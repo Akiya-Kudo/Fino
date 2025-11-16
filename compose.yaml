@@ -1,0 +1,26 @@
+networks:
+  fino-network:
+    driver: bridge
+
+services:
+  bespin:
+    image: grafana/grafana
+    restart: unless-stopped
+    ports:
+      - 3011:3000
+    volumes:
+      - type: bind
+        source: ./service/bespin/.volume
+        target: /var/lib/grafana
+      - type: bind
+        source: ./service/bespin/grafana.ini
+        target: /etc/grafana/grafana.ini
+      - type: bind
+        source: ./service/bespin/provisioning
+        target: /etc/grafana/provisioning
+    networks:
+      - fino-network
+    environment:
+    # Production setting must use those variables as a secrete like ** Docker secrets **
+      - GF_SECURITY_ADMIN_PASSWORD=${GRAFANA_ADMIN_PASSWORD}
+      - GF_SECURITY_ADMIN_USER=${GRAFANA_ADMIN_USER}
