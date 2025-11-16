@@ -63,15 +63,6 @@ else
     echo "direnv already installed."
 fi
 
-# Set EDITOR if not set
-if [ -z "$EDITOR" ]; then
-    DEFAULT_EDITOR="vim"
-    echo "EDITOR is not set. Using default: $DEFAULT_EDITOR"
-    echo "export EDITOR=$DEFAULT_EDITOR" >> "$RC_FILE"
-else
-    echo "EDITOR already set: $EDITOR"
-fi
-
 # Add hook if missing
 if ! grep -Fxq "$HOOK_CMD" "$RC_FILE"; then
     echo "Adding direnv hook to $RC_FILE"
