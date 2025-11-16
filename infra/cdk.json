@@ -1,22 +1,28 @@
 {
   "app": "npx ts-node --prefer-ts-exts bin/cdk.ts",
+  "toolkitStackName": "FinoCdkManageStack",
+  "toolkitStackDescription": "Fino CDK Management Stack",
+  "tsconfig": "./tsconfig.json",
   "watch": {
     "include": [
       "**"
     ],
     "exclude": [
+      ".github",
+      ".vscode",
       "README.md",
       "cdk*.json",
       "**/*.d.ts",
       "**/*.js",
       "tsconfig.json",
       "package*.json",
-      "yarn.lock",
       "node_modules",
       "test"
     ]
   },
   "context": {
+    "projectName": "Fino",
+    
     "@aws-cdk/aws-signer:signingProfileNamePassedToCfn": true,
     "@aws-cdk/aws-ecs-patterns:secGroupsDisablesImplicitOpenListener": true,
     "@aws-cdk/aws-lambda:recognizeLayerVersion": true,

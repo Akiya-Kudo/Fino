@@ -16,5 +16,5 @@ set -e
 
 # Setup aws-cdk-local
 
-# Setup Locakstack
-export AWS_PROFILE=localstack
+# npm install
+npm install
