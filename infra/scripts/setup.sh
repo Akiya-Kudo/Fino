@@ -75,3 +75,5 @@ fi
 
 echo "=== Setup Complete ==="
 echo "Please restart your terminal or run: source $RC_FILE"
+
+direnv allow
