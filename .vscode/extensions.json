@@ -1,0 +1,8 @@
+{
+    "recommendations": [
+        "charliermarsh.ruff",
+        "zaaack.markdown-editor",
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+    ]
+}
