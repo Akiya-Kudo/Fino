@@ -31,36 +31,28 @@ ARGS = $(filter-out $@,$(MAKECMDGOALS))
 	@:
 
 # -------- Default AWS --------
-deploy:
-	$(RUN_CDK) $(CDK) deploy --profile $(DEFAULT_PROFILE) $(ARGS) 
+# 引数の1つ目をCDKサブコマンドとして使用
+# 使用例: make cdk deploy, make cdk synth, make cdk destroy など
+cdk:
+	@if [ -z "$(word 1,$(ARGS))" ]; then \
+		echo "Error: CDK subcommand is required. Usage: make cdk <subcommand> [args...]"; \
+		echo "Available subcommands: deploy, synth, diff, destroy, bootstrap, ls, list, etc."; \
+		exit 1; \
+	fi
+	$(RUN_CDK) $(CDK) $(word 1,$(ARGS)) --profile $(DEFAULT_PROFILE) $(filter-out $(word 1,$(ARGS)),$(ARGS))
 
-synth:
-	$(RUN_CDK) $(CDK) synth --profile $(DEFAULT_PROFILE) $(ARGS)
-
-diff:
-	$(RUN_CDK) $(CDK) diff --profile $(DEFAULT_PROFILE) $(ARGS)
-
-destroy:
-	$(RUN_CDK) $(CDK) destroy --profile $(DEFAULT_PROFILE) $(ARGS)
-
-bootstrap:
-	$(RUN_CDK) $(CDK) bootstrap --profile $(DEFAULT_PROFILE) $(ARGS)
 
 # -------- LocalStack --------
-local-deploy:
-	$(RUN_CDK) $(CDKLOCAL) deploy --profile $(LOCAL_PROFILE) $(ARGS)
+# 引数の1つ目をCDKサブコマンドとして使用
+# 使用例: make local deploy, make local synth, make local destroy など
+lcdk:
+	@if [ -z "$(word 1,$(ARGS))" ]; then \
+		echo "Error: CDK subcommand is required. Usage: make local <subcommand> [args...]"; \
+		echo "Available subcommands: deploy, synth, diff, destroy, bootstrap, ls, list, etc."; \
+		exit 1; \
+	fi
+	$(RUN_CDK) $(CDKLOCAL) $(word 1,$(ARGS)) --profile $(LOCAL_PROFILE) $(filter-out $(word 1,$(ARGS)),$(ARGS))
 
-local-synth:
-	$(RUN_CDK) $(CDKLOCAL) synth --profile $(LOCAL_PROFILE) $(ARGS)
-
-local-diff:
-	$(RUN_CDK) $(CDKLOCAL) diff --profile $(LOCAL_PROFILE) $(ARGS)
-
-local-destroy:
-	$(RUN_CDK) $(CDKLOCAL) destroy --profile $(LOCAL_PROFILE) $(ARGS)
-
-local-bootstrap:
-	$(RUN_CDK) $(CDKLOCAL) bootstrap --profile $(LOCAL_PROFILE) $(ARGS)
 
 # -------- Setup --------
 
