@@ -1,5 +1,18 @@
 {
-  // エディター設定
+  // ===============================
+  // Typescript
+  // ===============================
+  "[typescript]": {
+    "editor.formatOnSave": true,
+    "editor.codeActionsOnSave": {
+        "source.fixAll": "explicit",
+        "source.organizeImports": "explicit",
+      },
+    "editor.defaultFormatter": "charliermarsh.ruff"
+  },
+  // ===============================
+  // Python
+  // ===============================
   "[python]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
@@ -16,7 +29,10 @@
   },
   // Jupyter 実行時のカレントディレクトリを固定
   "jupyter.notebookFileRoot": "${workspaceFolder}",
-  // モダンなブラック＆イエローテーマカラー設定（ヘッダー/フッターは青）
+  
+  // ===============================
+  // Editor Customizations
+  // ===============================
   "workbench.colorCustomizations": {
     // アクティブタブとフォーカス
     "tab.activeBackground": "#1a1a1a",
