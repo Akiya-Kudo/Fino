@@ -37,6 +37,9 @@ deploy:
 synth:
 	$(RUN_CDK) $(CDK) synth --profile $(DEFAULT_PROFILE) $(ARGS)
 
+diff:
+	$(RUN_CDK) $(CDK) diff --profile $(DEFAULT_PROFILE) $(ARGS)
+
 destroy:
 	$(RUN_CDK) $(CDK) destroy --profile $(DEFAULT_PROFILE) $(ARGS)
 
@@ -49,6 +52,9 @@ local-deploy:
 
 local-synth:
 	$(RUN_CDK) $(CDKLOCAL) synth --profile $(LOCAL_PROFILE) $(ARGS)
+
+local-diff:
+	$(RUN_CDK) $(CDKLOCAL) diff --profile $(LOCAL_PROFILE) $(ARGS)
 
 local-destroy:
 	$(RUN_CDK) $(CDKLOCAL) destroy --profile $(LOCAL_PROFILE) $(ARGS)
