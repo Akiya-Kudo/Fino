@@ -5,13 +5,7 @@ import { addCommonTags, type SystemGroup } from "../util/cdk/tagging";
 
 export interface BaseInfo {
 	baseName: string;
-	systemGroup: SystemGroup;
-}
-
-export interface BaseConstructorProps<T extends cdk.StackProps> {
-	scope: Construct;
-	baseName: string;
-	props?: T;
+	systemGroup?: SystemGroup;
 }
 
 export class BaseStack extends cdk.Stack {

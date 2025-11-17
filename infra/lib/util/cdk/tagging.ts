@@ -11,10 +11,8 @@ export type SystemGroup =
 	| "Manage" //(AWS Configなど)
 	| "none"; // cdk import時にタグを追加しない用
 
-export function addCommonTags(stack: Stack, systemGroup: SystemGroup): void {
-	if (systemGroup === "none") {
-		return;
-	}
+export function addCommonTags(stack: Stack, systemGroup?: SystemGroup): void {
+	const defaultSystemGroup = "none";
 
 	const tags = Tags.of(stack);
 	tags.add("Project", stack.node.tryGetContext("projectName"));
@@ -24,6 +22,6 @@ export function addCommonTags(stack: Stack, systemGroup: SystemGroup): void {
 			"-" +
 			stack.node.tryGetContext("targetEnv"),
 	);
-	tags.add("SystemGroup", systemGroup);
+	tags.add("SystemGroup", systemGroup ?? defaultSystemGroup);
 	tags.add("Stack", stack.stackName);
 }
