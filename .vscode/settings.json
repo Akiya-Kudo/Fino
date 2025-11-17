@@ -1,14 +1,28 @@
 {
   // ===============================
+  // Editor Formatter
+  // ===============================
+  "editor.formatOnSave": true,
+  // ===============================
   // Typescript
   // ===============================
+  "editor.codeActionsOnSave": {
+    "source.fixAll.biome": "explicit"
+  },
   "[typescript]": {
-    "editor.formatOnSave": true,
-    "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit",
-        "source.organizeImports": "explicit",
-      },
-    "editor.defaultFormatter": "charliermarsh.ruff"
+    "editor.defaultFormatter": "biomejs.biome",
+  },
+  "[javascript]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[typescriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[javascriptreact]": {
+    "editor.defaultFormatter": "biomejs.biome"
+  },
+  "[json]": {
+    "editor.defaultFormatter": "biomejs.biome"
   },
   // ===============================
   // Python
@@ -24,14 +38,11 @@
   "python.pythonPath": ".venv/bin/python",
   "python.defaultInterpreterPath": ".venv/bin/python",
   "python.terminal.activateEnvironment": true,
-  "[markdown]": {
-    "editor.defaultFormatter": "zaaack.markdown-editor"
-  },
   // Jupyter 実行時のカレントディレクトリを固定
   "jupyter.notebookFileRoot": "${workspaceFolder}",
   
   // ===============================
-  // Editor Customizations
+  // Editor Theme
   // ===============================
   "workbench.colorCustomizations": {
     // アクティブタブとフォーカス
