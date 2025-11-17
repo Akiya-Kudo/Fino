@@ -1,10 +1,12 @@
 {
 	"folders": [
 		{
-			"path": "."
+			"path": ".",
+			"name": "===== Fino Workspace ====="
 		},
 		{
-			"path": "infra"
+			"path": "infra",
+			"name": "===== Infra Workspace ====="
 		}
 	],
 	"settings": {
