@@ -1,8 +1,24 @@
 networks:
   fino-network:
     driver: bridge
+  localstack-network:
 
 services:
+  localstack:
+    container_name: localstack
+    image: localstack/localstack:4.10
+    ports:
+      - "127.0.0.1:4566:4566"            # LocalStack Gateway
+      - "127.0.0.1:4510-4559:4510-4559"  # external services port range (S3, SQS, SNS, etc.)
+    environment:
+      # LocalStack configuration: https://docs.localstack.cloud/references/configuration/
+      - DEBUG=${DEBUG:-0}
+    volumes:
+      - "${LOCALSTACK_MOUNT_DIR:-./volume}:/var/lib/localstack"
+      - "/var/run/docker.sock:/var/run/docker.sock"
+    networks:
+      - localstack-network
+
   bespin:
     image: grafana/grafana
     restart: unless-stopped
@@ -10,7 +26,7 @@ services:
       - ${BESPIN_PORT}:3000
     volumes:
       - type: bind
-        source: ./service/bespin/.mount
+        source: ${BESPIN_MOUNT_PATH}
         target: /var/lib/grafana
       - type: bind
         source: ./service/bespin/grafana.ini
@@ -26,3 +42,4 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=${BESPIN_ADMIN_PASSWORD}
       - GF_SECURITY_ADMIN_USER=${BESPIN_ADMIN_USER}
       - GF_INSTALL_PLUGINS=grafana-athena-datasource,trino-datasource
+

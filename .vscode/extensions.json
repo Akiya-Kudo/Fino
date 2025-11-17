@@ -1,8 +1,12 @@
 {
     "recommendations": [
+        // typescript
+        "biomejs.biome",
+        // python
         "charliermarsh.ruff",
-        "zaaack.markdown-editor",
         "ms-python.python",
-        "ms-toolsai.jupyter"
+        "ms-toolsai.jupyter",
+        // markdown
+        "zaaack.markdown-editor",
     ]
 }
