@@ -45,7 +45,7 @@ cdk:
 # -------- LocalStack --------
 # 引数の1つ目をCDKサブコマンドとして使用
 # 使用例: make local deploy, make local synth, make local destroy など
-lcdk:
+local:
 	@if [ -z "$(word 1,$(ARGS))" ]; then \
 		echo "Error: CDK subcommand is required. Usage: make local <subcommand> [args...]"; \
 		echo "Available subcommands: deploy, synth, diff, destroy, bootstrap, ls, list, etc."; \
@@ -65,4 +65,4 @@ test:
 	$(RUN_CDK) npm run test
 
 echo:
-	@echo "$(LOCALSTACK_MOUNT_DIR)"
+	@echo "$(LOCALSTACK_VOLUME_DIR)"

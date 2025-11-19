@@ -1,18 +1,19 @@
 import { type Stack, Tags } from "aws-cdk-lib";
 
-export type SystemGroup =
-	| "API"
-	| "Distribution"
-	| "Storage"
-	| "Auth"
-	| "Common"
-	| "CICD"
-	| "Security"
-	| "Manage" //(AWS Configなど)
-	| "none"; // cdk import時にタグを追加しない用
+export enum SystemGroup {
+	API = "API",
+	DISTRIBUTION = "Distribution",
+	STORAGE = "Storage",
+	AUTH = "Auth",
+	COMMON = "Common",
+	CICD = "CICD",
+	SECURITY = "Security",
+	MANAGE = "Manage", //(AWS Configなど)
+	NONE = "none", // cdk import時にタグを追加しない用
+}
 
 export function addCommonTags(stack: Stack, systemGroup?: SystemGroup): void {
-	const defaultSystemGroup = "none";
+	const defaultSystemGroup = SystemGroup.NONE;
 
 	const tags = Tags.of(stack);
 	tags.add("Project", stack.node.tryGetContext("projectName"));

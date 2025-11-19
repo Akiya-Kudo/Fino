@@ -1,7 +1,12 @@
 #! /bin/bash
 
-set -e
+# sourceで読み込むと元のプロセス自体がエラーとなり、プロセスが終了してしまうため、コメントアウト
+# set -e
 
+### FINO PROJECT ###
+alias fino="make"
+
+### INFA ####
 # Create AWS Account
 
 # Create AWS API Key
@@ -17,4 +22,4 @@ set -e
 # Setup aws-cdk-local
 
 # npm install
-npm install
+cd infra && npm install && cd ..
