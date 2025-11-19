@@ -65,4 +65,4 @@ test:
 	$(RUN_CDK) npm run test
 
 echo:
-	@echo "$(LOCALSTACK_MOUNT_DIR)"
+	@echo "$(LOCALSTACK_VOLUME_DIR)"
