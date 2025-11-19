@@ -1,5 +1,5 @@
 import type { Construct } from "constructs";
-import { getContext } from "./context";
+import { getContext, getTargetEnv } from "./context";
 
 /**
  * Stack Name
@@ -38,7 +38,7 @@ export const createStackName = ({
 	serviceBaseName,
 }: createStackNameArgs) => {
 	const projectName = getContext({ scope, key: "projectName" });
-	const envName = getContext({ scope, key: "targetEnv" });
+	const envName = getTargetEnv();
 
 	return connect([projectName, envName, serviceGroupName, serviceBaseName]);
 };
@@ -54,7 +54,7 @@ export const createResourceName = ({
 	serviceGroupName,
 }: createResourceNameArgs) => {
 	const projectName = getContext({ scope, key: "projectName" });
-	const envName = getContext({ scope, key: "targetEnv" });
+	const envName = getTargetEnv();
 
 	switch (resourceType) {
 		case ResourceType.S3_BUCKET:
@@ -90,7 +90,7 @@ export const makeSsmParameterName = ({
 		["/", getContext({ scope, key: "projectName" }).toLowerCase()],
 		"",
 	);
-	const envName = getContext({ scope, key: "targetEnv" }).toLowerCase();
+	const envName = getTargetEnv().toLowerCase();
 
 	return connect([projectName, envName, baseName], "/");
 };
