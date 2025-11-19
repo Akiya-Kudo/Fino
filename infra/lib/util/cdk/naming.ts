@@ -1,10 +1,31 @@
 import type { Construct } from "constructs";
 import { getContext } from "./context";
 
+/**
+ * Stack Name
+ */
+
+export enum ServiceGroupName {
+	HOTH = "Hoth",
+}
+
+/**
+ * Resource Type
+ */
+export enum ResourceType {
+	S3_BUCKET = "S3Bucket",
+}
 interface createStackNameArgs {
 	scope: Construct;
 	serviceGroupName: string;
-	serviceName: string;
+	serviceBaseName: string;
+}
+
+interface createResourceNameArgs {
+	scope: Construct;
+	resourceType?: ResourceType;
+	baseResourceName: string;
+	serviceGroupName?: ServiceGroupName;
 }
 
 export const connect = (arr: string[], sep = "-"): string => {
@@ -14,43 +35,49 @@ export const connect = (arr: string[], sep = "-"): string => {
 export const createStackName = ({
 	scope,
 	serviceGroupName,
-	serviceName,
+	serviceBaseName,
 }: createStackNameArgs) => {
 	const projectName = getContext({ scope, key: "projectName" });
 	const envName = getContext({ scope, key: "targetEnv" });
 
-	return connect([projectName, envName, serviceGroupName, serviceName]);
+	return connect([projectName, envName, serviceGroupName, serviceBaseName]);
 };
 
-export type ssmParameterAcmArnName = "sub_certificate_arn";
-
-interface createResourceNameArgs {
-	scope: Construct;
-	baseResourceName: string;
-}
+/**
+ * Resource Name
+ */
 
 export const createResourceName = ({
 	scope,
+	resourceType,
 	baseResourceName,
+	serviceGroupName,
 }: createResourceNameArgs) => {
 	const projectName = getContext({ scope, key: "projectName" });
 	const envName = getContext({ scope, key: "targetEnv" });
 
-	return connect([projectName, envName, baseResourceName]);
+	switch (resourceType) {
+		case ResourceType.S3_BUCKET:
+			if (!serviceGroupName)
+				throw new Error(
+					"S3バケットのリソース名を作成する場合はserviceGroupNameが必須です",
+				);
+			return connect([
+				projectName.toLowerCase(),
+				envName.toLowerCase(),
+				serviceGroupName.toLowerCase(),
+				baseResourceName.toLowerCase(),
+			]);
+		default:
+			return connect([projectName, envName, baseResourceName]);
+	}
 };
 
-export const makeBucketName = ({
-	scope,
-	baseName,
-}: {
-	scope: Construct;
-	baseName: string;
-}) => {
-	const projectName = getContext({ scope, key: "projectName" }).toLowerCase();
-	const envName = getContext({ scope, key: "targetEnv" }).toLowerCase();
+/**
+ * SSM Parameter Name
+ */
 
-	return connect([projectName, envName, baseName.toLowerCase()]);
-};
+export type ssmParameterAcmArnName = "sub_certificate_arn";
 
 export const makeSsmParameterName = ({
 	scope,

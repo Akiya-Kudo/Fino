@@ -8,17 +8,17 @@ export interface BaseInfo {
 	serviceGroupName: string;
 	/** システムグループ名 */
 	systemGroupName?: SystemGroup;
-	/** サービス名 */
-	serviceName: string;
+	/** サービスベース名（スタックの機能区分名） */
+	serviceBaseName: string;
 }
 
 export class BaseStack extends cdk.Stack {
 	constructor(scope: Construct, baseInfo: BaseInfo, props?: cdk.StackProps) {
-		const { serviceGroupName, systemGroupName, serviceName } = baseInfo;
+		const { serviceGroupName, systemGroupName, serviceBaseName } = baseInfo;
 		const stackName = createStackName({
 			scope,
 			serviceGroupName,
-			serviceName,
+			serviceBaseName,
 		});
 		super(scope, stackName, props);
 		addCommonTags(this, systemGroupName);
