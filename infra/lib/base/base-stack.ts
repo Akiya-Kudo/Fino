@@ -4,15 +4,23 @@ import { createStackName } from "../util/cdk/naming";
 import { addCommonTags, type SystemGroup } from "../util/cdk/tagging";
 
 export interface BaseInfo {
-	baseName: string;
-	systemGroup?: SystemGroup;
+	/** サービスグループ名 */
+	serviceGroupName: string;
+	/** システムグループ名 */
+	systemGroupName?: SystemGroup;
+	/** サービス名 */
+	serviceName: string;
 }
 
 export class BaseStack extends cdk.Stack {
 	constructor(scope: Construct, baseInfo: BaseInfo, props?: cdk.StackProps) {
-		const { baseName, systemGroup } = baseInfo;
-		const stackName = createStackName({ scope, baseName });
+		const { serviceGroupName, systemGroupName, serviceName } = baseInfo;
+		const stackName = createStackName({
+			scope,
+			serviceGroupName,
+			serviceName,
+		});
 		super(scope, stackName, props);
-		addCommonTags(this, systemGroup);
+		addCommonTags(this, systemGroupName);
 	}
 }

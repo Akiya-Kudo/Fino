@@ -3,18 +3,23 @@ import { getContext } from "./context";
 
 interface createStackNameArgs {
 	scope: Construct;
-	baseName: string;
+	serviceGroupName: string;
+	serviceName: string;
 }
 
 export const connect = (arr: string[], sep = "-"): string => {
 	return arr.filter((str) => !!str).join(sep);
 };
 
-export const createStackName = ({ scope, baseName }: createStackNameArgs) => {
+export const createStackName = ({
+	scope,
+	serviceGroupName,
+	serviceName,
+}: createStackNameArgs) => {
 	const projectName = getContext({ scope, key: "projectName" });
 	const envName = getContext({ scope, key: "targetEnv" });
 
-	return connect([projectName, envName, baseName]);
+	return connect([projectName, envName, serviceGroupName, serviceName]);
 };
 
 export type ssmParameterAcmArnName = "sub_certificate_arn";
