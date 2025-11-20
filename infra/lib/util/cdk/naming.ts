@@ -7,6 +7,7 @@ import { getContext, getTargetEnv } from "./context";
 
 export enum ServiceGroupName {
 	HOTH = "Hoth",
+	ECHO = "Echo",
 }
 
 /**
