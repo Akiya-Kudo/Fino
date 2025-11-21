@@ -10,7 +10,7 @@
     "source.fixAll.biome": "explicit"
   },
   "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome",
+    "editor.defaultFormatter": "biomejs.biome"
   },
   "[javascript]": {
     "editor.defaultFormatter": "biomejs.biome"
@@ -30,115 +30,115 @@
   "[python]": {
     "editor.formatOnSave": true,
     "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit",
-        "source.organizeImports": "explicit",
-      },
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    },
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
   "python.pythonPath": ".venv/bin/python",
   "python.defaultInterpreterPath": ".venv/bin/python",
   "python.terminal.activateEnvironment": true,
   // Jupyter 実行時のカレントディレクトリを固定
-  "jupyter.notebookFileRoot": "${workspaceFolder}",
-  
+  "jupyter.notebookFileRoot": "${workspaceFolder}"
+
   // ===============================
   // Editor Theme
   // ===============================
-  "workbench.colorCustomizations": {
-    // アクティブタブとフォーカス
-    "tab.activeBackground": "#1a1a1a",
-    "tab.activeForeground": "#ffa365",
-    "tab.activeBorder": "#ffa365",
-    "tab.activeBorderTop": "#ffa365",
-    "tab.inactiveBackground": "#0a0a0a",
-    "tab.inactiveForeground": "#6b7280",
+  // "workbench.colorCustomizations": {
+  //   // アクティブタブとフォーカス
+  //   "tab.activeBackground": "#1a1a1a",
+  //   "tab.activeForeground": "#ffa365",
+  //   "tab.activeBorder": "#ffa365",
+  //   "tab.activeBorderTop": "#ffa365",
+  //   "tab.inactiveBackground": "#0a0a0a",
+  //   "tab.inactiveForeground": "#6b7280",
 
-    // サイドバー
-    "sideBar.background": "#0a0a0a",
-    "sideBar.foreground": "#d1d5db",
-    "sideBar.border": "#1a1a1a",
-    "sideBarTitle.foreground": "#ffbe6f",
-    "sideBarSectionHeader.background": "#1a1a1a",
-    "sideBarSectionHeader.foreground": "#d7e1ff",
+  //   // サイドバー
+  //   "sideBar.background": "#0a0a0a",
+  //   "sideBar.foreground": "#d1d5db",
+  //   "sideBar.border": "#1a1a1a",
+  //   "sideBarTitle.foreground": "#ffbe6f",
+  //   "sideBarSectionHeader.background": "#1a1a1a",
+  //   "sideBarSectionHeader.foreground": "#d7e1ff",
 
-    // アクティビティバー
-    "activityBar.background": "#000000",
-    "activityBar.foreground": "#ffac4d",
-    "activityBar.inactiveForeground": "#634b4d",
-    "activityBar.border": "#1a1a1a",
-    "activityBarBadge.background": "#f88b3c",
-    "activityBarBadge.foreground": "#000000",
+  //   // アクティビティバー
+  //   "activityBar.background": "#000000",
+  //   "activityBar.foreground": "#ffac4d",
+  //   "activityBar.inactiveForeground": "#634b4d",
+  //   "activityBar.border": "#1a1a1a",
+  //   "activityBarBadge.background": "#f88b3c",
+  //   "activityBarBadge.foreground": "#000000",
 
-    // ステータスバー（フッター - 青）
-    "statusBar.background": "#ff7c5b",
-    "statusBar.foreground": "#ffffff",
-    "statusBar.border": "#e2bc24",
-    "statusBar.debuggingBackground": "#ffe065",
-    "statusBar.noFolderBackground": "#1a1a1a",
+  //   // ステータスバー（フッター - 青）
+  //   "statusBar.background": "#ff7c5b",
+  //   "statusBar.foreground": "#ffffff",
+  //   "statusBar.border": "#e2bc24",
+  //   "statusBar.debuggingBackground": "#ffe065",
+  //   "statusBar.noFolderBackground": "#1a1a1a",
 
-    // エディター
-    "editor.background": "#0a0a0a",
-    "editor.foreground": "#e5e7eb",
-    "editor.lineHighlightBackground": "#1a1a1a",
-    "editor.selectionBackground": "#fbbf2460",
-    "editor.selectionHighlightBackground": "#fbbf2430",
-    "editorCursor.foreground": "#ffe065",
-    "editorWhitespace.foreground": "#262626",
-    "editorLineNumber.foreground": "#b55b07",
-    "editorLineNumber.activeForeground": "#ffe065",
+  //   // エディター
+  //   "editor.background": "#0a0a0a",
+  //   "editor.foreground": "#e5e7eb",
+  //   "editor.lineHighlightBackground": "#1a1a1a",
+  //   "editor.selectionBackground": "#fbbf2460",
+  //   "editor.selectionHighlightBackground": "#fbbf2430",
+  //   "editorCursor.foreground": "#ffe065",
+  //   "editorWhitespace.foreground": "#262626",
+  //   "editorLineNumber.foreground": "#b55b07",
+  //   "editorLineNumber.activeForeground": "#ffe065",
 
-    // エディターグループ
-    "editorGroup.border": "#ffe065",
-    "editorGroupHeader.tabsBackground": "#000000",
-    "editorGroupHeader.tabsBorder": "#1e3a8a",
+  //   // エディターグループ
+  //   "editorGroup.border": "#ffe065",
+  //   "editorGroupHeader.tabsBackground": "#000000",
+  //   "editorGroupHeader.tabsBorder": "#1e3a8a",
 
-    // パネル（ターミナル、出力など）
-    "panel.background": "#0a0a0a",
-    "panel.border": "#f77f61",
-    "panelTitle.activeBorder": "#ffe065",
-    "panelTitle.activeForeground": "#ffe065",
-    "panelTitle.inactiveForeground": "#6b7280",
+  //   // パネル（ターミナル、出力など）
+  //   "panel.background": "#0a0a0a",
+  //   "panel.border": "#f77f61",
+  //   "panelTitle.activeBorder": "#ffe065",
+  //   "panelTitle.activeForeground": "#ffe065",
+  //   "panelTitle.inactiveForeground": "#6b7280",
 
-    // タイトルバー（ヘッダー - 青）
-    "titleBar.activeBackground": "#ff7c5b",
-    "titleBar.activeForeground": "#ffffff",
-    "titleBar.border": "#ffa365",
+  //   // タイトルバー（ヘッダー - 青）
+  //   "titleBar.activeBackground": "#ff7c5b",
+  //   "titleBar.activeForeground": "#ffffff",
+  //   "titleBar.border": "#ffa365",
 
-    // ボタンとインプット
-    "button.background": "#ffe065",
-    "button.foreground": "#000000",
-    "button.hoverBackground": "#ffe065",
-    "input.background": "#1a1a1a",
-    "input.border": "#262626",
-    "input.foreground": "#e5e7eb",
-    "inputOption.activeBackground": "#fbbf2440",
-    "inputOption.activeBorder": "#ffe065",
+  //   // ボタンとインプット
+  //   "button.background": "#ffe065",
+  //   "button.foreground": "#000000",
+  //   "button.hoverBackground": "#ffe065",
+  //   "input.background": "#1a1a1a",
+  //   "input.border": "#262626",
+  //   "input.foreground": "#e5e7eb",
+  //   "inputOption.activeBackground": "#fbbf2440",
+  //   "inputOption.activeBorder": "#ffe065",
 
-    // リストとツリー
-    "list.activeSelectionBackground": "#fbbf2440",
-    "list.activeSelectionForeground": "#ffe065",
-    "list.hoverBackground": "#1a1a1a",
-    "list.inactiveSelectionBackground": "#1a1a1a",
-    "list.focusBackground": "#fbbf2440",
-    "list.focusForeground": "#ffe065",
+  //   // リストとツリー
+  //   "list.activeSelectionBackground": "#fbbf2440",
+  //   "list.activeSelectionForeground": "#ffe065",
+  //   "list.hoverBackground": "#1a1a1a",
+  //   "list.inactiveSelectionBackground": "#1a1a1a",
+  //   "list.focusBackground": "#fbbf2440",
+  //   "list.focusForeground": "#ffe065",
 
-    // スクロールバー
-    "scrollbarSlider.background": "#262626aa",
-    "scrollbarSlider.hoverBackground": "#404040bb",
-    "scrollbarSlider.activeBackground": "#ffe065",
+  //   // スクロールバー
+  //   "scrollbarSlider.background": "#262626aa",
+  //   "scrollbarSlider.hoverBackground": "#404040bb",
+  //   "scrollbarSlider.activeBackground": "#ffe065",
 
-    // 通知
-    "notificationCenter.border": "#ffe065",
-    "notificationCenterHeader.background": "#1a1a1a",
-    "notifications.background": "#1a1a1a",
-    "notifications.border": "#262626",
+  //   // 通知
+  //   "notificationCenter.border": "#ffe065",
+  //   "notificationCenterHeader.background": "#1a1a1a",
+  //   "notifications.background": "#1a1a1a",
+  //   "notifications.border": "#262626",
 
-    // ターミナル
-    "terminal.background": "#0a0a0a",
-    "terminal.foreground": "#d1d5db",
-    "terminal.ansiYellow": "#ffe065",
-    "terminal.ansiBrightYellow": "#ffe065",
-    "terminal.ansiBlue": "#f77f61",
-    "terminal.ansiBrightBlue": "#f77f61"
-  }
+  //   // ターミナル
+  //   "terminal.background": "#0a0a0a",
+  //   "terminal.foreground": "#d1d5db",
+  //   "terminal.ansiYellow": "#ffe065",
+  //   "terminal.ansiBrightYellow": "#ffe065",
+  //   "terminal.ansiBlue": "#f77f61",
+  //   "terminal.ansiBrightBlue": "#f77f61"
+  // }
 }
