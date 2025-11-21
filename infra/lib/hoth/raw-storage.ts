@@ -30,10 +30,10 @@ export class HothRawStorageStack extends BaseStack {
 		this.bucket = new s3.Bucket(this, "RawStorageBucket", {
 			bucketName,
 			blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+			removalPolicy: RemovalPolicy.RETAIN,
 			// WORM（Write Once Read Many）のオブジェクトロックを設定するためにバージョニングが必須
 			versioned: true,
 			// ストーレージは明示的削除を必須化する（lockはバージョン単位で行われるため上書きはできてしまう）
-			removalPolicy: RemovalPolicy.RETAIN,
 			objectLockEnabled: true,
 			// バッチ処理を考慮して1日でロックしておく
 			objectLockDefaultRetention: s3.ObjectLockRetention.governance(
