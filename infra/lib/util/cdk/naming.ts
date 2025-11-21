@@ -15,6 +15,7 @@ export enum ServiceGroupName {
  */
 export enum ResourceType {
 	S3_BUCKET = "S3Bucket",
+	HTTP_APIGATEWAY = "HttpApiGateway",
 }
 interface createStackNameArgs {
 	scope: Construct;
