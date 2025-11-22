@@ -9,7 +9,46 @@ import {
 } from "../util/cdk/naming";
 import { SystemGroup } from "../util/cdk/tagging";
 
+/**
+ * # Hoth Stack（Data LakeHouse）
+ * Data LakeHouse の基盤スタック
+ * S3 Tableを使用して、テーブル定義を管理します。
+ * ### ☑️ IaCで管理すべきもの：
+ * - Raw 層の Iceberg Tables（Echo Stack（Ingestion Pipeline）やデータリソースからの書き込み用途のテーブル）
+ *   → Ingestion Pipeline と密結合しているため、Schema と Partition を固定すべき
+ *   → データ契約（Data Contract）としてインフラの一部として扱う
+ *
+ * ### 🆖 IaC で管理しないもの：
+ * - Refined 層の Iceberg Tables（分析用途のテーブル）
+ * - Mart 層（BI 用テーブル）
+ * - 分析用途の schema evolution
+ * - BI が作る ad-hoc テーブル
+ *   → モデリングの進化が頻繁なため、SQL / ETL で管理
+ *   → BI チームが自由に新テーブルを作れるようにする
+ *   → Iceberg の schema evolution やsnapshot management の恩恵を活かす
+ */
 export class HothLakeHouseStack extends BaseStack {
+	/**
+	 * 	### Data Lake House Table Bucket
+	 * テーブル定義を管理するためのバケット
+	 */
+	public readonly tableBucket: tables.TableBucket;
+	/**
+	 * ### Raw 層の Namespace
+	 * Ingestion Pipeline が書き込む Raw テーブル用の名前空間
+	 */
+	public readonly rawNamespace: tables.Namespace;
+	/**
+	 * ### Financial 層の Namespace
+	 * Refined / Mart 層のテーブル用の名前空間（CDK ではNamespaceのみ定義）
+	 */
+	public readonly financialNamespace: tables.Namespace;
+	/**
+	 * ### Raw 層のテーブル
+	 * Ingestion Pipeline が書き込む Raw テーブル
+	 */
+	public readonly rawTable: tables.Table;
+
 	constructor(scope: Construct, props?: StackProps) {
 		const baseInfo: BaseInfo = {
 			serviceGroupName: ServiceGroupName.HOTH,
@@ -18,13 +57,26 @@ export class HothLakeHouseStack extends BaseStack {
 		};
 		super(scope, baseInfo, props);
 
-		/**
-		 * Resource Names
-		 */
+		// ===== Table Bucket Name =====
+
 		const tableBucketName = createResourceName({
 			scope,
 			baseResourceName: "lakehouse-storage",
 			resourceType: ResourceType.S3_TABLE_BUCKET,
+			serviceGroupName: ServiceGroupName.HOTH,
+		});
+
+		this.tableBucket = new tables.TableBucket(this, "TableBucket", {
+			tableBucketName,
+			removalPolicy: RemovalPolicy.RETAIN,
+		});
+
+		// ===== Namespace Names =====
+
+		const rawNamespaceName = createResourceName({
+			scope,
+			baseResourceName: "raw",
+			resourceType: ResourceType.S3_TABLE_NAMESPACE,
 			serviceGroupName: ServiceGroupName.HOTH,
 		});
 		const financialNamespaceName = createResourceName({
@@ -33,29 +85,29 @@ export class HothLakeHouseStack extends BaseStack {
 			resourceType: ResourceType.S3_TABLE_NAMESPACE,
 			serviceGroupName: ServiceGroupName.HOTH,
 		});
-		const tableName = createResourceName({
+
+		this.rawNamespace = new tables.Namespace(this, "RawNamespace", {
+			namespaceName: rawNamespaceName,
+			tableBucket: this.tableBucket,
+		});
+
+		this.financialNamespace = new tables.Namespace(this, "FinancialNamespace", {
+			namespaceName: financialNamespaceName,
+			tableBucket: this.tableBucket,
+		});
+
+		// ===== Raw Table =====
+
+		const rawTableName = createResourceName({
 			scope,
-			baseResourceName: "lakehouse-table",
+			baseResourceName: "raw-table",
 			resourceType: ResourceType.S3_TABLE,
 			serviceGroupName: ServiceGroupName.HOTH,
 		});
 
-		/**
-		 * Resources
-		 */
-		const tableBucket = new tables.TableBucket(this, "TableBucket", {
-			tableBucketName: tableBucketName,
-			removalPolicy: RemovalPolicy.RETAIN,
-		});
-
-		const financialNamespace = new tables.Namespace(this, "Namespace", {
-			namespaceName: financialNamespaceName,
-			tableBucket,
-		});
-
-		const table = new tables.Table(this, "Table", {
-			namespace: financialNamespace,
-			tableName: tableName,
+		this.rawTable = new tables.Table(this, "RawTable", {
+			namespace: this.rawNamespace,
+			tableName: rawTableName,
 			openTableFormat: tables.OpenTableFormat.ICEBERG,
 			icebergMetadata: {
 				icebergSchema: {
@@ -66,28 +118,25 @@ export class HothLakeHouseStack extends BaseStack {
 							required: true,
 						},
 						{
-							name: "name",
+							name: "timestamp",
+							type: "timestamp",
+							required: true,
+						},
+						{
+							name: "data",
 							type: "string",
 						},
 					],
 				},
 			},
-			/**
-			 * 圧縮戦略の設定。既定では、テーブルのソート順に基づいて最適なコンパクション戦略が選択される。
-			 * @see https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables-maintenance.html#s3-tables-maintenance-compaction-strategies
-			 */
 			compaction: {
 				status: tables.Status.ENABLED,
-				targetFileSizeMb: 128, // 指定必須。
+				targetFileSizeMb: 128,
 			},
-			/**
-			 * スナップショット管理の設定。デフォルトで有効。
-			 * @see https://docs.aws.amazon.com/AmazonS3/latest/userguide/s3-tables-maintenance.html#s3-tables-maintenance-snapshot-management
-			 */
 			snapshotManagement: {
 				status: tables.Status.ENABLED,
-				maxSnapshotAgeHours: 48, // スナップショットの最大保持期間。 デフォルトは 120 時間（5 日）
-				minSnapshotsToKeep: 3, // 保持する最小スナップショット数。デフォルトは 1
+				maxSnapshotAgeHours: 48,
+				minSnapshotsToKeep: 3,
 			},
 		});
 	}
