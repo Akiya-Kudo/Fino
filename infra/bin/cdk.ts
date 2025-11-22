@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib/core";
-import { HothRawStorageStack } from "../lib/hoth/raw-storage";
+import { EchoRawStorageStack } from "../lib/echo/raw-storage";
 
 const app = new cdk.App();
 
-new HothRawStorageStack(app, {
+new EchoRawStorageStack(app, {
 	env: {},
 });

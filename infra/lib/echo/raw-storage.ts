@@ -9,11 +9,11 @@ import {
 } from "../util/cdk/naming";
 import { SystemGroup } from "../util/cdk/tagging";
 
-export class HothRawStorageStack extends BaseStack {
+export class EchoRawStorageStack extends BaseStack {
 	public readonly bucket: s3.Bucket;
 	constructor(scope: Construct, props?: StackProps) {
 		const baseInfo: BaseInfo = {
-			serviceGroupName: ServiceGroupName.HOTH,
+			serviceGroupName: ServiceGroupName.ECHO,
 			serviceBaseName: "RawStorage",
 			systemGroupName: SystemGroup.STORAGE,
 		};
@@ -23,7 +23,7 @@ export class HothRawStorageStack extends BaseStack {
 			scope,
 			baseResourceName: "raw-storage",
 			resourceType: ResourceType.S3_BUCKET,
-			serviceGroupName: ServiceGroupName.HOTH,
+			serviceGroupName: ServiceGroupName.ECHO,
 		});
 
 		// TODO: Lifecycle の "Expiration" ルールを設定して削除ルールを設定して、不要なデータを自動で削除するようにする
