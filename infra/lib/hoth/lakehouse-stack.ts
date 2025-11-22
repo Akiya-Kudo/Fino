@@ -57,7 +57,7 @@ export class HothLakeHouseStack extends BaseStack {
 		};
 		super(scope, baseInfo, props);
 
-		// ===== Table Bucket Name =====
+		// ===== Table Bucket =====
 
 		const tableBucketName = createResourceName({
 			scope,
@@ -71,7 +71,7 @@ export class HothLakeHouseStack extends BaseStack {
 			removalPolicy: RemovalPolicy.RETAIN,
 		});
 
-		// ===== Namespace Names =====
+		// ===== Namespace =====
 
 		const rawNamespaceName = createResourceName({
 			scope,
@@ -100,7 +100,7 @@ export class HothLakeHouseStack extends BaseStack {
 
 		const rawTableName = createResourceName({
 			scope,
-			baseResourceName: "raw-table",
+			baseResourceName: "raw",
 			resourceType: ResourceType.S3_TABLE,
 			serviceGroupName: ServiceGroupName.HOTH,
 		});
