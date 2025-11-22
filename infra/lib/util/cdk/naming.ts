@@ -8,6 +8,7 @@ import { getContext, getTargetEnv } from "./context";
 export enum ServiceGroupName {
 	HOTH = "Hoth",
 	ECHO = "Echo",
+	ECHO = "Echo",
 }
 
 /**
@@ -18,6 +19,7 @@ export enum ResourceType {
 	S3_TABLE = "S3Table",
 	S3_TABLE_BUCKET = "S3TableBucket",
 	S3_TABLE_NAMESPACE = "S3TableNamespace",
+	HTTP_APIGATEWAY = "HttpApiGateway",
 }
 interface createStackNameArgs {
 	scope: Construct;
