@@ -1,7 +1,11 @@
 import * as tables from "@aws-cdk/aws-s3tables-alpha";
 import { RemovalPolicy, type StackProps } from "aws-cdk-lib";
 import type { Construct } from "constructs";
-import { type BaseInfo, BaseStack } from "../base/base-stack";
+import {
+	type BaseInfo,
+	BaseStack,
+	type BaseStackProps,
+} from "../base/base-stack";
 import {
 	createResourceName,
 	ResourceType,
@@ -12,7 +16,7 @@ import { SystemGroup } from "../util/cdk/tagging";
 /**
  * # Hoth Stack（Data LakeHouse）
  * Data LakeHouse の基盤スタック
- * S3 Tableを使用して、テーブル定義を管理します。
+ *
  * ### ☑️ IaCで管理すべきもの：
  * - Raw 層の Iceberg Tables（Echo Stack（Ingestion Pipeline）やデータリソースからの書き込み用途のテーブル）
  *   → Ingestion Pipeline と密結合しているため、Schema と Partition を固定すべき
@@ -21,11 +25,9 @@ import { SystemGroup } from "../util/cdk/tagging";
  * ### 🆖 IaC で管理しないもの：
  * - Refined 層の Iceberg Tables（分析用途のテーブル）
  * - Mart 層（BI 用テーブル）
- * - 分析用途の schema evolution
- * - BI が作る ad-hoc テーブル
  *   → モデリングの進化が頻繁なため、SQL / ETL で管理
- *   → BI チームが自由に新テーブルを作れるようにする
- *   → Iceberg の schema evolution やsnapshot management の恩恵を活かす
+ * - ad-hoc テーブル
+ *   → BI チームが自由に新テーブルを作れるようにして、schema evolution やsnapshot management の恩恵を活かす
  */
 export class HothLakeHouseStack extends BaseStack {
 	/**
@@ -49,13 +51,19 @@ export class HothLakeHouseStack extends BaseStack {
 	 */
 	public readonly rawTable: tables.Table;
 
-	constructor(scope: Construct, props?: StackProps) {
+	constructor(scope: Construct, props?: BaseStackProps) {
 		const baseInfo: BaseInfo = {
 			serviceGroupName: ServiceGroupName.HOTH,
 			serviceBaseName: "LakeHouse",
 			systemGroupName: SystemGroup.STORAGE,
 		};
 		super(scope, baseInfo, props);
+
+		// ===== Custom Local Resource =====
+		if (props?.isRequiredCustomLocalResource) {
+			console.log("Custom Local Resource is required");
+			return;
+		}
 
 		// ===== Table Bucket =====
 
