@@ -9,8 +9,17 @@ import {
 } from "../util/cdk/naming";
 import { SystemGroup } from "../util/cdk/tagging";
 
+/**
+ * # Echo Stack（Unstructured Raw Storage）
+ * Ingestion Pipeline が書き込む生データの管理を行うためのスタック
+ */
 export class EchoRawStorageStack extends BaseStack {
+	/**
+	 * ### Unstructured Raw Storage Bucket
+	 * Ingestion Pipeline が書き込む生データを管理するためのバケット
+	 */
 	public readonly bucket: s3.Bucket;
+
 	constructor(scope: Construct, props?: StackProps) {
 		const baseInfo: BaseInfo = {
 			serviceGroupName: ServiceGroupName.ECHO,
@@ -19,6 +28,8 @@ export class EchoRawStorageStack extends BaseStack {
 		};
 		super(scope, baseInfo, props);
 
+		// ===== Bucket =====
+
 		const bucketName = createResourceName({
 			scope,
 			baseResourceName: "raw-storage",
@@ -26,14 +37,13 @@ export class EchoRawStorageStack extends BaseStack {
 			serviceGroupName: ServiceGroupName.ECHO,
 		});
 
-		// TODO: Lifecycle の "Expiration" ルールを設定して削除ルールを設定して、不要なデータを自動で削除するようにする
 		this.bucket = new s3.Bucket(this, "RawStorageBucket", {
 			bucketName,
 			blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
 			removalPolicy: RemovalPolicy.RETAIN,
 			// WORM（Write Once Read Many）のオブジェクトロックを設定するためにバージョニングが必須
 			versioned: true,
-			// ストーレージは明示的削除を必須化する（lockはバージョン単位で行われるため上書きはできてしまう）
+			// ストーレージは明示的削除を必須化する（lockはバージョン単位で行われるためバージョン更新はできてしまう）
 			objectLockEnabled: true,
 			// バッチ処理を考慮して1日でロックしておく
 			objectLockDefaultRetention: s3.ObjectLockRetention.governance(
