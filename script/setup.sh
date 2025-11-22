@@ -4,6 +4,9 @@
 # set -e
 
 ### FINO PROJECT ###
+echo "Setup Fino Project"
+echo "================================================"
+echo "process: add alias fino='make'"
 alias fino="make"
 
 ### INFA ####
@@ -22,4 +25,5 @@ alias fino="make"
 # Setup aws-cdk-local
 
 # npm install
+echo "process: npm install cdk dependencies (infra)"
 cd infra && npm install && cd ..

@@ -12,8 +12,16 @@ export interface BaseInfo {
 	serviceBaseName: string;
 }
 
+export interface BaseStackProps extends cdk.StackProps {
+	/**
+	 * ローカル環境デプロイ時にLocalstackが対応していない場合や、カスタマイズが必要な場合にtrueを設定する
+	 * スタックのconstructor内でこのフラグをチェックし自前でLocal用のスタックを定義する
+	 */
+	isRequiredCustomLocalResource?: boolean;
+}
+
 export class BaseStack extends cdk.Stack {
-	constructor(scope: Construct, baseInfo: BaseInfo, props?: cdk.StackProps) {
+	constructor(scope: Construct, baseInfo: BaseInfo, props?: BaseStackProps) {
 		const { serviceGroupName, systemGroupName, serviceBaseName } = baseInfo;
 		const stackName = createStackName({
 			scope,

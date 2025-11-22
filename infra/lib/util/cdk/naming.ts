@@ -8,6 +8,7 @@ import { getContext, getTargetEnv } from "./context";
 export enum ServiceGroupName {
 	HOTH = "Hoth",
 	ECHO = "Echo",
+	ECHO = "Echo",
 }
 
 /**
@@ -15,6 +16,9 @@ export enum ServiceGroupName {
  */
 export enum ResourceType {
 	S3_BUCKET = "S3Bucket",
+	S3_TABLE = "S3Table",
+	S3_TABLE_BUCKET = "S3TableBucket",
+	S3_TABLE_NAMESPACE = "S3TableNamespace",
 	HTTP_APIGATEWAY = "HttpApiGateway",
 }
 interface createStackNameArgs {
@@ -60,6 +64,7 @@ export const createResourceName = ({
 
 	switch (resourceType) {
 		case ResourceType.S3_BUCKET:
+		case ResourceType.S3_TABLE_BUCKET:
 			if (!serviceGroupName)
 				throw new Error(
 					"S3バケットのリソース名を作成する場合はserviceGroupNameが必須です",
@@ -70,6 +75,9 @@ export const createResourceName = ({
 				serviceGroupName.toLowerCase(),
 				baseResourceName.toLowerCase(),
 			]);
+		case ResourceType.S3_TABLE:
+		case ResourceType.S3_TABLE_NAMESPACE:
+			return connect([baseResourceName.toLowerCase()]);
 		default:
 			return connect([projectName, envName, baseResourceName]);
 	}
