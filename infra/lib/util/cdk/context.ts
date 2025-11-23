@@ -1,3 +1,4 @@
+import * as cdk from "aws-cdk-lib";
 import type { Construct } from "constructs";
 
 export type ContextKey = "projectName";
@@ -16,4 +17,13 @@ export const getContext = ({ scope, key }: getContextArgs) => {
  */
 export const getTargetEnv = () => {
 	return process.env.CDK_DEFAULT_ACCOUNT === "000000000000" ? "Local" : "Prd";
+};
+
+/**
+ * set removal policy based on target environment
+ */
+export const getEnvRemovalPolicy = () => {
+	return getTargetEnv() === "Prd"
+		? cdk.RemovalPolicy.RETAIN
+		: cdk.RemovalPolicy.DESTROY;
 };

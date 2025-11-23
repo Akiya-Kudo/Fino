@@ -11,8 +11,8 @@ export class EchoEdinetIngestionStack extends BaseStack {
 	constructor(scope: Construct, props?: BaseStackProps) {
 		const baseInfo: BaseInfo = {
 			serviceGroupName: ServiceGroupName.ECHO,
-			serviceBaseName: "EdinetIngestion",
 			systemGroupName: SystemGroup.JOB,
+			serviceBaseName: "EdinetIngestion",
 		};
 		super(scope, baseInfo, props);
 
