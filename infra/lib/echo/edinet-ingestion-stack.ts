@@ -134,7 +134,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			"MapIterator",
 			{
 				maxConcurrency: 1,
-				items: stepfunctions.ProvideItems.jsonata("$document_ids"),
+				items: stepfunctions.ProvideItems.jsonata("{% $document_ids %}"),
 			},
 		).itemProcessor(edinetDocIngestionTask.next(waitTask));
 
