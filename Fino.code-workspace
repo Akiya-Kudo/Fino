@@ -7,6 +7,10 @@
 		{
 			"path": "infra",
 			"name": "===== Infra Workspace ====="
+		},
+		{
+			"path": "service",
+			"name": "===== Service Workspace ====="
 		}
 	],
 	"settings": {
