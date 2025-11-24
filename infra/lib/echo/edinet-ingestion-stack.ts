@@ -106,9 +106,19 @@ export class EchoEdinetIngestionStack extends BaseStack {
 
 		// Step Function Tasks
 
+		// 別のパスで使用するため、新しいタスクインスタンスを作成
 		const edinetDocIdRegisterTask = new tasks.LambdaInvoke(
 			this,
 			"EdinetDocIdRegisterTask",
+			{
+				lambdaFunction: this.edinetDocIdRegisterLambda,
+				integrationPattern: stepfunctions.IntegrationPattern.REQUEST_RESPONSE,
+			},
+		);
+
+		const edinetDocIdRegisterForIngestionTask = new tasks.LambdaInvoke(
+			this,
+			"EdinetDocIdRegisterForIngestionTask",
 			{
 				lambdaFunction: this.edinetDocIdRegisterLambda,
 				integrationPattern: stepfunctions.IntegrationPattern.REQUEST_RESPONSE,
@@ -128,7 +138,10 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			time: stepfunctions.WaitTime.duration(Duration.seconds(30)),
 		});
 
-		// Step Function Flow
+		const successState = new stepfunctions.Succeed(this, "Success");
+
+		// Step Function Workflow
+
 		const docIngestionIterator = stepfunctions.Map.jsonata(
 			this,
 			"MapIterator",
@@ -139,21 +152,21 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		).itemProcessor(edinetDocIngestionTask.next(waitTask));
 
 		const docIngestionFlow = stepfunctions.Chain.start(
-			edinetDocIdRegisterTask,
+			edinetDocIdRegisterForIngestionTask,
 		).next(docIngestionIterator);
 
-		const edinetFlow = stepfunctions.Choice.jsonata(this, "Choice")
+		const workflow = stepfunctions.Choice.jsonata(this, "Choice")
 			.when(
 				stepfunctions.Condition.jsonata(
 					"{% $detail.type = 'Choice-EdintDocIDRegisterTriggeredCondition' %}",
 				),
-				edinetDocIdRegisterTask,
+				edinetDocIdRegisterTask.next(successState),
 			)
 			.when(
 				stepfunctions.Condition.jsonata(
 					"{% $detail.type = 'EdintDocIngestionTriggeredCondition' %}",
 				),
-				docIngestionFlow,
+				docIngestionFlow.next(successState),
 			)
 			.otherwise(
 				stepfunctions.Fail.jsonata(this, "UnsupportedEventType", {
@@ -172,7 +185,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		this.stateMachine = new stepfunctions.StateMachine(this, "StateMachine", {
 			stateMachineName,
 
-			definition: edinetFlow,
+			definition: workflow,
 		});
 
 		// Event Bridge
