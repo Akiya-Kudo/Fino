@@ -1,5 +1,6 @@
 import * as cdk from "aws-cdk-lib";
 import type { Construct } from "constructs";
+import type { ServiceGroupName } from "./naming";
 
 export type ContextKey = "projectName";
 
@@ -26,4 +27,26 @@ export const getEnvRemovalPolicy = () => {
 	return getTargetEnv() === "Prd"
 		? cdk.RemovalPolicy.RETAIN
 		: cdk.RemovalPolicy.DESTROY;
+};
+
+/**
+ * サービスレイヤーの関数エントリーポイントのパスを生成する
+ * @param serviceGroupName - サービスグループ名（例: ServiceGroupName.ECHO）
+ * @param functionName - 関数名（例: "edinet-doc-ingestion"）
+ * @param entryFile - エントリーファイル名（デフォルト: "main.py"）
+ * @returns 関数エントリーポイントへの相対パス
+ */
+interface getLambdaEntryPathArgs {
+	serviceGroupName: Lowercase<ServiceGroupName>;
+	functionName: string;
+	entryFile?: string;
+}
+
+export const getLambdaEntryPath = ({
+	serviceGroupName,
+	functionName,
+	entryFile = "main.py",
+}: getLambdaEntryPathArgs) => {
+	const serviceGroupPath = serviceGroupName;
+	return `../../../service/${serviceGroupPath}/functions/${functionName}/${entryFile}`;
 };

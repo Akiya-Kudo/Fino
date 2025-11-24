@@ -1,5 +1,7 @@
+import * as pythonLambda from "@aws-cdk/aws-lambda-python-alpha";
 import * as events from "aws-cdk-lib/aws-events";
 import * as targets from "aws-cdk-lib/aws-events-targets";
+import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as stepfunctions from "aws-cdk-lib/aws-stepfunctions";
 import type { Construct } from "constructs";
 import {
@@ -7,6 +9,7 @@ import {
 	BaseStack,
 	type BaseStackProps,
 } from "../base/base-stack";
+import { getLambdaEntryPath } from "../util/cdk/context";
 import {
 	createResourceName,
 	ResourceType,
@@ -19,6 +22,20 @@ import { SystemGroup } from "../util/cdk/tagging";
  * Edinet Ingestion Workflowを管理するためのスタック
  */
 export class EchoEdinetIngestionStack extends BaseStack {
+	/**
+	 * ## Lambda (Edinet Document Ingestion)
+	 * - DynamoDBのIngestion Stateを参照し、未取得の書類を取得する
+	 * - EDINET APIを叩いて書類を取得する
+	 * - Hoth Data LakeHouseに書き込みを行う（PyIceberg）
+	 */
+	public readonly edinetDocIngestionLambda: pythonLambda.PythonFunction;
+
+	/**
+	 * ## Lambda (Edinet Document ID Register)
+	 * - eventから書類IDを取得し、DynamoDBのIngestion Stateに登録する
+	 */
+	public readonly edinetDocIdRegisterLambda: pythonLambda.PythonFunction;
+
 	/**
 	 * ## Step Function (Edinet Ingestion)
 	 */
@@ -39,13 +56,57 @@ export class EchoEdinetIngestionStack extends BaseStack {
 
 		// Lambda（Python）
 
+		const edinetDocIdRegisterLambdaEntryPath = getLambdaEntryPath({
+			serviceGroupName: "echo",
+			functionName: "edinet-docid-register",
+		});
+
+		const edinetDocIdRegisterLambdaName = createResourceName({
+			scope,
+			resourceType: ResourceType.LAMBDA,
+			serviceGroupName: ServiceGroupName.ECHO,
+			baseResourceName: "edinet-docid-register",
+		});
+
+		this.edinetDocIdRegisterLambda = new pythonLambda.PythonFunction(
+			this,
+			"EdinetDocIdRegisterLambda",
+			{
+				functionName: edinetDocIdRegisterLambdaName,
+				entry: edinetDocIdRegisterLambdaEntryPath,
+				handler: "handler",
+				runtime: lambda.Runtime.PYTHON_3_13,
+			},
+		);
+
+		const edinetDocIngestionLambdaEntryPath = getLambdaEntryPath({
+			serviceGroupName: "echo",
+			functionName: "edinet-doc-ingestion",
+		});
+
+		const edinetDocIngestionLambdaName = createResourceName({
+			scope,
+			resourceType: ResourceType.LAMBDA,
+			serviceGroupName: ServiceGroupName.ECHO,
+			baseResourceName: "edinet-doc-ingestion",
+		});
+
+		this.edinetDocIngestionLambda = new pythonLambda.PythonFunction(
+			this,
+			"EdinetDocIngestionLambda",
+			{
+				functionName: edinetDocIngestionLambdaName,
+				entry: edinetDocIngestionLambdaEntryPath,
+				handler: "handler",
+				runtime: lambda.Runtime.PYTHON_3_13,
+			},
+		);
+
 		// Step Function
 
 		const choiceState = new stepfunctions.Choice(this, "ChoiceState", {
 			comment: "Choice state for Edinet Ingestion",
 		});
-
-		console.log("choiceState", choiceState);
 
 		const stateMachineName = createResourceName({
 			scope,
