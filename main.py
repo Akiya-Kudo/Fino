@@ -1,5 +1,5 @@
 def main():
-    print("Hello from edinet-doc-ingestion!")
+    print("Hello from fino!")
 
 
 if __name__ == "__main__":

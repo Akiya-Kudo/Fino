@@ -1,3 +1,7 @@
+import boto3
+
+dynamodb = boto3.resource("dynamodb")
+
 
 def handler(event, context):
     """
@@ -8,7 +12,4 @@ def handler(event, context):
     """
     print(event)
     print(context)
-    return {
-        'statusCode': 200,
-        'body': 'Hello, World!'
-    }
+    return {"statusCode": 200, "body": "Hello, World!"}
