@@ -64,5 +64,16 @@ setup:
 test:
 	$(RUN_CDK) npm run test
 
+# -------- Lint --------
+
+lint:
+	$(RUN_CDK) npm run lint
+
+format:
+	$(RUN_CDK) npm run format
+
+fix:
+	$(RUN_CDK) npm run fix
+
 echo:
 	@echo "$(LOCALSTACK_VOLUME_DIR)"

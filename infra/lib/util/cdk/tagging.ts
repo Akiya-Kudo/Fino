@@ -2,8 +2,10 @@ import { type Stack, Tags } from "aws-cdk-lib";
 
 export enum SystemGroup {
 	API = "API",
+
 	DISTRIBUTION = "Distribution",
 	STORAGE = "Storage",
+	JOB = "Job",
 	AUTH = "Auth",
 	COMMON = "Common",
 	CICD = "CICD",

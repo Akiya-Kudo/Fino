@@ -1,11 +1,11 @@
 import * as tables from "@aws-cdk/aws-s3tables-alpha";
-import { RemovalPolicy, type StackProps } from "aws-cdk-lib";
 import type { Construct } from "constructs";
 import {
 	type BaseInfo,
 	BaseStack,
 	type BaseStackProps,
 } from "../base/base-stack";
+import { getEnvRemovalPolicy } from "../util/cdk/context";
 import {
 	createResourceName,
 	ResourceType,
@@ -31,22 +31,22 @@ import { SystemGroup } from "../util/cdk/tagging";
  */
 export class HothLakeHouseStack extends BaseStack {
 	/**
-	 * 	### Data Lake House Table Bucket
+	 * 	## Data Lake House Table Bucket
 	 * テーブル定義を管理するためのバケット
 	 */
 	public readonly tableBucket: tables.TableBucket;
 	/**
-	 * ### Raw 層の Namespace
+	 * ## Raw 層の Namespace
 	 * Ingestion Pipeline が書き込む Raw テーブル用の名前空間
 	 */
 	public readonly rawNamespace: tables.Namespace;
 	/**
-	 * ### Financial 層の Namespace
+	 * ## Financial 層の Namespace
 	 * Refined / Mart 層のテーブル用の名前空間（CDK ではNamespaceのみ定義）
 	 */
 	public readonly financialNamespace: tables.Namespace;
 	/**
-	 * ### Raw 層のテーブル
+	 * ## Raw 層のテーブル
 	 * Ingestion Pipeline が書き込む Raw テーブル
 	 */
 	public readonly rawTable: tables.Table;
@@ -54,8 +54,8 @@ export class HothLakeHouseStack extends BaseStack {
 	constructor(scope: Construct, props?: BaseStackProps) {
 		const baseInfo: BaseInfo = {
 			serviceGroupName: ServiceGroupName.HOTH,
-			serviceBaseName: "LakeHouse",
 			systemGroupName: SystemGroup.STORAGE,
+			serviceBaseName: "LakeHouse",
 		};
 		super(scope, baseInfo, props);
 
@@ -69,14 +69,14 @@ export class HothLakeHouseStack extends BaseStack {
 
 		const tableBucketName = createResourceName({
 			scope,
-			baseResourceName: "lakehouse-storage",
-			resourceType: ResourceType.S3_TABLE_BUCKET,
 			serviceGroupName: ServiceGroupName.HOTH,
+			resourceType: ResourceType.S3_TABLE_BUCKET,
+			baseResourceName: "lakehouse-storage",
 		});
 
 		this.tableBucket = new tables.TableBucket(this, "TableBucket", {
 			tableBucketName,
-			removalPolicy: RemovalPolicy.RETAIN,
+			removalPolicy: getEnvRemovalPolicy(),
 		});
 
 		// ===== Namespace =====
