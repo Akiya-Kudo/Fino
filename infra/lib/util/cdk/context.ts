@@ -1,3 +1,4 @@
+import * as path from "node:path";
 import * as cdk from "aws-cdk-lib";
 import type { Construct } from "constructs";
 import type { ServiceGroupName } from "./naming";
@@ -47,5 +48,15 @@ export const getLambdaEntryPath = ({
 	functionName,
 }: getLambdaEntryPathArgs) => {
 	const serviceGroupPath = serviceGroupName;
-	return `../../service/${serviceGroupPath}/function/${functionName}/`;
+	// infra ディレクトリから見た相対パスを絶対パスに変換
+	// cdk synth は通常 infra ディレクトリから実行されるため、process.cwd() は infra ディレクトリを指す
+	const infraDir = process.cwd();
+	return path.resolve(
+		infraDir,
+		"..",
+		"service",
+		serviceGroupPath,
+		"function",
+		functionName,
+	);
 };

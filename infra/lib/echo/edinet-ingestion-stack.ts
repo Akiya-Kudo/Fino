@@ -180,6 +180,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		const customEventBusName = createResourceName({
 			scope,
 			resourceType: ResourceType.EVENT_BUS,
+			serviceGroupName: ServiceGroupName.ECHO,
 			baseResourceName: "edinet-event-bus",
 		});
 
