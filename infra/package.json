@@ -9,8 +9,9 @@
 		"watch": "tsc -w",
 		"test": "jest",
 		"cdk": "cdk",
-		"lint": "npx @biomejs/biome lint ./ --write",
-		"format": "npx @biomejs/biome format ./ --write",
+		"lint": "npx @biomejs/biome lint ../ --write",
+		"format": "npx @biomejs/biome format ../ --write",
+		"fix": "npx @biomejs/biome format ../ --write && npx @biomejs/biome lint ../ --write",
 		"ci": "npx @biomejs/biome ci ."
 	},
 	"devDependencies": {

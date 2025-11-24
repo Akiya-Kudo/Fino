@@ -1,12 +1,12 @@
 {
-    "recommendations": [
-        // typescript
-        "fronterior.biome-monorepo",
-        // python
-        "charliermarsh.ruff",
-        "ms-python.python",
-        "ms-toolsai.jupyter",
-        // markdown
-        "zaaack.markdown-editor",
-    ]
+	"recommendations": [
+		// typescript
+		"fronterior.biome-monorepo",
+		// python
+		"charliermarsh.ruff",
+		"ms-python.python",
+		"ms-toolsai.jupyter",
+		// markdown
+		"zaaack.markdown-editor"
+	]
 }
