@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 import * as cdk from "aws-cdk-lib/core";
+import { EchoEdinetIngestionStack } from "../lib/echo/edinet-ingestion-workflow-stack";
 import { HothLakeHouseStack } from "../lib/hoth/lakehouse-stack";
 
 const app = new cdk.App();
 
-new HothLakeHouseStack(app);
+const hothLakeHouseStack = new HothLakeHouseStack(app);
+
+const echoEdinetIngestionStack = new EchoEdinetIngestionStack(app);
+echoEdinetIngestionStack.addDependency(hothLakeHouseStack);

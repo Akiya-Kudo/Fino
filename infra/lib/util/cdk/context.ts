@@ -45,8 +45,7 @@ interface getLambdaEntryPathArgs {
 export const getLambdaEntryPath = ({
 	serviceGroupName,
 	functionName,
-	entryFile = "main.py",
 }: getLambdaEntryPathArgs) => {
 	const serviceGroupPath = serviceGroupName;
-	return `../../../service/${serviceGroupPath}/functions/${functionName}/${entryFile}`;
+	return `../../service/${serviceGroupPath}/function/${functionName}/`;
 };

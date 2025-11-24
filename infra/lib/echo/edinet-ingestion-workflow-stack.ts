@@ -129,9 +129,9 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		});
 
 		// Step Function Flow
-		const docIngestionIterator = new stepfunctions.Map(
+		const docIngestionIterator = stepfunctions.Map.jsonata(
 			this,
-			"DocIngestionIterator",
+			"MapIterator",
 			{
 				maxConcurrency: 1,
 				items: stepfunctions.ProvideItems.jsonata("$document_ids"),
@@ -142,20 +142,24 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			edinetDocIdRegisterTask,
 		).next(docIngestionIterator);
 
-		const edinetFlow = new stepfunctions.Choice(this, "ChoiceState")
+		const edinetFlow = stepfunctions.Choice.jsonata(this, "Choice")
 			.when(
-				stepfunctions.Condition.stringEquals(
-					"$.event.detail.type",
-					"EdintDocIDRegisterTriggered",
+				stepfunctions.Condition.jsonata(
+					"{% $detail.type = 'Choice-EdintDocIDRegisterTriggeredCondition' %}",
 				),
 				edinetDocIdRegisterTask,
 			)
 			.when(
-				stepfunctions.Condition.stringEquals(
-					"$.event.detail.type",
-					"EdintDocIngestionTriggered",
+				stepfunctions.Condition.jsonata(
+					"{% $detail.type = 'EdintDocIngestionTriggeredCondition' %}",
 				),
 				docIngestionFlow,
+			)
+			.otherwise(
+				stepfunctions.Fail.jsonata(this, "UnsupportedEventType", {
+					error: "UnsupportedEventType",
+					cause: "Event type not supported",
+				}),
 			);
 
 		// Step Function
