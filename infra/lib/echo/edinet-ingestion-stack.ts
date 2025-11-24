@@ -80,6 +80,9 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				entry: edinetDocIdRegisterLambdaEntryPath,
 				handler: "handler",
 				runtime: lambda.Runtime.PYTHON_3_13,
+				bundling: {
+					assetExcludes: [".venv", "__pycache__", "*.pyc"],
+				},
 			},
 		);
 
@@ -103,6 +106,9 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				entry: edinetDocIngestionLambdaEntryPath,
 				handler: "handler",
 				runtime: lambda.Runtime.PYTHON_3_13,
+				bundling: {
+					assetExcludes: [".venv", "__pycache__", "*.pyc"],
+				},
 			},
 		);
 
