@@ -1,4 +1,11 @@
+
 def handler(event, context):
+    """
+    # Edinet Document ID Register Lambda Function
+
+    ## Description
+    - eventから書類IDを取得し、DynamoDBのIngestion Stateに登録する
+    """
     print(event)
     print(context)
     return {

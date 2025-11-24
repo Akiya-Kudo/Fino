@@ -1,7 +1,9 @@
 import * as pythonLambda from "@aws-cdk/aws-lambda-python-alpha";
 import { Duration } from "aws-cdk-lib";
+import type * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as events from "aws-cdk-lib/aws-events";
 import * as targets from "aws-cdk-lib/aws-events-targets";
+import * as iam from "aws-cdk-lib/aws-iam";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as stepfunctions from "aws-cdk-lib/aws-stepfunctions";
 import * as tasks from "aws-cdk-lib/aws-stepfunctions-tasks";
@@ -19,6 +21,10 @@ import {
 } from "../util/cdk/naming";
 import { SystemGroup } from "../util/cdk/tagging";
 
+interface EchoEdinetIngestionStackProps extends BaseStackProps {
+	ingestionStateTable: dynamodb.Table;
+}
+
 /**
  * # Edinet Ingestion Workflow Stack
  * Edinet Ingestion Workflowを管理するためのスタック
@@ -26,15 +32,11 @@ import { SystemGroup } from "../util/cdk/tagging";
 export class EchoEdinetIngestionStack extends BaseStack {
 	/**
 	 * ## Lambda (Edinet Document Ingestion)
-	 * - DynamoDBのIngestion Stateを参照し、未取得の書類を取得する
-	 * - EDINET APIを叩いて書類を取得する
-	 * - Hoth Data LakeHouseに書き込みを行う（PyIceberg）
 	 */
 	public readonly edinetDocIngestionLambda: pythonLambda.PythonFunction;
 
 	/**
 	 * ## Lambda (Edinet Document ID Register)
-	 * - eventから書類IDを取得し、DynamoDBのIngestion Stateに登録する
 	 */
 	public readonly edinetDocIdRegisterLambda: pythonLambda.PythonFunction;
 
@@ -48,7 +50,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 	 */
 	public readonly eventRule: events.Rule;
 
-	constructor(scope: Construct, props?: BaseStackProps) {
+	constructor(scope: Construct, props: EchoEdinetIngestionStackProps) {
 		const baseInfo: BaseInfo = {
 			serviceGroupName: ServiceGroupName.ECHO,
 			systemGroupName: SystemGroup.JOB,
@@ -102,6 +104,22 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				handler: "handler",
 				runtime: lambda.Runtime.PYTHON_3_13,
 			},
+		);
+
+		// Lambda Policy Role
+
+		this.edinetDocIdRegisterLambda.addToRolePolicy(
+			new iam.PolicyStatement({
+				actions: ["dynamodb:PutItem", "dynamodb:GetItem"],
+				resources: [props.ingestionStateTable.tableArn],
+			}),
+		);
+
+		this.edinetDocIngestionLambda.addToRolePolicy(
+			new iam.PolicyStatement({
+				actions: ["dynamodb:PutItem", "dynamodb:GetItem"],
+				resources: [props.ingestionStateTable.tableArn],
+			}),
 		);
 
 		// Step Function Tasks
