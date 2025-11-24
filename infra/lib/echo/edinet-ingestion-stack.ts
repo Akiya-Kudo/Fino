@@ -269,3 +269,5 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		});
 	}
 }
+
+https: //aws.amazon.com/jp/blogs/compute/simplifying-developer-experience-with-variables-and-jsonata-in-aws-step-functions/
