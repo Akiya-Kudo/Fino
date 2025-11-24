@@ -173,6 +173,18 @@ export class EchoEdinetIngestionStack extends BaseStack {
 
 		// Step Function Workflow
 
+		// EventBridgeのdetailを共通変数として抽出
+		const extractDetailState = stepfunctions.Pass.jsonata(
+			this,
+			"ExtractDetail",
+			{
+				outputs: {
+					detail: "$.detail",
+					detailType: "$.detailType",
+				},
+			},
+		);
+
 		const docIngestionIterator = stepfunctions.Map.jsonata(
 			this,
 			"MapIterator",
@@ -186,25 +198,27 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			edinetDocIdRegisterForIngestionTask,
 		).next(docIngestionIterator);
 
-		const workflow = stepfunctions.Choice.jsonata(this, "Choice")
-			.when(
-				stepfunctions.Condition.jsonata(
-					"{% $states.input.`detail-type` = 'EdintDocIDRegisterTriggered' %}",
+		const workflow = stepfunctions.Chain.start(extractDetailState).next(
+			stepfunctions.Choice.jsonata(this, "Choice")
+				.when(
+					stepfunctions.Condition.jsonata(
+						`{% $states.input.detailType = '${EchoEventContext.edinet.detailType.EDINT_DOC_ID_REGISTER_TRIGGERED}' %}`,
+					),
+					edinetDocIdRegisterTask.next(successState),
+				)
+				.when(
+					stepfunctions.Condition.jsonata(
+						`{% $states.input.detailType = '${EchoEventContext.edinet.detailType.EDINT_DOC_INGESTION_TRIGGERED}' %}`,
+					),
+					docIngestionFlow.next(successState),
+				)
+				.otherwise(
+					stepfunctions.Fail.jsonata(this, "UnsupportedEventType", {
+						error: "UnsupportedEventType",
+						cause: "Event type not supported",
+					}),
 				),
-				edinetDocIdRegisterTask.next(successState),
-			)
-			.when(
-				stepfunctions.Condition.jsonata(
-					"{% $states.input.`detail-type` = 'EdintDocIngestionTriggered' %}",
-				),
-				docIngestionFlow.next(successState),
-			)
-			.otherwise(
-				stepfunctions.Fail.jsonata(this, "UnsupportedEventType", {
-					error: "UnsupportedEventType",
-					cause: "Event type not supported",
-				}),
-			);
+		);
 
 		// Step Function
 		const stateMachineName = createResourceName({
