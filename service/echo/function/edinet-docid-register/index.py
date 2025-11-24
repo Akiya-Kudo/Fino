@@ -57,6 +57,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
                 Item={
                     "data_source_group": partition_key,
                     "sec_code": document_id,  # Sort Keyとしてdocument_idを保存
+                    "ingestion_state": "READY",
                 }
             )
             saved_count += 1
@@ -70,7 +71,7 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         return {
             "statusCode": 207,  # Multi-Status
             "body": {
-                "message": "Some document_ids failed to save to DynamoDB",
+                "message": "SomeFailed to save document_ids to DynamoDB",
                 "sec_code": sec_code,
                 "document_ids": document_ids,
                 "saved_count": saved_count,

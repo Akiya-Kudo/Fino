@@ -20,6 +20,7 @@ import {
 	ServiceGroupName,
 } from "../util/cdk/naming";
 import { SystemGroup } from "../util/cdk/tagging";
+import { EchoEventContext } from "./context";
 
 interface EchoEdinetIngestionStackProps extends BaseStackProps {
 	ingestionStateTable: dynamodb.Table;
@@ -243,11 +244,11 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			description: "Rule for Edinet Ingestion",
 			eventBus: customEventBus,
 			eventPattern: {
-				version: ["0"],
-				source: ["emitter.cli"],
+				version: [EchoEventContext.version.V0],
+				source: [EchoEventContext.source.CLI],
 				detailType: [
-					"EdintDocIDRegisterTriggered",
-					"EdintDocIngestionTriggered",
+					EchoEventContext.edinet.detailType.EDINT_DOC_ID_REGISTER_TRIGGERED,
+					EchoEventContext.edinet.detailType.EDINT_DOC_INGESTION_TRIGGERED,
 				],
 			},
 			targets: [new targets.SfnStateMachine(this.stateMachine)],
