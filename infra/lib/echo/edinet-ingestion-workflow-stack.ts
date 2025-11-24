@@ -37,11 +37,15 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		};
 		super(scope, baseInfo, props);
 
+		// Lambda（Python）
+
 		// Step Function
 
 		const choiceState = new stepfunctions.Choice(this, "ChoiceState", {
 			comment: "Choice state for Edinet Ingestion",
 		});
+
+		console.log("choiceState", choiceState);
 
 		const stateMachineName = createResourceName({
 			scope,
@@ -83,7 +87,10 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			eventPattern: {
 				version: ["0"],
 				source: ["emitter.cli"],
-				detailType: ["EdinetRegisterTriggered", "EdinetIngestionTriggered"],
+				detailType: [
+					"EdintDocIDRegisterTriggered",
+					"EdintDocIngestionTriggered",
+				],
 			},
 			targets: [new targets.SfnStateMachine(this.stateMachine)],
 		});
