@@ -53,19 +53,18 @@ name = "edinet-docid-register"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
+    { name = "aws-lambda-powertools" },
     { name = "boto3" },
 ]
 
-[package.dev-dependencies]
-dev = [
-    { name = "aws-lambda-powertools" },
+[package.metadata]
+requires-dist = [
+    { name = "aws-lambda-powertools", specifier = ">=3.23.0" },
+    { name = "boto3", specifier = ">=1.41.2" },
 ]
 
-[package.metadata]
-requires-dist = [{ name = "boto3", specifier = ">=1.41.2" }]
-
 [package.metadata.requires-dev]
-dev = [{ name = "aws-lambda-powertools", specifier = ">=3.23.0" }]
+dev = []
 
 [[package]]
 name = "jmespath"
