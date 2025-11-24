@@ -70,6 +70,9 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         return {
             "statusCode": 207,  # Multi-Status
             "body": {
+                "message": "Some document_ids failed to save to DynamoDB",
+                "sec_code": sec_code,
+                "document_ids": document_ids,
                 "saved_count": saved_count,
                 "total_count": len(document_ids),
                 "errors": errors,
@@ -81,6 +84,8 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         "statusCode": 200,
         "body": {
             "message": "Success",
+            "sec_code": sec_code,
+            "document_ids": document_ids,
             "saved_count": saved_count,
             "total_count": len(document_ids),
         },
