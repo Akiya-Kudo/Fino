@@ -19,6 +19,9 @@ export enum ResourceType {
 	S3_TABLE_BUCKET = "S3TableBucket",
 	S3_TABLE_NAMESPACE = "S3TableNamespace",
 	DYNAMODB = "DynamoDB",
+	STEP_FUNCTION = "StepFunction",
+	EVNENT_RULE = "EventRule",
+	EVENT_BUS = "EventBus",
 }
 interface createStackNameArgs {
 	scope: Construct;
@@ -28,7 +31,7 @@ interface createStackNameArgs {
 
 interface createResourceNameArgs {
 	scope: Construct;
-	resourceType?: ResourceType;
+	resourceType: ResourceType;
 	baseResourceName: string;
 	serviceGroupName?: ServiceGroupName;
 }
@@ -64,9 +67,11 @@ export const createResourceName = ({
 	switch (resourceType) {
 		case ResourceType.S3_BUCKET:
 		case ResourceType.S3_TABLE_BUCKET:
+		case ResourceType.EVENT_BUS:
 			if (!serviceGroupName)
 				throw new Error(
-					"S3バケットのリソース名を作成する場合はserviceGroupNameが必須です",
+					"このリソース名を作成する場合はserviceGroupNameが必須です：" +
+						baseResourceName,
 				);
 			return connect([
 				projectName.toLowerCase(),
