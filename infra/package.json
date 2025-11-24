@@ -15,6 +15,7 @@
 		"ci": "npx @biomejs/biome ci ."
 	},
 	"devDependencies": {
+		"@aws-cdk/aws-lambda-python-alpha": "^2.227.0-alpha.0",
 		"@aws-cdk/aws-s3tables-alpha": "^2.227.0-alpha.0",
 		"@biomejs/biome": "2.3.6",
 		"@types/jest": "^29.5.14",
@@ -27,7 +28,6 @@
 		"typescript": "~5.6.3"
 	},
 	"dependencies": {
-		"@aws-cdk/aws-lambda-python-alpha": "^2.227.0-alpha.0",
 		"constructs": "^10.0.0"
 	}
 }

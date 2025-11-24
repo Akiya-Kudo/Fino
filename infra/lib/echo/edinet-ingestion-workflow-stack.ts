@@ -1,8 +1,10 @@
 import * as pythonLambda from "@aws-cdk/aws-lambda-python-alpha";
+import { Duration } from "aws-cdk-lib";
 import * as events from "aws-cdk-lib/aws-events";
 import * as targets from "aws-cdk-lib/aws-events-targets";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as stepfunctions from "aws-cdk-lib/aws-stepfunctions";
+import * as tasks from "aws-cdk-lib/aws-stepfunctions-tasks";
 import type { Construct } from "constructs";
 import {
 	type BaseInfo,
@@ -102,12 +104,61 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			},
 		);
 
-		// Step Function
+		// Step Function Tasks
 
-		const choiceState = new stepfunctions.Choice(this, "ChoiceState", {
-			comment: "Choice state for Edinet Ingestion",
+		const edinetDocIdRegisterTask = new tasks.LambdaInvoke(
+			this,
+			"EdinetDocIdRegisterTask",
+			{
+				lambdaFunction: this.edinetDocIdRegisterLambda,
+				integrationPattern: stepfunctions.IntegrationPattern.REQUEST_RESPONSE,
+			},
+		);
+
+		const edinetDocIngestionTask = new tasks.LambdaInvoke(
+			this,
+			"EdinetDocIngestionTask",
+			{
+				lambdaFunction: this.edinetDocIngestionLambda,
+				integrationPattern: stepfunctions.IntegrationPattern.REQUEST_RESPONSE,
+			},
+		);
+
+		const waitTask = new stepfunctions.Wait(this, "Wait30sTask", {
+			time: stepfunctions.WaitTime.duration(Duration.seconds(30)),
 		});
 
+		// Step Function Flow
+		const docIngestionIterator = new stepfunctions.Map(
+			this,
+			"DocIngestionIterator",
+			{
+				maxConcurrency: 1,
+				items: stepfunctions.ProvideItems.jsonata("$document_ids"),
+			},
+		).itemProcessor(edinetDocIngestionTask.next(waitTask));
+
+		const docIngestionFlow = stepfunctions.Chain.start(
+			edinetDocIdRegisterTask,
+		).next(docIngestionIterator);
+
+		const edinetFlow = new stepfunctions.Choice(this, "ChoiceState")
+			.when(
+				stepfunctions.Condition.stringEquals(
+					"$.event.detail.type",
+					"EdintDocIDRegisterTriggered",
+				),
+				edinetDocIdRegisterTask,
+			)
+			.when(
+				stepfunctions.Condition.stringEquals(
+					"$.event.detail.type",
+					"EdintDocIngestionTriggered",
+				),
+				docIngestionFlow,
+			);
+
+		// Step Function
 		const stateMachineName = createResourceName({
 			scope,
 			resourceType: ResourceType.STEP_FUNCTION,
@@ -117,9 +168,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		this.stateMachine = new stepfunctions.StateMachine(this, "StateMachine", {
 			stateMachineName,
 
-			definition: new stepfunctions.Pass(this, "Pass", {
-				result: stepfunctions.Result.fromString("Hello, World!"),
-			}),
+			definition: edinetFlow,
 		});
 
 		// Event Bridge
