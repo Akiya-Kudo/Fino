@@ -1,7 +1,7 @@
 {
     "recommendations": [
         // typescript
-        "biomejs.biome",
+        "fronterior.biome-monorepo",
         // python
         "charliermarsh.ruff",
         "ms-python.python",

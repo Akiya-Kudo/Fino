@@ -81,6 +81,7 @@
 			"terminal.ansiBrightYellow": "#ffe065",
 			"terminal.ansiBlue": "#f77f61",
 			"terminal.ansiBrightBlue": "#f77f61"
-		}
+		},
+		"makefile.configureOnOpen": false
 	}
 }
