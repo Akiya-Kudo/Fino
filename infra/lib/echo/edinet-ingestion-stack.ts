@@ -158,13 +158,13 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		const workflow = stepfunctions.Choice.jsonata(this, "Choice")
 			.when(
 				stepfunctions.Condition.jsonata(
-					"{% $detail.type = 'Choice-EdintDocIDRegisterTriggeredCondition' %}",
+					"{% $detail.type = 'EdintDocIDRegisterTriggered' %}",
 				),
 				edinetDocIdRegisterTask.next(successState),
 			)
 			.when(
 				stepfunctions.Condition.jsonata(
-					"{% $detail.type = 'EdintDocIngestionTriggeredCondition' %}",
+					"{% $detail.type = 'EdintDocIngestionTriggered' %}",
 				),
 				docIngestionFlow.next(successState),
 			)
