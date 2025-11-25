@@ -144,6 +144,10 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			{
 				lambdaFunction: this.edinetDocIdRegisterLambda,
 				integrationPattern: stepfunctions.IntegrationPattern.REQUEST_RESPONSE,
+				payload: stepfunctions.TaskInput.fromObject({
+					detail: "$detail",
+					detailType: "$detailType",
+				}),
 			},
 		);
 
@@ -178,10 +182,10 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			this,
 			"ExtractDetail",
 			{
-				outputs: {
-					detail: "$.detail",
-					detailType: "$.detailType",
-				},
+				assign: {
+					detail: "{% $states.input.detail %}",
+					detailType: "{% $states.input.`detail-type` %}",
+				}
 			},
 		);
 
@@ -202,13 +206,13 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			stepfunctions.Choice.jsonata(this, "Choice")
 				.when(
 					stepfunctions.Condition.jsonata(
-						`{% $states.input.detailType = '${EchoEventContext.edinet.detailType.EDINT_DOC_ID_REGISTER_TRIGGERED}' %}`,
+						`{% $detailType = '${EchoEventContext.edinet.detailType.EDINT_DOC_ID_REGISTER_TRIGGERED}' %}`,
 					),
 					edinetDocIdRegisterTask.next(successState),
 				)
 				.when(
 					stepfunctions.Condition.jsonata(
-						`{% $states.input.detailType = '${EchoEventContext.edinet.detailType.EDINT_DOC_INGESTION_TRIGGERED}' %}`,
+						`{% $detailType = '${EchoEventContext.edinet.detailType.EDINT_DOC_INGESTION_TRIGGERED}' %}`,
 					),
 					docIngestionFlow.next(successState),
 				)
@@ -269,5 +273,3 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		});
 	}
 }
-
-https: //aws.amazon.com/jp/blogs/compute/simplifying-developer-experience-with-variables-and-jsonata-in-aws-step-functions/
