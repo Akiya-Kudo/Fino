@@ -138,16 +138,15 @@ export class EchoEdinetIngestionStack extends BaseStack {
 		// Step Function Tasks
 
 		// 別のパスで使用するため、新しいタスクインスタンスを作成
-		const edinetDocIdRegisterTask = new tasks.LambdaInvoke(
+		const edinetDocIdRegisterTask = tasks.LambdaInvoke.jsonata(
 			this,
 			"EdinetDocIdRegisterTask",
 			{
 				lambdaFunction: this.edinetDocIdRegisterLambda,
 				integrationPattern: stepfunctions.IntegrationPattern.REQUEST_RESPONSE,
-				payload: stepfunctions.TaskInput.fromObject({
-					detail: "$detail",
-					detailType: "$detailType",
-				}),
+				payload: stepfunctions.TaskInput.fromText(
+					'{% { "detail": $detail, "detailType": $detailType } %}',
+				),
 			},
 		);
 
@@ -185,7 +184,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				assign: {
 					detail: "{% $states.input.detail %}",
 					detailType: "{% $states.input.`detail-type` %}",
-				}
+				},
 			},
 		);
 

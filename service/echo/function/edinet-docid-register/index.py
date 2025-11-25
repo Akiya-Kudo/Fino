@@ -21,6 +21,10 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         - PK: edinet/<sec_code>
         - Sort Key: document_id
     """
+
+    print(f"Received event: {json.dumps(event)}"    )
+    print(f"Received context: {json.dumps(context)}")
+
     # テーブル名を環境変数から取得
     table_name = os.environ.get("INGESTION_STATE_TABLE_NAME")
     if not table_name:
