@@ -45,7 +45,7 @@ export class IngestionStateStoreStack extends BaseStack {
 			scope,
 			serviceGroupName: ServiceGroupName.ECHO,
 			resourceType: ResourceType.DYNAMODB,
-			baseResourceName: "ingestion-state",
+			baseResourceName: "ingestion-state-table",
 		});
 
 		this.ingestionStateTable = new dynamodb.Table(this, "IngestionStateTable", {

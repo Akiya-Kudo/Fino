@@ -68,6 +68,7 @@ export const createResourceName = ({
 		case ResourceType.S3_TABLE_BUCKET:
 		case ResourceType.LAMBDA:
 		case ResourceType.EVENT_BUS:
+		case ResourceType.DYNAMODB:
 			if (!serviceGroupName)
 				throw new Error(
 					"このリソース名を作成する場合はserviceGroupNameが必須です：" +
