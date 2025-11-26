@@ -2,6 +2,8 @@ import * as cdk from "aws-cdk-lib/core";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import { type BaseInfo, BaseStack } from "../base/base-stack";
 import type { Construct } from "constructs";
+import { SystemGroup } from "../util/cdk/tagging";
+import { ServiceGroupName } from "../util/cdk/naming";
 
 interface HothProps extends cdk.StackProps {
 	// lakehouseのデータレイヤー設定
@@ -39,8 +41,9 @@ export class Hoth extends BaseStack {
 
 	constructor(scope: Construct, baseName: string, props?: HothProps) {
 		const baseInfo: BaseInfo = {
-			baseName,
-			systemGroup: "Storage",
+			serviceGroupName: ServiceGroupName.HOTH,
+			systemGroupName: SystemGroup.STORAGE,
+			serviceBaseName: baseName,
 		};
 		super(scope, baseInfo, props);
 

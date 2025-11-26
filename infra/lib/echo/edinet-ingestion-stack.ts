@@ -80,7 +80,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				functionName: edinetDocIdRegisterLambdaName,
 				entry: edinetDocIdRegisterLambdaEntryPath,
 				handler: "handler",
-				runtime: lambda.Runtime.PYTHON_3_13,
+				runtime: lambda.Runtime.PYTHON_3_12,
 				environment: {
 					INGESTION_STATE_TABLE_NAME: props.ingestionStateTable.tableName,
 					INGESTION_STATE_TABLE_ENDPOINT: props.ingestionStateTableEndpoint,
@@ -110,7 +110,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				functionName: edinetDocIngestionLambdaName,
 				entry: edinetDocIngestionLambdaEntryPath,
 				handler: "handler",
-				runtime: lambda.Runtime.PYTHON_3_13,
+				runtime: lambda.Runtime.PYTHON_3_12,
 				environment: {
 					INGESTION_STATE_TABLE_NAME: props.ingestionStateTable.tableName,
 					// FIXME: ローカル環境ように定義しているが本来であればboto3により実装している場合はNoneの場合自動でendpointを取得されるので不要かつ、python-lambda-localでデバッグしてるのでこの値は参照されない
