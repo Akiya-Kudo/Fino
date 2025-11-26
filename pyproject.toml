@@ -3,10 +3,11 @@ name = "fino"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
-requires-python = ">=3.9"
-dependencies = []
+requires-python = "==3.12.*"
+dependencies = [
+    "python-lambda-local>=0.1.13",
+    "setuptools>=80.9.0",
+]
 
 [dependency-groups]
-dev = [
-    "ruff>=0.14.6",
-]
+dev = ["ruff>=0.14.6"]
