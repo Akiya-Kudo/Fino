@@ -24,7 +24,7 @@ RUN_CDK = cd infra &&
 
 # Extract extra args:
 # Remove the make target name from MAKECMDGOALS
-ARGS = $(filter-out $@,$(MAKECMDGOALS))
+ARGS = $(filter-out $@, $(MAKECMDGOALS))
 
 # Avoid "No rule to make target" errors for args
 %:
@@ -58,6 +58,14 @@ local:
 
 setup:
 	$(RUN_CDK) scripts/setup.sh
+
+env:
+	@if grep -q "^SYSTEM_ENV=" .env; then \
+		sed -i '' "s/^SYSTEM_ENV=.*/SYSTEM_ENV=$(filter-out $@,$(MAKECMDGOALS))/" .env; \
+	else \
+		echo "\nSYSTEM_ENV=$(filter-out $@,$(MAKECMDGOALS))" >> .env; \
+	fi
+	@echo "Updated SYSTEM_ENV"
 
 # -------- Test --------
 

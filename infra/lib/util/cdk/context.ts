@@ -18,7 +18,22 @@ export const getContext = ({ scope, key }: getContextArgs) => {
  * FIXME: 環境が増えた場合には撮り方を考える必要あり。環境変数として環境名を指定するようにする（lilomap）か、他にあるんかね
  */
 export const getTargetEnv = () => {
-	return process.env.CDK_DEFAULT_ACCOUNT === "000000000000" ? "Local" : "Prd";
+	const systemEnv = process.env.SYSTEM_ENV;
+	switch (systemEnv) {
+		case "Local":
+			return "Local";
+		case "Dev":
+			return "Dev";
+		case "Prd":
+			return "Prd";
+		default:
+			if (process.env.CDK_DEFAULT_ACCOUNT === "000000000000") {
+				return "Local";
+			}
+			throw new Error(
+				`環境変数により環境を指定してください（SYSTEM_ENV）: ${systemEnv}`,
+			);
+	}
 };
 
 /**
