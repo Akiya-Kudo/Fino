@@ -10,9 +10,11 @@ logger = Logger()
 
 dynamodb = boto3.resource("dynamodb")
 
+LambdaEvent = {"detail": { "document_ids": list[str], "sec_code": str}, "detailType": str}
+
 
 @logger.inject_lambda_context(log_event=True)
-def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
+def handler(event: LambdaEvent, context: LambdaContext) -> Dict[str, Any]:
     """
     # Edinet Document ID Register Lambda Function
 
@@ -22,8 +24,8 @@ def handler(event: Dict[str, Any], context: LambdaContext) -> Dict[str, Any]:
         - Sort Key: document_id
     """
 
-    print(f"Received event: {json.dumps(event)}"    )
-    print(f"Received context: {json.dumps(context)}")
+    print(f"Received event: {event}"    )
+    print(f"Received context: {context}")
 
     # テーブル名を環境変数から取得
     table_name = os.environ.get("INGESTION_STATE_TABLE_NAME")
