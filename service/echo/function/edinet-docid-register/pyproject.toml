@@ -7,6 +7,7 @@ requires-python = ">=3.9"
 dependencies = [
     "boto3>=1.41.2",
     "aws-lambda-powertools>=3.23.0",
+    "aws-lambda-powertools[validation]"
 ]
 
 [dependency-groups]
