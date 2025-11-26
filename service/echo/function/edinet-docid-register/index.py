@@ -55,6 +55,7 @@ def handler(event: schemas.InputEvent, context: LambdaContext) -> schemas.Output
         "statusCode": 200,
         "body": {
             "message": "Success",
+            "document_ids": document_ids,
             "sec_code": sec_code,
             "saved_count": len(saved_count),
         },

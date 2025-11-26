@@ -15,6 +15,7 @@ class InputEvent(BaseModel):
 class OutputBody(BaseModel):
     sec_code: str
     saved_count: int
+    document_ids: list[str]
 
 
 class OutputEvent(BaseModel):
