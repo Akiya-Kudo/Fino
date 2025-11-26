@@ -59,6 +59,8 @@ local:
 setup:
 	$(RUN_CDK) scripts/setup.sh
 
+# -------- Cdk environment --------
+
 env:
 	@if grep -q "^SYSTEM_ENV=" .env; then \
 		sed -i '' "s/^SYSTEM_ENV=.*/SYSTEM_ENV=$(filter-out $@,$(MAKECMDGOALS))/" .env; \
