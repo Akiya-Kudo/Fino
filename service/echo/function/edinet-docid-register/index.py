@@ -1,6 +1,7 @@
 import os
 
 import boto3
+from boto3.dynamodb.conditions import Key
 from aws_lambda_powertools import Logger
 from aws_lambda_powertools.utilities.typing import LambdaContext
 from aws_lambda_powertools.utilities.parser import event_parser
@@ -38,8 +39,18 @@ def handler(event: schemas.InputEvent, context: LambdaContext) -> schemas.Output
     # Generate Partition Key
     partition_key = f"edinet/{sec_code}"
 
-    saved_count = 0
-    for document_id in document_ids:
+    # Get Existing Document IDs from DynamoDB
+    result = table.query(
+        KeyConditionExpression=Key("data_source_group").eq(partition_key)
+    )
+
+    # Extract Existing Document IDs & Get Document IDs for Save
+    existing_document_ids = [item["document_id"] for item in result.get("Items", [])]
+    document_ids_for_save = [document_id for document_id in document_ids if document_id not in existing_document_ids]
+
+    # Save Document IDs to DynamoDB
+    saved_document_ids = []
+    for document_id in document_ids_for_save:
         table.put_item(
             Item={
                 "data_source_group": partition_key,
@@ -47,16 +58,16 @@ def handler(event: schemas.InputEvent, context: LambdaContext) -> schemas.Output
                 "ingestion_state": "READY",
             }
         )
-        saved_count += 1
+        saved_document_ids.append(document_id)
         logger.info(f"SUCCESS SAVE DOCUMENT ID: PK: {partition_key}, SK: {document_id}")
 
-    logger.info(f"SAVED COUNT: {saved_count}")
+    logger.info(f"SAVED COUNT: {len(saved_document_ids)}")
     return {
         "statusCode": 200,
         "body": {
             "message": "Success",
             "document_ids": document_ids,
             "sec_code": sec_code,
-            "saved_count": saved_count,
+            "saved_document_ids": saved_document_ids,
         },
     }
