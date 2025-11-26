@@ -1,3 +1,4 @@
+import type { App } from "aws-cdk-lib";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import type { Construct } from "constructs";
 import {
@@ -5,7 +6,7 @@ import {
 	BaseStack,
 	type BaseStackProps,
 } from "../base/base-stack";
-import { getEnvRemovalPolicy } from "../util/cdk/context";
+import { getEnvRemovalPolicy, getTargetEnv } from "../util/cdk/context";
 import {
 	createResourceName,
 	ResourceType,
@@ -17,7 +18,7 @@ import { SystemGroup } from "../util/cdk/tagging";
  * # Ingestion State Store Stack
  * Ingestion State を管理するための DynamoDB テーブルを作成するスタック
  */
-export class IngestionStateStoreStack extends BaseStack {
+export class IngestionStateTableStack extends BaseStack {
 	/**
 	 * ## Ingestion State Table
 	 *
@@ -31,7 +32,13 @@ export class IngestionStateStoreStack extends BaseStack {
 	 */
 	public readonly ingestionStateTable: dynamodb.Table;
 
-	constructor(scope: Construct, props?: BaseStackProps) {
+	/**
+	 * ## Table Endpoint
+	 * DynamoDB テーブルのエンドポイント
+	 */
+	public readonly tableEndpoint: string;
+
+	constructor(scope: App, props?: BaseStackProps) {
 		const baseInfo: BaseInfo = {
 			serviceGroupName: ServiceGroupName.ECHO,
 			systemGroupName: SystemGroup.STORAGE,
@@ -40,6 +47,11 @@ export class IngestionStateStoreStack extends BaseStack {
 		super(scope, baseInfo, props);
 
 		// DynamoDB Table
+
+		this.tableEndpoint =
+			getTargetEnv() === "Local"
+				? "http://dynamodb-local:8000"
+				: `dynamodb.${scope.region}.amazonaws.com`;
 
 		const ingestionStateTableName = createResourceName({
 			scope,
@@ -55,7 +67,7 @@ export class IngestionStateStoreStack extends BaseStack {
 				type: dynamodb.AttributeType.STRING,
 			},
 			sortKey: {
-				name: "sec_code",
+				name: "document_id",
 				type: dynamodb.AttributeType.STRING,
 			},
 			billingMode: dynamodb.BillingMode.PAY_PER_REQUEST,

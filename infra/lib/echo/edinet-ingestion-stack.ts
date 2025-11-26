@@ -1,5 +1,5 @@
 import * as pythonLambda from "@aws-cdk/aws-lambda-python-alpha";
-import { Duration } from "aws-cdk-lib";
+import { type App, Duration } from "aws-cdk-lib";
 import type * as dynamodb from "aws-cdk-lib/aws-dynamodb";
 import * as events from "aws-cdk-lib/aws-events";
 import * as targets from "aws-cdk-lib/aws-events-targets";
@@ -7,7 +7,6 @@ import * as iam from "aws-cdk-lib/aws-iam";
 import * as lambda from "aws-cdk-lib/aws-lambda";
 import * as stepfunctions from "aws-cdk-lib/aws-stepfunctions";
 import * as tasks from "aws-cdk-lib/aws-stepfunctions-tasks";
-import type { Construct } from "constructs";
 import {
 	type BaseInfo,
 	BaseStack,
@@ -24,6 +23,7 @@ import { EchoEventContext } from "./context";
 
 interface EchoEdinetIngestionStackProps extends BaseStackProps {
 	ingestionStateTable: dynamodb.Table;
+	ingestionStateTableEndpoint: string;
 }
 
 /**
@@ -51,7 +51,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 	 */
 	public readonly eventRule: events.Rule;
 
-	constructor(scope: Construct, props: EchoEdinetIngestionStackProps) {
+	constructor(scope: App, props: EchoEdinetIngestionStackProps) {
 		const baseInfo: BaseInfo = {
 			serviceGroupName: ServiceGroupName.ECHO,
 			systemGroupName: SystemGroup.JOB,
@@ -83,6 +83,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				runtime: lambda.Runtime.PYTHON_3_13,
 				environment: {
 					INGESTION_STATE_TABLE_NAME: props.ingestionStateTable.tableName,
+					INGESTION_STATE_TABLE_ENDPOINT: props.ingestionStateTableEndpoint,
 				},
 				bundling: {
 					assetExcludes: [".venv", "__pycache__", "*.pyc"],
@@ -112,6 +113,8 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				runtime: lambda.Runtime.PYTHON_3_13,
 				environment: {
 					INGESTION_STATE_TABLE_NAME: props.ingestionStateTable.tableName,
+					// FIXME: ローカル環境ように定義しているが本来であればboto3により実装している場合はNoneの場合自動でendpointを取得されるので不要かつ、python-lambda-localでデバッグしてるのでこの値は参照されない
+					INGESTION_STATE_TABLE_ENDPOINT: props.ingestionStateTableEndpoint,
 				},
 				bundling: {
 					assetExcludes: [".venv", "__pycache__", "*.pyc"],

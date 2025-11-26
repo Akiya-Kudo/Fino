@@ -1,0 +1,26 @@
+networks:
+  fino-dev-network:
+    driver: bridge
+
+services:
+  dynamodb-local:
+    image: amazon/dynamodb-local:latest
+    ports:
+      - "8000:8000"
+    environment:
+      - DEFAULT_REGION=ap-northeast-1
+    volumes:
+      - ./dynamodb-local-data:/data
+    networks:
+      - fino-dev-network
+  dynamodb-admin:
+    image: aaronshaf/dynamodb-admin:4.6.1
+    environment:
+      - DYNAMO_ENDPOINT=http://dynamodb-local:8000
+      - AWS_REGION=ap-northeast-1
+    ports:
+      - 8001:8001
+    depends_on:
+      - dynamodb-local
+    networks:
+      - fino-dev-network
