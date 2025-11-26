@@ -205,13 +205,13 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			stepfunctions.Choice.jsonata(this, "Choice")
 				.when(
 					stepfunctions.Condition.jsonata(
-						`{% $detailType = '${EchoEventContext.edinet.detailType.EDINT_DOC_ID_REGISTER_TRIGGERED}' %}`,
+						`{% $detailType = '${EchoEventContext.edinet.detailType.EDINET_DOC_ID_REGISTER_TRIGGERED}' %}`,
 					),
 					edinetDocIdRegisterTask.next(successState),
 				)
 				.when(
 					stepfunctions.Condition.jsonata(
-						`{% $detailType = '${EchoEventContext.edinet.detailType.EDINT_DOC_INGESTION_TRIGGERED}' %}`,
+						`{% $detailType = '${EchoEventContext.edinet.detailType.EDINET_DOC_INGESTION_TRIGGERED}' %}`,
 					),
 					docIngestionFlow.next(successState),
 				)
@@ -264,8 +264,8 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				version: [EchoEventContext.version.V0],
 				source: [EchoEventContext.source.CLI],
 				detailType: [
-					EchoEventContext.edinet.detailType.EDINT_DOC_ID_REGISTER_TRIGGERED,
-					EchoEventContext.edinet.detailType.EDINT_DOC_INGESTION_TRIGGERED,
+					EchoEventContext.edinet.detailType.EDINET_DOC_ID_REGISTER_TRIGGERED,
+					EchoEventContext.edinet.detailType.EDINET_DOC_INGESTION_TRIGGERED,
 				],
 			},
 			targets: [new targets.SfnStateMachine(this.stateMachine)],

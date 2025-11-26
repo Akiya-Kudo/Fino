@@ -19,8 +19,8 @@ export const EchoEventContext = {
 			NAME: edinetEventBusName,
 		},
 		detailType: {
-			EDINT_DOC_ID_REGISTER_TRIGGERED: "EdintDocIDRegisterTriggered",
-			EDINT_DOC_INGESTION_TRIGGERED: "EdintDocIngestionTriggered",
+			EDINET_DOC_ID_REGISTER_TRIGGERED: "EdinetDocIDRegisterTriggered",
+			EDINET_DOC_INGESTION_TRIGGERED: "EdinetDocIngestionTriggered",
 		},
 	},
 	source: {
