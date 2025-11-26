@@ -1,6 +1,5 @@
 import type { App } from "aws-cdk-lib";
 import * as dynamodb from "aws-cdk-lib/aws-dynamodb";
-import type { Construct } from "constructs";
 import {
 	type BaseInfo,
 	BaseStack,
@@ -50,7 +49,7 @@ export class IngestionStateTableStack extends BaseStack {
 
 		this.tableEndpoint =
 			getTargetEnv() === "Local"
-				? "http://dynamodb-local:8000"
+				? "http://localhost:8000"
 				: `dynamodb.${scope.region}.amazonaws.com`;
 
 		const ingestionStateTableName = createResourceName({
