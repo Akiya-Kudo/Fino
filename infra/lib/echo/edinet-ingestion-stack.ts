@@ -159,6 +159,9 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			{
 				lambdaFunction: this.edinetDocIdRegisterLambda,
 				integrationPattern: stepfunctions.IntegrationPattern.REQUEST_RESPONSE,
+				payload: stepfunctions.TaskInput.fromText(
+					'{% { "detail": $detail, "detailType": $detailType } %}',
+				),
 			},
 		);
 
@@ -168,6 +171,9 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			{
 				lambdaFunction: this.edinetDocIngestionLambda,
 				integrationPattern: stepfunctions.IntegrationPattern.REQUEST_RESPONSE,
+				payload: stepfunctions.TaskInput.fromText(
+					'{% { "detail": $detail, "detailType": $detailType } %}',
+				),
 			},
 		);
 
