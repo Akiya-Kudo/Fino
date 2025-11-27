@@ -153,7 +153,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			},
 		);
 
-		const edinetDocIdRegisterForIngestionTask = new tasks.LambdaInvoke(
+		const edinetDocIdRegisterForIngestionTask = tasks.LambdaInvoke.jsonata(
 			this,
 			"EdinetDocIdRegisterForIngestionTask",
 			{
@@ -165,7 +165,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			},
 		);
 
-		const edinetDocIngestionTask = new tasks.LambdaInvoke(
+		const edinetDocIngestionTask = tasks.LambdaInvoke.jsonata(
 			this,
 			"EdinetDocIngestionTask",
 			{
@@ -202,7 +202,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 			"MapIterator",
 			{
 				maxConcurrency: 1,
-				items: stepfunctions.ProvideItems.jsonata("{% $document_ids %}"),
+				items: stepfunctions.ProvideItems.jsonata("{% $detail.document_ids %}"),
 			},
 		).itemProcessor(edinetDocIngestionTask.next(waitTask));
 
