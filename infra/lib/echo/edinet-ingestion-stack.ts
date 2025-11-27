@@ -172,7 +172,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 				lambdaFunction: this.edinetDocIngestionLambda,
 				integrationPattern: stepfunctions.IntegrationPattern.REQUEST_RESPONSE,
 				payload: stepfunctions.TaskInput.fromText(
-					'{% { "detail": $detail, "detailType": $detailType } %}',
+					'{% { "detail": $detail, "detailType": $detailType, "item": $ } %}',
 				),
 			},
 		);
