@@ -5,7 +5,6 @@ import { IngestionStateTableStack } from "../lib/echo/ingestion-state-table-stac
 import { HothLakeHouseStack } from "../lib/hoth/lakehouse-stack";
 
 const app = new cdk.App();
-
 const hothLakeHouseStack = new HothLakeHouseStack(app);
 
 const ingestionStateStoreStack = new IngestionStateTableStack(app);

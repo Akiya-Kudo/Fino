@@ -5,7 +5,11 @@ import {
 	BaseStack,
 	type BaseStackProps,
 } from "../base/base-stack";
-import { getEnvRemovalPolicy, getTargetEnv } from "../util/cdk/context";
+import {
+	getContext,
+	getEnvRemovalPolicy,
+	getTargetEnv,
+} from "../util/cdk/context";
 import {
 	createResourceName,
 	ResourceType,
@@ -50,7 +54,7 @@ export class IngestionStateTableStack extends BaseStack {
 		this.tableEndpoint =
 			getTargetEnv() === "Local"
 				? "http://localhost:8000"
-				: `dynamodb.${scope.region}.amazonaws.com`;
+				: `https://dynamodb.${getContext({ scope, key: "region" })}.amazonaws.com`;
 
 		const ingestionStateTableName = createResourceName({
 			scope,

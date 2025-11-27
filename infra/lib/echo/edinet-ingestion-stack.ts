@@ -126,7 +126,7 @@ export class EchoEdinetIngestionStack extends BaseStack {
 
 		this.edinetDocIdRegisterLambda.addToRolePolicy(
 			new iam.PolicyStatement({
-				actions: ["dynamodb:PutItem", "dynamodb:GetItem"],
+				actions: ["dynamodb:PutItem", "dynamodb:Query"],
 				resources: [props.ingestionStateTable.tableArn],
 			}),
 		);

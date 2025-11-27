@@ -3,7 +3,7 @@ import * as cdk from "aws-cdk-lib";
 import type { Construct } from "constructs";
 import type { ServiceGroupName } from "./naming";
 
-export type ContextKey = "projectName";
+export type ContextKey = "projectName" | "region";
 
 interface getContextArgs {
 	scope: Construct;
