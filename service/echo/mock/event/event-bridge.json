@@ -1,0 +1,8 @@
+[
+  {
+    "EventBusName": "fino-prd-echo-edinet-event-bus",
+    "Source": "emitter.cli",
+    "DetailType": "EdintDocIDRegisterTriggered",
+    "Detail": "{ \"document_ids\":[ \"1111\",\"1111111\",\"11111111111\",\"111\",\"1\",\"12121\"], \"sec_code\": \"testcode\" }"
+  }
+]
