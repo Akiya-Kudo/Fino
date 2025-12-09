@@ -7,7 +7,10 @@ from command.kamino.command import app as kamino
 console = Console()
 
 
-app = typer.Typer(invoke_without_command=True)
+app = typer.Typer(
+    invoke_without_command=True,
+    # help_option_names=["-h", "--help"]
+)
 
 app.add_typer(kamino, name="kamino")
 
@@ -23,11 +26,11 @@ def callback():
             - raw data ingestion workflow.
             - data-lakehouse management.
 
-            [#ffd700]***[/#ffd700] please check help command what you can do with fino cli [#ffd700]***[/#ffd700]
+            [#ffd700]***[/#ffd700] please check --help option what you can do with fino cli [#ffd700]***[/#ffd700]
 
-            (:stars: We love Star Wars — This Project service-names are inspired by Star Wars planets! )
+            (— This Project service-names are inspired by Star Wars planets! :stars: )
             """,
-            title="🚀 Welcome",
+            title="🚀 Welcome Fino CLI",
             border_style="#ffd700",
         )
     )
