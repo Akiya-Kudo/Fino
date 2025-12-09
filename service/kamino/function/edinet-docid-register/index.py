@@ -17,9 +17,12 @@ table = dynamodb.Table(table_name)
 
 logger = Logger()
 
+
 @logger.inject_lambda_context(log_event=True)
 @event_parser(model=schemas.InputEvent)
-def handler(event: schemas.InputEvent, context: LambdaContext) -> schemas.OutputEvent:
+def handler(
+    event: schemas.InputEvent, context: LambdaContext
+) -> schemas.OutputEvent:
     """
     # Edinet Document ID Register Lambda Function
 
@@ -35,7 +38,6 @@ def handler(event: schemas.InputEvent, context: LambdaContext) -> schemas.Output
     document_ids = detail.document_ids
     sec_code = detail.sec_code
 
-
     # Generate Partition Key
     partition_key = f"edinet/{sec_code}"
 
@@ -45,8 +47,14 @@ def handler(event: schemas.InputEvent, context: LambdaContext) -> schemas.Output
     )
 
     # Extract Existing Document IDs & Get Document IDs for Save
-    existing_document_ids = [item["document_id"] for item in result.get("Items", [])]
-    document_ids_for_save = [document_id for document_id in document_ids if document_id not in existing_document_ids]
+    existing_document_ids = [
+        item["document_id"] for item in result.get("Items", [])
+    ]
+    document_ids_for_save = [
+        document_id
+        for document_id in document_ids
+        if document_id not in existing_document_ids
+    ]
 
     # Save Document IDs to DynamoDB
     saved_document_ids = []
@@ -59,7 +67,9 @@ def handler(event: schemas.InputEvent, context: LambdaContext) -> schemas.Output
             }
         )
         saved_document_ids.append(document_id)
-        logger.info(f"SUCCESS SAVE DOCUMENT ID: PK: {partition_key}, SK: {document_id}")
+        logger.info(
+            f"SUCCESS SAVE DOCUMENT ID: PK: {partition_key}, SK: {document_id}"
+        )
 
     logger.info(f"SAVED COUNT: {len(saved_document_ids)}")
     return {

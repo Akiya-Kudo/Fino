@@ -21,4 +21,3 @@ class OutputBody(BaseModel):
 class OutputEvent(BaseModel):
     statusCode: int
     body: OutputBody
-
