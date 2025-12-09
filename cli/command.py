@@ -7,16 +7,22 @@ from command.kamino.command import app as kamino
 console = Console()
 
 
-app = typer.Typer(
-    invoke_without_command=True,
-    # help_option_names=["-h", "--help"]
+app = typer.Typer(invoke_without_command=True, no_args_is_help=False)
+
+app.add_typer(
+    kamino,
+    name="kamino",
+    help="Kamino is a ingestion workflow and raw data storage.",
 )
 
-app.add_typer(kamino, name="kamino")
 
+@app.callback(invoke_without_command=True)
+def callback(ctx: typer.Context):
+    # コマンドが指定されている場合はパネルを表示しない
+    if ctx.invoked_subcommand is not None:
+        return
 
-@app.callback()
-def callback():
+    # コマンドなしで実行された場合のみオンボーディングパネルを表示
     console.print(
         Panel.fit(
             """[bold #ff5f00]Fino CLI[/bold #ff5f00] - Financial data management CLI tool -
