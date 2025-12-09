@@ -1,9 +1,6 @@
 import rich
 import typer
-from rich.console import Console
 from typing_extensions import Annotated
-
-error_console = Console(stderr=True)
 
 app = typer.Typer(no_args_is_help=True)
 
@@ -32,8 +29,7 @@ def main(
     #     print(f"Good day Ms. {name} {lastname}.")
     # else:
     #     print(f"Hello {name} {lastname}")
-    rich.print("[bold red]Alert![/bold red] [green]Portal gun[/green] shooting! :boom:")
-    error_console.print(
+    rich.print(
         "[bold red]Alert![/bold red] [green]Portal gun[/green] shooting! :boom:"
     )
     raise typer.Exit(code=1)
