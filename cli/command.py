@@ -3,9 +3,9 @@ from rich.console import Console
 from rich.panel import Panel
 
 from command.kamino.command import app as kamino
+from command.utils import FinoColors
 
 console = Console()
-
 
 app = typer.Typer(invoke_without_command=True, no_args_is_help=False)
 
@@ -25,19 +25,19 @@ def callback(ctx: typer.Context):
     # コマンドなしで実行された場合のみオンボーディングパネルを表示
     console.print(
         Panel.fit(
-            """[bold #ff5f00]Fino CLI[/bold #ff5f00] - Financial data management CLI tool -
-            [bold #ff875f]Fino[/bold #ff875f] is a powerful financial data platform for supporting your investment decisions.
+            f"""[bold {FinoColors.ORANGE3}]Fino CLI[/bold {FinoColors.ORANGE3}] - Financial data management CLI tool -
+            [bold {FinoColors.LIGHT_SALMON3}]Fino[/bold {FinoColors.LIGHT_SALMON3}] is a powerful financial data platform for supporting your investment decisions.
             
-            [bold #ffafd7]Features:[/bold #ffafd7]
+            [bold {FinoColors.PINK3}]Features:[/bold {FinoColors.PINK3}]
             - raw data ingestion workflow.
             - data-lakehouse management.
 
-            [#ffd700]***[/#ffd700] please check --help option what you can do with fino cli [#ffd700]***[/#ffd700]
+            [{FinoColors.GOLD3}]***[/{FinoColors.GOLD3}] please check --help option what you can do with fino cli [{FinoColors.GOLD3}]***[/{FinoColors.GOLD3}]
 
             (— This Project service-names are inspired by Star Wars planets! :stars: )
             """,
             title="🚀 Welcome Fino CLI",
-            border_style="#ffd700",
+            border_style=FinoColors.GOLD3,
         )
     )
 

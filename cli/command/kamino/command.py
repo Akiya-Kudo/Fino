@@ -1,7 +1,11 @@
 from enum import Enum
 
+import rich
 import typer
+from click.core import ParameterSource
 from typing_extensions import Annotated
+
+from command.utils import FinoColors
 
 app = typer.Typer(no_args_is_help=True)
 
@@ -13,6 +17,7 @@ class Target(str, Enum):
 
 @app.command()
 def collect(
+    ctx: typer.Context,
     target: Annotated[
         Target,
         typer.Option(
@@ -26,7 +31,10 @@ def collect(
     """
     Collect data from the target system.
     """
-    print(target.value)
+    if ctx.get_parameter_source("target") == ParameterSource.DEFAULT:
+        rich.print(
+            f"[{FinoColors.MAGENTA3}]Since target option is not specified, data will be collected from the default Edinet[/{FinoColors.MAGENTA3}]"
+        )
 
 
 if __name__ == "__main__":
