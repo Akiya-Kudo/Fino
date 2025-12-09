@@ -11,6 +11,10 @@
 		{
 			"path": "service",
 			"name": "===== Service Workspace ====="
+		},
+		{
+			"path": "cli",
+			"name": "===== CLI Workspace ====="
 		}
 	],
 	"settings": {
