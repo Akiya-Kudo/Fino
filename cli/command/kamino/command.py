@@ -27,6 +27,7 @@ def collect(
             help="Target system name to collect data",
         ),
     ] = "edinet",
+    # edinet_api_key: Annotated[str, typer.Option()]
 ):
     """
     Collect data from the target system.

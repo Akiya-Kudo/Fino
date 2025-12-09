@@ -4,7 +4,11 @@ version = "0.1.0"
 description = "Fino CLI - financial data platform cli tool -"
 readme = "README.md"
 requires-python = "==3.13.*"
-dependencies = ["typer>=0.20.0", "rich>=13.0.0"]
+dependencies = [
+    "typer>=0.20.0",
+    "rich>=13.0.0",
+    "dynaconf>=3.2.12",
+]
 
 [tool.ruff]
 extend = "../pyproject.toml"
