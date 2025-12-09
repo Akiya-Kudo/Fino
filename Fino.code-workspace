@@ -7,6 +7,10 @@
 		{
 			"path": "infra",
 			"name": "===== Infra Workspace ====="
+		},
+		{
+			"path": "service",
+			"name": "===== Service Workspace ====="
 		}
 	],
 	"settings": {
@@ -81,6 +85,7 @@
 			"terminal.ansiBrightYellow": "#ffe065",
 			"terminal.ansiBlue": "#f77f61",
 			"terminal.ansiBrightBlue": "#f77f61"
-		}
+		},
+		"makefile.configureOnOpen": false
 	}
 }

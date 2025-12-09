@@ -4,43 +4,56 @@
   // ===============================
   "editor.formatOnSave": true,
   // ===============================
-  // Typescript
+  // Typescript (infra/CDK用 - Biome)
   // ===============================
-  "editor.codeActionsOnSave": {
-    "source.fixAll.biome": "explicit"
-  },
   "[typescript]": {
-    "editor.defaultFormatter": "biomejs.biome",
+    "editor.defaultFormatter": "fronterior.biome-monorepo",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.biome": "explicit",
+      "source.organizeImports.biome": "explicit"
+    }
   },
   "[javascript]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "fronterior.biome-monorepo",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.biome": "explicit",
+      "source.organizeImports.biome": "explicit"
+    }
   },
   "[typescriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "fronterior.biome-monorepo",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.biome": "explicit",
+      "source.organizeImports.biome": "explicit"
+    }
   },
   "[javascriptreact]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "fronterior.biome-monorepo",
+    "editor.codeActionsOnSave": {
+      "source.fixAll.biome": "explicit",
+      "source.organizeImports.biome": "explicit"
+    }
   },
   "[json]": {
-    "editor.defaultFormatter": "biomejs.biome"
+    "editor.defaultFormatter": "fronterior.biome-monorepo"
   },
+
   // ===============================
-  // Python
+  // Python (Lambda関数用 - Ruff)
   // ===============================
   "[python]": {
-    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.codeActionsOnSave": {
-        "source.fixAll": "explicit",
-        "source.organizeImports": "explicit",
-      },
-    "editor.defaultFormatter": "charliermarsh.ruff"
+      "source.fixAll": "explicit",
+      "source.organizeImports": "explicit"
+    }
   },
   "python.pythonPath": ".venv/bin/python",
   "python.defaultInterpreterPath": ".venv/bin/python",
   "python.terminal.activateEnvironment": true,
   // Jupyter 実行時のカレントディレクトリを固定
   "jupyter.notebookFileRoot": "${workspaceFolder}",
-  
+
   // ===============================
   // Editor Theme
   // ===============================
@@ -140,5 +153,6 @@
     "terminal.ansiBrightYellow": "#ffe065",
     "terminal.ansiBlue": "#f77f61",
     "terminal.ansiBrightBlue": "#f77f61"
-  }
+  },
+  "makefile.configureOnOpen": false
 }

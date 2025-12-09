@@ -1,0 +1,11 @@
+{
+  "detail": {
+    "document_ids": [
+      "1234567890",
+      "1234567891",
+      "1234567892"
+    ],
+    "sec_code": "1234567890"
+  },
+  "detailType": "EdinetDocIDRegisterTriggered"
+}

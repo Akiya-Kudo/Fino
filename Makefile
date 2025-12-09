@@ -24,7 +24,7 @@ RUN_CDK = cd infra &&
 
 # Extract extra args:
 # Remove the make target name from MAKECMDGOALS
-ARGS = $(filter-out $@,$(MAKECMDGOALS))
+ARGS = $(filter-out $@, $(MAKECMDGOALS))
 
 # Avoid "No rule to make target" errors for args
 %:
@@ -59,10 +59,31 @@ local:
 setup:
 	$(RUN_CDK) scripts/setup.sh
 
+# -------- Cdk environment --------
+
+env:
+	@if grep -q "^SYSTEM_ENV=" .env; then \
+		sed -i '' "s/^SYSTEM_ENV=.*/SYSTEM_ENV=$(filter-out $@,$(MAKECMDGOALS))/" .env; \
+	else \
+		echo "\nSYSTEM_ENV=$(filter-out $@,$(MAKECMDGOALS))" >> .env; \
+	fi
+	@echo "Updated SYSTEM_ENV"
+
 # -------- Test --------
 
 test:
 	$(RUN_CDK) npm run test
+
+# -------- Lint --------
+
+lint:
+	$(RUN_CDK) npm run lint
+
+format:
+	$(RUN_CDK) npm run format
+
+fix:
+	$(RUN_CDK) npm run fix
 
 echo:
 	@echo "$(LOCALSTACK_VOLUME_DIR)"
