@@ -16,12 +16,10 @@
 
 ##### Hoth（Data LakeHouse）
 
-##### Echo（Ingestion Job Workflow）
+##### Kamino（Ingestion Workflow & RAQ Data Strorage）
 
 ##### Naboo（Portfolio Service）
 
 ##### Bespin（Bashboard）
 
 ##### Coruscant（Jupyter Nootebook）
-
-##### AT-AT（Emitter CLI Tool）
