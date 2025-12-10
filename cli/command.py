@@ -28,7 +28,7 @@ def callback(ctx: typer.Context):
             f"""[bold {FinoColors.ORANGE3}]Fino CLI[/bold {FinoColors.ORANGE3}] - Financial data management CLI tool -
             [bold {FinoColors.LIGHT_SALMON3}]Fino[/bold {FinoColors.LIGHT_SALMON3}] is a powerful financial data platform for supporting your investment decisions.
             
-            [bold {FinoColors.PINK3}]Features:[/bold {FinoColors.PINK3}]
+            [bold {FinoColors.DEEP_PINK3}]Features:[/bold {FinoColors.DEEP_PINK3}]
             - raw data ingestion workflow.
             - data-lakehouse management.
 

@@ -44,6 +44,7 @@ def collect(
         raise typer.BadParameter(
             "edinet api key is not set. please set in config file or environment variable."
         )
+    print("edinet api key is :", edinet_api_key)
 
 
 if __name__ == "__main__":
