@@ -208,6 +208,9 @@ collector = [
     { name = "aws-lambda-powertools", extra = ["parser"] },
     { name = "boto3" },
 ]
+core = [
+    { name = "dynaconf" },
+]
 ingestion = [
     { name = "aws-lambda-powertools", extra = ["validation"] },
     { name = "boto3" },
@@ -230,16 +233,17 @@ requires-dist = [
     { name = "aws-lambda-powertools", extras = ["validation"], marker = "extra == 'ingestion'" },
     { name = "boto3", marker = "extra == 'collector'", specifier = ">=1.41.2" },
     { name = "boto3", marker = "extra == 'ingestion'", specifier = ">=1.41.2" },
-    { name = "dynaconf", marker = "extra == 'cli'", specifier = ">=3.2.12" },
+    { name = "dynaconf", marker = "extra == 'core'", specifier = ">=3.2.12" },
     { name = "edinet-python", marker = "extra == 'ingestion'", specifier = ">=0.1.0" },
     { name = "fino", extras = ["collect"], marker = "extra == 'cli'" },
+    { name = "fino", extras = ["core"], marker = "extra == 'cli'" },
     { name = "fino", extras = ["ingestion"], marker = "extra == 'cli'" },
     { name = "pandas", marker = "extra == 'ingestion'", specifier = ">=2.0.0" },
     { name = "pyiceberg", marker = "extra == 'ingestion'", specifier = ">=0.5.0" },
     { name = "rich", marker = "extra == 'cli'", specifier = ">=13.0.0" },
     { name = "typer", marker = "extra == 'cli'", specifier = ">=0.20.0" },
 ]
-provides-extras = ["ingestion", "collector", "cli"]
+provides-extras = ["core", "ingestion", "collector", "cli"]
 
 [package.metadata.requires-dev]
 dev = [

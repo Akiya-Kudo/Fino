@@ -1,9 +1,8 @@
 import typer
-from rich.console import Console
-from rich.panel import Panel
-
 from command.kamino.command import app as kamino
 from command.utils import FinoColors
+from rich.console import Console
+from rich.panel import Panel
 
 console = Console()
 

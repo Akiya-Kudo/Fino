@@ -9,11 +9,7 @@
 			"name": "========= Infra ========="
 		},
 		{
-			"path": "src",
-			"name": "===== Source Services ===="
-		},
-		{
-			"path": "cli",
+			"path": "src/fino/cli",
 			"name": "========= CLI ==========",
 		}
 	],
