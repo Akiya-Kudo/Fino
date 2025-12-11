@@ -1,7 +1,7 @@
 [project]
-name = "kamino-service"
+name = "kamino"
 version = "0.1.0"
-description = "Kamino Service - Ingestion workflow and raw data storage service -"
+description = "Kamino - Ingestion workflow and raw data storing -"
 readme = "README.md"
 requires-python = "==3.13.*"
 dependencies = [

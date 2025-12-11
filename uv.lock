@@ -216,7 +216,7 @@ version = "0.1.0"
 source = { virtual = "cli" }
 dependencies = [
     { name = "dynaconf" },
-    { name = "kamino-service" },
+    { name = "kamino" },
     { name = "rich" },
     { name = "typer" },
 ]
@@ -224,7 +224,7 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "dynaconf", specifier = ">=3.2.12" },
-    { name = "kamino-service", directory = "service/kamino" },
+    { name = "kamino", directory = "src/kamino" },
     { name = "rich", specifier = ">=13.0.0" },
     { name = "typer", specifier = ">=0.20.0" },
 ]
@@ -257,9 +257,9 @@ wheels = [
 ]
 
 [[package]]
-name = "kamino-service"
+name = "kamino"
 version = "0.1.0"
-source = { directory = "service/kamino" }
+source = { directory = "src/kamino" }
 dependencies = [
     { name = "aws-lambda-powertools", extra = ["validation"] },
     { name = "boto3" },

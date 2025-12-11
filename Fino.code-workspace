@@ -2,19 +2,19 @@
 	"folders": [
 		{
 			"path": ".",
-			"name": "===== Fino Workspace ====="
+			"name": "========= Fino ========="
 		},
 		{
 			"path": "infra",
-			"name": "===== Infra Workspace ====="
+			"name": "========= Infra ========="
 		},
 		{
-			"path": "service",
-			"name": "===== Service Workspace ====="
+			"path": "src",
+			"name": "===== Source Services ===="
 		},
 		{
 			"path": "cli",
-			"name": "===== CLI Workspace =====",
+			"name": "========= CLI ==========",
 		}
 	],
 	"settings": {

@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: kamino
+Version: 0.1.0
+Summary: Kamino - Ingestion workflow and raw data storing -
+Requires-Python: ==3.13.*
+Description-Content-Type: text/markdown
+Requires-Dist: aws-lambda-powertools>=3.23.0
+Requires-Dist: boto3>=1.41.2
+Requires-Dist: aws-lambda-powertools[validation]
+Requires-Dist: edinet-python>=0.1.0
+Requires-Dist: pyiceberg>=0.5.0
+Requires-Dist: pandas>=2.0.0

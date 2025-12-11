@@ -10,7 +10,7 @@ dependencies = []
 dev = ["ruff>=0.14.8", "ruff-lsp>=0.0.1"]
 
 [tool.uv.workspace]
-members = ["cli"]
+members = ["cli", "src.kamino"]
 
 
 [tool.ruff]
