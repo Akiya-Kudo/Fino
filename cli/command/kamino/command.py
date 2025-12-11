@@ -1,9 +1,11 @@
-import os
 from enum import Enum
 
+import rich
 import typer
+from click.core import ParameterSource
 from typing_extensions import Annotated
 
+from command.utils import FinoColors
 from config import settings
 
 app = typer.Typer(no_args_is_help=True)
@@ -26,29 +28,23 @@ def collect(
             help="Target system name to collect data",
         ),
     ] = "edinet",
-    edinet_api_key: Annotated[
-        str, typer.Option(envvar="FINO_EDINET_API_KEY")
-        # ] = settings.get("FINO_EDINET_API_KEY", default=""),
-    ] = "deault",
+    edinet_api_key: Annotated[str, typer.Option()] = settings.get(
+        "EDINET__API_KEY", default=""
+    ),
 ):
     """
     Collect data from the target system.
     """
     # drfault value check and validation
-    # if ctx.get_parameter_source("target") == ParameterSource.DEFAULT:
-    #     rich.print(
-    #         f"[{FinoColors.MAGENTA3}]Since target option is not specified, data will be collected from the default Edinet[/{FinoColors.MAGENTA3}]"
-    #     )
-    # if edinet_api_key == "":
-    #     raise typer.BadParameter(
-    #         "edinet api key is not set. please set in config file or environment variable."
-    #     )
-    # print("edinet api key is :", edinet_api_key)
-    print("environ", os.environ.get("FINO_EDINET__API_KEY"))
-    print("typer", edinet_api_key)
-    print("dynaconf", settings.get("EDINET__API_KEY"))
-    print("dynaconf", settings.get("EDINET_P"))
-    print("cwd", os.getcwd())
+    if ctx.get_parameter_source("target") == ParameterSource.DEFAULT:
+        rich.print(
+            f"[{FinoColors.ORANGE3}]Since target option is not specified, data will be collected from the default Edinet[/{FinoColors.ORANGE3}]"
+        )
+
+    if edinet_api_key == "":
+        raise typer.BadParameter(
+            "edinet api key is not set. please set in config file or environment variable."
+        )
 
 
 if __name__ == "__main__":

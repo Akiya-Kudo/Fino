@@ -27,5 +27,5 @@ settings = Dynaconf(
     # When turned on, dynaconf will try to load the variables from a .env file.
     load_dotenv=True,
     # Flexibility to specify the path of the config files.
-    root_path=os.getenv("FINO_CONFIG_DIR"),
+    root_path=os.getenv("FINO_CONFIG_DIR", None),
 )
