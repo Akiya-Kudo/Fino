@@ -4,7 +4,6 @@ version = "0.1.0"
 description = "Fino - financial data platform -"
 readme = "README.md"
 requires-python = "==3.12.*"
-
 dependencies = [
     "typer>=0.20.0",
     "rich>=13.0.0",
@@ -18,15 +17,15 @@ dependencies = [
     "aws-lambda-powertools[parser]",
 ]
 
+
+[project.scripts]
+fino = "fino.cli.main:app"
+
+
 [dependency-groups]
 dev = ["ruff>=0.14.8", "ruff-lsp>=0.0.1"]
 
-[tool.uv.workspace]
-members = ["cli", "src.kamino"]
-
 [project.optional-dependencies]
-# CLI Package
-cli = ["typer>=0.20.0", "rich>=13.0.0", "dynaconf>=3.2.12"]
 # Ingestion Package
 ingestion = [
     "aws-lambda-powertools>=3.23.0",
@@ -42,9 +41,14 @@ collector = [
     "boto3>=1.41.2",
     "aws-lambda-powertools[parser]",
 ]
+# CLI Package
+cli = [
+    "typer>=0.20.0",
+    "rich>=13.0.0",
+    "dynaconf>=3.2.12",
+    "fino[ingestion]",
+    "fino[collect]",
+]
 
 [tool.ruff]
 line-length = 80
-
-[project.scripts]
-fino = "fino.cli.main:app"
