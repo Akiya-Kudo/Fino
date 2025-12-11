@@ -1,5 +1,5 @@
 [project]
-name = "edinet-doc-ingestion"
+name = ""
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
@@ -10,8 +10,8 @@ dependencies = [
     "aws-lambda-powertools[validation]",
     "edinet-python>=0.1.0",
     "pyiceberg>=0.5.0",
-    "pandas>=2.0.0"
+    "pandas>=2.0.0",
 ]
 
-[dependency-groups]
-dev = []
+[tool.ruff]
+extend = "../../../pyproject.toml"
