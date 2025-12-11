@@ -8,6 +8,8 @@ dependencies = [
     "typer>=0.20.0",
     "rich>=13.0.0",
     "dynaconf>=3.2.12",
+    # https://github.com/astral-sh/uv/pull/640
+    "kamino-service @ file://${PROJECT_ROOT}/service/kamino",
 ]
 
 [tool.ruff]
