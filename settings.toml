@@ -1,1 +1,2 @@
-edinet_api_key = "edinet_api_key"
+[edinet]
+api_key = "ediedi" # FINO_EDINET__API_KEY
