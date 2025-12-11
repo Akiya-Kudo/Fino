@@ -16,11 +16,6 @@ from dynaconf import Dynaconf
     - CLI 実行ディレクトリに依存するようにするためにはroot_pathにos.getcwd()を指定する。
 """
 
-root_path = os.getenv("FINO_CONFIG_DIR")
-
-print("root_path", root_path)
-
-
 settings = Dynaconf(
     envvar_prefix="FINO",
     # The list of enabled loaders that dynaconf will use to load settings files,
@@ -31,5 +26,6 @@ settings = Dynaconf(
     settings_files=["settings.toml", ".secrets.toml"],
     # When turned on, dynaconf will try to load the variables from a .env file.
     load_dotenv=True,
-    root_path=root_path,
+    # Flexibility to specify the path of the config files.
+    root_path=os.getenv("FINO_CONFIG_DIR"),
 )
