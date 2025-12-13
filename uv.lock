@@ -61,7 +61,7 @@ lint = [{ name = "ruff", specifier = ">=0.14.8" }]
 [[package]]
 name = "fino-cli"
 version = "0.1.0"
-source = { editable = "packages/fino-cli" }
+source = { editable = "packages/fino_cli" }
 dependencies = [
     { name = "dynaconf" },
     { name = "fino-core" },
@@ -71,14 +71,14 @@ dependencies = [
 [package.metadata]
 requires-dist = [
     { name = "dynaconf", specifier = ">=3.2.12" },
-    { name = "fino-core", editable = "packages/fino-core" },
+    { name = "fino-core", editable = "packages/fino_core" },
     { name = "typer", specifier = ">=0.20.0" },
 ]
 
 [[package]]
 name = "fino-core"
 version = "0.1.0"
-source = { editable = "packages/fino-core" }
+source = { editable = "packages/fino_core" }
 dependencies = [
     { name = "dynaconf" },
 ]
