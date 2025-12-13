@@ -1,16 +1,15 @@
-from typing import Any, Literal, overload, Union
 import datetime
+from typing import Any, Literal, Union, overload
 
 import requests
-
-from edinet.enums.exceptions import (
-    ResponseNot200,
+from fino_core.collector.edinet.enum.exception import (
     BadRequest,
+    InternalServerError,
     InvalidAPIKey,
     ResourceNotFound,
-    InternalServerError,
+    ResponseNot200,
 )
-from edinet.enums.response import (
+from fino_core.collector.edinet.enum.response import (
     GetDocumentResponse,
     GetDocumentResponseWithDocs,
 )
@@ -33,12 +32,12 @@ class Edinet:
             raise ValueError()
 
         # EDINET APIのバージョン(今のところ2しかないけど)
-        EDINET_API_VERSION = 2
+        self.EDINET_API_VERSION = 2
         # apiの保存
         self.__token = token
         # edinetAPIのURL
         self.__EDINET_URL = (
-            f"https://api.edinet-fsa.go.jp/api/v{EDINET_API_VERSION}/"
+            f"https://api.edinet-fsa.go.jp/api/v{self.EDINET_API_VERSION}/"
         )
 
     def __request(
@@ -48,7 +47,11 @@ class Edinet:
 
         params["Subscription-Key"] = self.__token
 
-        res = requests.get(url=self.__EDINET_URL + endpoint, params=params)
+        res = requests.get(
+            url=self.__EDINET_URL + endpoint,
+            params=params,
+            timeout=(3.0, 7.5),  # timeout: (connect timeout, read timeout)
+        )
 
         if res.status_code == 200:
             return res
@@ -106,13 +109,13 @@ class Edinet:
         else:
             raise ValueError()
 
-    def get_document(self, docId: str, type: Literal[1, 2, 3, 4, 5]) -> bytes:
+    def get_document(self, doc_id: str, type: Literal[1, 2, 3, 4, 5]) -> bytes:
         """
         ドキュメントの取得
 
         Parameters
         ----------
-        docId: str
+        doc_id: str
             書類管理番号
         type: Literal[1, 2, 3, 4, 5]
             - 1: 提出本文書及び監査報告書、XBRLを取得
@@ -121,14 +124,19 @@ class Edinet:
             - 4: 英文ファイルを取得
             - 5: CSVを取得
         """
-        if isinstance(docId, str) and type in (1, 2, 3, 4, 5):
+        if isinstance(doc_id, str) and type in (1, 2, 3, 4, 5):
             params = {"type": type}
 
             response = self.__request(
-                endpoint=f"documents/{docId}", params=params
+                endpoint=f"documents/{doc_id}", params=params
             )
 
             return response.content
 
         else:
             raise ValueError()
+
+
+# Based on code from https://github.com/35enidoi/edinet_wrap
+# Licensed under the Apache License, Version 2.0
+# Copyright 2024 35enidoi
