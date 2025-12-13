@@ -4,11 +4,7 @@ version = '0.1.0'
 description = 'Fino CLI'
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = [
-    "dynaconf>=3.2.12",
-    "fino-core>=0.1.0",
-    "typer>=0.20.0",
-]
+dependencies = ["dynaconf>=3.2.12", "fino-core>=0.1.0", "typer>=0.20.0"]
 
 [build-system]
 requires = ["hatchling"]
@@ -18,4 +14,4 @@ build-backend = "hatchling.build"
 fino-core = { workspace = true }
 
 [tool.hatch.build.targets.wheel]
-packages = ["src/fino"]
+packages = ["src/fino-cli"]

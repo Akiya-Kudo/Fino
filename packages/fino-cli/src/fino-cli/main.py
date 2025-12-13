@@ -1,12 +1,13 @@
 import typer
-from command.collector.command import app as kamino
 from rich.console import Console
 from rich.panel import Panel
 from util.theme import FinoColors
 
 console = Console()
 
-app = typer.Typer(invoke_without_command=True, no_args_is_help=False)
+app = typer.Typer(
+    name="fino", invoke_without_command=True, no_args_is_help=False
+)
 
 app.add_typer(
     kamino,
