@@ -3,10 +3,9 @@ from enum import Enum
 import rich
 import typer
 from click.core import ParameterSource
-from typing_extensions import Annotated
-
-from command.utils import FinoColors
 from config import settings
+from typing_extensions import Annotated
+from util.theme import FinoColors
 
 app = typer.Typer(no_args_is_help=True)
 
