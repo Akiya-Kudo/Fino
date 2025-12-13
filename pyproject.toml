@@ -3,42 +3,12 @@ name = "fino"
 version = "0.1.0"
 description = "Fino - financial data platform -"
 readme = "README.md"
-requires-python = "==3.12.*"
+requires-python = "==3.13.*"
 dependencies = []
 
-[project.scripts]
-fino = "src.fino.cli.main:callback"
+[tool.uv.workspace]
+members = ["packages/*"]
 
 [dependency-groups]
-dev = ["ruff>=0.14.8", "ruff-lsp>=0.0.1"]
-
-
-[project.optional-dependencies]
-# Core
-core = ["dynaconf>=3.2.12"]
-# Ingestion Package
-ingestion = [
-    "aws-lambda-powertools>=3.23.0",
-    "boto3>=1.41.2",
-    "aws-lambda-powertools[validation]",
-    "edinet-python>=0.1.0",
-    "pyiceberg>=0.5.0",
-    "pandas>=2.0.0",
-]
-# Collector Package
-collector = [
-    "aws-lambda-powertools>=3.23.0",
-    "boto3>=1.41.2",
-    "aws-lambda-powertools[parser]",
-]
-# CLI Package
-cli = [
-    "typer>=0.20.0",
-    "rich>=13.0.0",
-    "fino[core]",
-    "fino[ingestion]",
-    "fino[collect]",
-]
-
-[tool.ruff]
-line-length = 80
+lint = ["ruff>=0.14.8"]
+dev = [{ include-group = "lint" }]
