@@ -30,7 +30,7 @@ def collect(
     edinet_api_key: Annotated[str, typer.Option()] = settings.get(
         "EDINET__API_KEY", default=""
     ),
-):
+) -> None:
     """
     Collect data from the target system.
     """
