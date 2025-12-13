@@ -2,6 +2,7 @@ import typer
 from rich.console import Console
 from rich.panel import Panel
 
+import fino_cli.command.collect.app as collect
 from fino_cli.util.theme import FinoColors
 
 console = Console()
@@ -10,11 +11,11 @@ app = typer.Typer(
     name="fino", invoke_without_command=True, no_args_is_help=False
 )
 
-# app.add_typer(
-#     kamino,
-#     name="kamino",
-#     help="Kamino is a ingestion workflow and raw data storage.",
-# )
+app.add_typer(
+    collect.app,
+    name="collect",
+    help="collect command to collect data from the target system.",
+)
 
 
 @app.callback(invoke_without_command=True)
