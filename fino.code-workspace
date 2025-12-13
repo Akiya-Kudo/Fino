@@ -6,11 +6,11 @@
 		},
 		{
 			"name": "🌃 Fino Core",
-			"path": "packages/fino-core"
+			"path": "packages/fino_core"
 		},
 		{
 			"name": "🌌 Fino CLI",
-			"path": "packages/fino-cli"
+			"path": "packages/fino_cli"
 		}
 	],
 	"settings": {
