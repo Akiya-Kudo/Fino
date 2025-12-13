@@ -1,15 +1,15 @@
 {
 	"folders": [
 		{
-			"name": "🌠 Fino",
+			"name": "------------ Fino ------------",
 			"path": "."
 		},
 		{
-			"name": "🌃 Fino Core",
-			"path": "packages/fino_core"
+			"name": "--------- Fino Core ---------",
+			"path": "packages/fino_core"	
 		},
 		{
-			"name": "🌌 Fino CLI",
+			"name": "---------- Fino CLI ----------",
 			"path": "packages/fino_cli"
 		}
 	],
