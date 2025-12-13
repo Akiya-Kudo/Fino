@@ -4,7 +4,11 @@ version = '0.1.0'
 description = 'Fino Core'
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = ["dynaconf>=3.2.12"]
+dependencies = [
+    "dynaconf>=3.2.12",
+    "pydantic>=2.12.5",
+    "requests>=2.32.5",
+]
 
 [build-system]
 requires = ["hatchling"]

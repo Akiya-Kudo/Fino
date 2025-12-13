@@ -5,6 +5,7 @@ import typer
 from click.core import ParameterSource
 from fino_cli.config import settings
 from fino_cli.util.theme import FinoColors
+from fino_core import collect_edinet
 from typing_extensions import Annotated
 
 app = typer.Typer(no_args_is_help=True)
@@ -16,7 +17,7 @@ class Target(str, Enum):
 
 
 @app.command()
-def collect(
+def collector(
     ctx: typer.Context,
     target: Annotated[
         Target,
@@ -34,16 +35,20 @@ def collect(
     """
     Collect data from the target system.
     """
-    # drfault value check and validation
+    # paramter check
     if ctx.get_parameter_source("target") == ParameterSource.DEFAULT:
         rich.print(
             f"[{FinoColors.ORANGE3}]Since target option is not specified, data will be collected from the default Edinet[/{FinoColors.ORANGE3}]"
         )
 
+    # parameter validation
     if edinet_api_key == "":
         raise typer.BadParameter(
             "edinet api key is not set. please set in config file or environment variable."
         )
+
+    # fino core collector
+    collect_edinet()
 
 
 if __name__ == "__main__":

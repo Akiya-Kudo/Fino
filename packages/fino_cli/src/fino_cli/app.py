@@ -2,7 +2,7 @@ import typer
 from rich.console import Console
 from rich.panel import Panel
 
-import fino_cli.command.collect.app as collect
+import fino_cli.command.collector.app as collector
 from fino_cli.util.theme import FinoColors
 
 console = Console()
@@ -12,9 +12,8 @@ app = typer.Typer(
 )
 
 app.add_typer(
-    collect.app,
-    name="collect",
-    help="collect command to collect data from the target system.",
+    collector.app,
+    name="collector",
 )
 
 
