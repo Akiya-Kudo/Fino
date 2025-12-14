@@ -2,14 +2,14 @@ import datetime
 from typing import Any, Literal, Union, overload
 
 import requests
-from fino_core.collector.edinet.enum.exception import (
-    BadRequest,
+from fino_core.collector.edinet.model.exception import (
+    BadRequestError,
     InternalServerError,
-    InvalidAPIKey,
-    ResourceNotFound,
-    ResponseNot200,
+    InvalidAPIKeyError,
+    ResourceNotFoundError,
+    ResponseNot200Error,
 )
-from fino_core.collector.edinet.enum.response import (
+from fino_core.collector.edinet.model.response import (
     GetDocumentResponse,
     GetDocumentResponseWithDocs,
 )
@@ -56,17 +56,17 @@ class Edinet:
         if res.status_code == 200:
             return res
         elif res.status_code == 400:
-            raise BadRequest(
+            raise BadRequestError(
                 res.status_code, res.text
             )  # 例外のargはすべて右の通り: int(statuscode), str(text)
         elif res.status_code == 401:
-            raise InvalidAPIKey(res.status_code, res.text)
+            raise InvalidAPIKeyError(res.status_code, res.text)
         elif res.status_code == 404:
-            raise ResourceNotFound(res.status_code, res.text)
+            raise ResourceNotFoundError(res.status_code, res.text)
         elif res.status_code == 500:
             raise InternalServerError(res.status_code, res.text)
         else:
-            raise ResponseNot200(res.status_code, res.text)
+            raise ResponseNot200Error(res.status_code, res.text)
 
     @overload
     def get_document_list(
