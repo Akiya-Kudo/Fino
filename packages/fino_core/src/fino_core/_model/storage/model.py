@@ -1,4 +1,5 @@
-from typing import Optional, Protocol
+from abc import ABC, abstractmethod
+from typing import Optional
 
 from pydantic import BaseModel
 
@@ -9,7 +10,8 @@ class Storage(BaseModel):
     username: Optional[str] = None
 
 
-class StorageInterface(Protocol):
+class StorageRepository(ABC):
+    @abstractmethod
     def save(
         self, object: bytes
     ) -> None: ...  # @see: https://stackoverflow.com/questions/73792674/python-protocol-use-static-method-or-ellipsis

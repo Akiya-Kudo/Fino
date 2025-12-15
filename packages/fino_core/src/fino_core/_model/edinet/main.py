@@ -2,14 +2,15 @@ import datetime
 from typing import Any, Literal, Union, overload
 
 import requests
-from fino_core.collector.edinet.model.exception import (
+
+from fino_core._model.edinet.model.exception import (
     BadRequestError,
     InternalServerError,
     InvalidAPIKeyError,
     ResourceNotFoundError,
     ResponseNot200Error,
 )
-from fino_core.collector.edinet.model.response import (
+from fino_core._model.edinet.model.response import (
     GetDocumentResponse,
     GetDocumentResponseWithDocs,
 )
@@ -36,13 +37,9 @@ class Edinet:
         # apiの保存
         self.__token = token
         # edinetAPIのURL
-        self.__EDINET_URL = (
-            f"https://api.edinet-fsa.go.jp/api/v{self.EDINET_API_VERSION}/"
-        )
+        self.__EDINET_URL = f"https://api.edinet-fsa.go.jp/api/v{self.EDINET_API_VERSION}/"
 
-    def __request(
-        self, endpoint: str, params: dict[str, Any]
-    ) -> requests.Response:
+    def __request(self, endpoint: str, params: dict[str, Any]) -> requests.Response:
         """内部で使うrequestsメソッド、getリクエストのみ。"""
 
         params["Subscription-Key"] = self.__token
@@ -77,9 +74,7 @@ class Edinet:
         self, date: datetime.datetime, withdocs: True
     ) -> GetDocumentResponseWithDocs: ...
     @overload
-    def get_document_list(
-        self, date: datetime.datetime
-    ) -> GetDocumentResponse: ...
+    def get_document_list(self, date: datetime.datetime) -> GetDocumentResponse: ...
 
     def get_document_list(
         self, date: datetime.datetime, withdocs: bool = False
@@ -127,9 +122,7 @@ class Edinet:
         if isinstance(doc_id, str) and type in (1, 2, 3, 4, 5):
             params = {"type": type}
 
-            response = self.__request(
-                endpoint=f"documents/{doc_id}", params=params
-            )
+            response = self.__request(endpoint=f"documents/{doc_id}", params=params)
 
             return response.content
 
