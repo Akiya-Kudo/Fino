@@ -1,17 +1,21 @@
-from abc import ABCMeta, abstractmethod
-from typing import Optional
-
-from pydantic import BaseModel
+from abc import ABC, abstractmethod
+from dataclasses import dataclass
 
 
-class StorageConfig(BaseModel):
-    storage_path: str
-    password: Optional[str] = None
-    username: Optional[str] = None
+@dataclass
+class StorageConfig:
+    """Storage URI (s3://, file://, etc.)"""
+
+    uri: str
+    password: str | None = None
+    username: str | None = None
 
 
-class StorageRepository(ABCMeta):
+class StoragePort(ABC):
     @abstractmethod
     def save(
-        cls, object: bytes
-    ) -> None: ...  # @see: https://stackoverflow.com/questions/73792674/python-protocol-use-static-method-or-ellipsis
+        self,
+        data: bytes,
+        path: str,
+    ) -> None:
+        pass

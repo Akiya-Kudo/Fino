@@ -1,3 +1,3 @@
-from .main import StorageConfig, StorageRepository
+from .main import StorageConfig, StoragePort
 
-__all__ = ["StorageConfig", "StorageRepository"]
+__all__ = ["StorageConfig", "StoragePort"]

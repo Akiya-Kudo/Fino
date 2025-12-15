@@ -3,14 +3,14 @@ from typing import Any, Literal, Union, overload
 
 import requests
 
-from fino_core._model.edinet.model.exception import (
+from .exception import (
     BadRequestError,
     InternalServerError,
     InvalidAPIKeyError,
     ResourceNotFoundError,
     ResponseNot200Error,
 )
-from fino_core._model.edinet.model.response import (
+from .response import (
     GetDocumentResponse,
     GetDocumentResponseWithDocs,
 )
@@ -19,25 +19,17 @@ __all__ = ["Edinet"]
 
 
 class Edinet:
-    def __init__(self, token: str) -> None:
-        """
-        Edinet APIのラッパー
+    # EDINET API Version (今のところ2しかないけど)
+    api_version: int = 2
+    base_url: str = "https://api.edinet-fsa.go.jp/api/v{self.api_version}/"
+    api_key: str
 
-        Parameters
-        ----------
-        token: str
-            APIのキー
-        """
-        # 引数の型チェック
-        if not isinstance(token, str):
-            raise ValueError()
-
-        # EDINET APIのバージョン(今のところ2しかないけど)
-        self.EDINET_API_VERSION = 2
+    def __init__(self, api_key: str) -> None:
+        self.api_version = 2
         # apiの保存
-        self.__token = token
+        self.api_key = api_key
         # edinetAPIのURL
-        self.__EDINET_URL = f"https://api.edinet-fsa.go.jp/api/v{self.EDINET_API_VERSION}/"
+        self.base_url = f"https://api.edinet-fsa.go.jp/api/v{self.api_version}/"
 
     def __request(self, endpoint: str, params: dict[str, Any]) -> requests.Response:
         """内部で使うrequestsメソッド、getリクエストのみ。"""
