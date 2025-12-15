@@ -1,4 +1,4 @@
-from fino_core._model import StorageInterface
+from fino_core.model import StorageInterface
 
 
 class LocalStorage(StorageInterface):
