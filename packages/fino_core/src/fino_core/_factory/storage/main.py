@@ -1,8 +1,9 @@
 from urllib.parse import urlparse
 
-from fino_core.factory.storage.localStorage import LocalStorage
-from fino_core.factory.storage.s3Storage import S3Storage
-from fino_core.model.storage.main import StorageConfig, StorageInterface
+from fino_core._model.storage import StorageConfig, StorageInterface
+
+from .local_storage import LocalStorage
+from .s3_storage import S3Storage
 
 
 def create_storage(config: StorageConfig) -> StorageInterface:

@@ -1,7 +1,7 @@
-from fino_core.model import StorageInterface
+from fino_core._model.storage import StorageRepository
 
 
-class S3Storage(StorageInterface):
+class S3Storage(StorageRepository):
     def save(self, object: bytes) -> None:
         pass
 

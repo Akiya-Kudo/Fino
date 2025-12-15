@@ -1,7 +1,7 @@
 import datetime
 
-from fino_core.factory.storage.main import create_storage
-from fino_core.model.storage.main import StorageConfig
+from fino_core._factory.storage import create_storage
+from fino_core._model.storage import StorageConfig
 
 
 # TODO: targetが増えたら、Strategyパターンとかを採用して、処理の呼び出しと、分岐を分離する
