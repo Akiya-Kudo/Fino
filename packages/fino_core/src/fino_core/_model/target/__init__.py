@@ -1,3 +1,3 @@
-from .main import TargetConfig, TargetRepository, TargetType
+from .main import TargetConfig, TargetPort, TargetType
 
-__all__ = ["TargetConfig", "TargetRepository", "TargetType"]
+__all__ = ["TargetPort", "TargetConfig", "TargetType"]

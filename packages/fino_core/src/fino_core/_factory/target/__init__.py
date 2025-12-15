@@ -1,4 +1,4 @@
-from .edinet.main import Edinet
+from .edinet.main import EdinetAdapter
 from .main import create_target
 
-__all__ = ["create_target", "Edinet"]
+__all__ = ["create_target", "EdinetAdapter"]

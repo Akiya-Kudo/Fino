@@ -1,33 +1,31 @@
 import datetime
-from typing import Any, Literal, Union, overload
+from typing import Any, Literal, Union
 
 import requests
-
-from .exception import (
+from fino_core._model.target.edinet import (
     BadRequestError,
+    EdinetTargetConfig,
+    EdinetTargetPort,
+    GetDocumentResponse,
+    GetDocumentResponseWithDocs,
     InternalServerError,
     InvalidAPIKeyError,
     ResourceNotFoundError,
     ResponseNot200Error,
 )
-from .response import (
-    GetDocumentResponse,
-    GetDocumentResponseWithDocs,
-)
-
-__all__ = ["Edinet"]
 
 
-class Edinet:
+class EdinetAdapter(EdinetTargetPort):
     # EDINET API Version (今のところ2しかないけど)
     api_version: int = 2
     base_url: str = "https://api.edinet-fsa.go.jp/api/v{self.api_version}/"
     api_key: str
 
-    def __init__(self, api_key: str) -> None:
+    def __init__(self, config: EdinetTargetConfig) -> None:
+        super(config)
         self.api_version = 2
         # apiの保存
-        self.api_key = api_key
+        self.api_key = config.api_key
         # edinetAPIのURL
         self.base_url = f"https://api.edinet-fsa.go.jp/api/v{self.api_version}/"
 
@@ -57,30 +55,9 @@ class Edinet:
         else:
             raise ResponseNot200Error(res.status_code, res.text)
 
-    @overload
-    def get_document_list(
-        self, date: datetime.datetime, withdocs: False
-    ) -> GetDocumentResponse: ...
-    @overload
-    def get_document_list(
-        self, date: datetime.datetime, withdocs: True
-    ) -> GetDocumentResponseWithDocs: ...
-    @overload
-    def get_document_list(self, date: datetime.datetime) -> GetDocumentResponse: ...
-
     def get_document_list(
         self, date: datetime.datetime, withdocs: bool = False
     ) -> Union[GetDocumentResponse, GetDocumentResponseWithDocs]:
-        """
-        `documents.json`エンドポイントのラッパー
-
-        Parameters
-        ----------
-        date: datetime.datetime
-            `datetime.datetime`オブジェクト、年月日の指定。
-        withdocs: :obj:`bool`, default False
-            提出書類一覧を含めるか、デフォルトは含めない。
-        """
         if isinstance(date, datetime.datetime) and isinstance(
             withdocs, bool
         ):  # 引数があっているか確認
@@ -97,29 +74,9 @@ class Edinet:
             raise ValueError()
 
     def get_document(self, doc_id: str, type: Literal[1, 2, 3, 4, 5]) -> bytes:
-        """
-        ドキュメントの取得
+        response = self.__request(endpoint=f"documents/{doc_id}", params={"type": type})
 
-        Parameters
-        ----------
-        doc_id: str
-            書類管理番号
-        type: Literal[1, 2, 3, 4, 5]
-            - 1: 提出本文書及び監査報告書、XBRLを取得
-            - 2: PDFを取得
-            - 3: 代替書面・添付文書を取得
-            - 4: 英文ファイルを取得
-            - 5: CSVを取得
-        """
-        if isinstance(doc_id, str) and type in (1, 2, 3, 4, 5):
-            params = {"type": type}
-
-            response = self.__request(endpoint=f"documents/{doc_id}", params=params)
-
-            return response.content
-
-        else:
-            raise ValueError()
+        return response.content
 
 
 # Based on code from https://github.com/35enidoi/edinet_wrap

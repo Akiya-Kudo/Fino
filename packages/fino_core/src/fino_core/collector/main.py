@@ -1,6 +1,21 @@
-from fino_core._factory.storage import create_storage
+from typing import List
 
-from .interface import CollectInput, CollectOutput
+from pydantic import BaseModel
+
+from fino_core._factory.storage import create_storage
+from fino_core._model.period import Period
+from fino_core._model.storage import StorageConfig
+from fino_core._model.target import TargetConfig
+
+
+class CollectInput(BaseModel):
+    target: TargetConfig
+    period: Period
+    storage: StorageConfig
+
+
+class CollectOutput(BaseModel):
+    documents: List[str]
 
 
 # TODO: targetが増えたら、Strategyパターンとかを採用して、処理の呼び出しと、分岐を分離する
