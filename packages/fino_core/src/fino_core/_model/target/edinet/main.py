@@ -89,7 +89,7 @@ class EdinetTargetPort(TargetPort):
         """
         ...
 
-    def get_document(self, doc_id: str, type: Literal[1, 2, 3, 4, 5]) -> bytes:
+    def get_document(self, doc_id: str, doc_type: EdinetDoc) -> bytes:
         """
         ドキュメントの取得
 
@@ -97,11 +97,12 @@ class EdinetTargetPort(TargetPort):
         ----------
         doc_id: str
             書類管理番号
-        type: Literal[1, 2, 3, 4, 5]
-            - 1: 提出本文書及び監査報告書、XBRLを取得
-            - 2: PDFを取得
-            - 3: 代替書面・添付文書を取得
-            - 4: 英文ファイルを取得
-            - 5: CSVを取得
+        type: EdinetDoc
+            書類種別
+
+        Returns
+        -------
+        bytes
+            ドキュメントのバイト列
         """
         ...
