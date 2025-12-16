@@ -62,13 +62,15 @@ class EdinetTargetPort(TargetPort):
 
     @overload
     def get_document_list(
-        self, date: datetime.datetime, withdocs: False
+        self, date: datetime.date, withdocs: Literal[False] = False
     ) -> GetDocumentResponse: ...
     @overload
     def get_document_list(
-        self, date: datetime.datetime, withdocs: True
+        self, date: datetime.date, withdocs: Literal[True]
     ) -> GetDocumentResponseWithDocs: ...
-    def get_document_list(self, date: datetime.datetime) -> GetDocumentResponse:
+    def get_document_list(
+        self, date: datetime.date, withdocs: bool = False
+    ) -> GetDocumentResponse | GetDocumentResponseWithDocs:
         """
         `documents.json`エンドポイントのラッパー
 
@@ -78,6 +80,12 @@ class EdinetTargetPort(TargetPort):
             `datetime.datetime`オブジェクト、年月日の指定。
         withdocs: :obj:`bool`, default False
             提出書類一覧を含めるか、デフォルトは含めない。
+
+        Returns
+        -------
+        GetDocumentResponse | GetDocumentResponseWithDocs
+            withdocs=Falseの場合はGetDocumentResponse、
+            withdocs=Trueの場合はGetDocumentResponseWithDocsを返す
         """
         ...
 

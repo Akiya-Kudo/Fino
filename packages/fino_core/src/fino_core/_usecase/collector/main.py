@@ -1,3 +1,4 @@
+import datetime
 from datetime import date
 from typing import List
 
@@ -64,7 +65,11 @@ def collect(input: CollectInput) -> CollectOutput:
     print(storage)
 
     documents: List[str] = []
-    for date in input.period.iterate_by_day():
-        document_list = target.get_document_list(date)
+    for date_obj in input.period.iterate_by_day():
+        # dateをdatetimeに変換（時刻は00:00:00）
+        datetime_obj = datetime.datetime.combine(date_obj, datetime.time.min)
+        # target.get_document_list()を呼び出し
+        document_list = target.get_document_list(datetime_obj, withdocs=True)
+        # TODO: document_listからdocIDを抽出してdocumentsに追加
 
     return CollectOutput(documents=documents)

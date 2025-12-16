@@ -94,7 +94,7 @@ class Period(BaseModel):
         >>> start
         datetime.date(2024, 3, 1)
         >>> end
-        datetime.date(2024, 4, 1)
+        datetime.date(2024, 3, 31)
         """
 
         if self.granularity == Granularity.DAY:
