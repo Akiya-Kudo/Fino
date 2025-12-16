@@ -5,7 +5,7 @@ from .exception import (
     ResourceNotFoundError,
     ResponseNot200Error,
 )
-from .main import EdinetTargetConfig, EdinetTargetPort
+from .main import EdinetDoc, EdinetTargetConfig, EdinetTargetPort
 from .response import (
     GetDocumentResponse,
     GetDocumentResponseWithDocs,
@@ -24,4 +24,6 @@ __all__ = [
     # response
     "GetDocumentResponse",
     "GetDocumentResponseWithDocs",
+    # metadata
+    "EdinetDoc",
 ]

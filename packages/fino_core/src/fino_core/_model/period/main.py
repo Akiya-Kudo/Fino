@@ -66,6 +66,18 @@ class Period(BaseModel):
         else:
             raise ValueError("period must be collectedly specified")
 
+    @property
+    def closest_day(self) -> date:
+        """
+        Periodの最も近い日を取得する
+        """
+        if self.granularity == Granularity.DAY:
+            return date(self.year, self.month, self.day)
+        elif self.granularity == Granularity.MONTH:
+            return date(self.year, self.month, 1) + relativedelta(months=1) - timedelta(days=1)
+        else:
+            return date(self.year, 1, 1) + relativedelta(years=1) - timedelta(days=1)
+
     def to_range(self) -> Tuple[date, date]:
         """
         Period を [start, end) の日付レンジに変換する
@@ -87,13 +99,13 @@ class Period(BaseModel):
 
         if self.granularity == Granularity.DAY:
             start = date(self.year, self.month, self.day)
-            end = start + relativedelta(days=1)
+            end = start
         elif self.granularity == Granularity.MONTH:
             start = date(self.year, self.month, 1)
-            end = start + relativedelta(months=1)
+            end = start + relativedelta(months=1) - timedelta(days=1)
         else:
             start = date(self.year, 1, 1)
-            end = start + relativedelta(years=1)
+            end = start + relativedelta(years=1) - timedelta(days=1)
 
         return start, end
 
