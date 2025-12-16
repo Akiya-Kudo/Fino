@@ -1,3 +1,6 @@
-from .main import Period
+from .main import Granularity, Period
 
-__all__ = ["Period"]
+__all__ = [
+    "Period",
+    "Granularity",
+]
