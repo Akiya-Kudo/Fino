@@ -1,11 +1,10 @@
 from typing import List
 
-from pydantic import BaseModel
-
 from fino_core._factory.storage import create_storage
 from fino_core._model.period import Period
 from fino_core._model.storage import StorageConfig
 from fino_core._model.target import TargetConfig
+from pydantic import BaseModel
 
 
 class CollectInput(BaseModel):
