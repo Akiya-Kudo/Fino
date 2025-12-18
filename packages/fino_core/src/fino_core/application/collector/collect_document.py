@@ -1,5 +1,6 @@
-from fino_core.api.collector.input.collect_document import CollectDocumentInput
 from fino_core.model.period import Period
+
+from .input.collect_document import CollectDocumentInput
 
 
 def collect_documents(input: CollectDocumentInput) -> None:
