@@ -26,29 +26,13 @@ class S3StorageConfig(StorageConfig):
     region: str
 
 
-class StoragePort(ABC):
+class Storage(ABC):
     """ストレージ操作のポート（インターフェース）"""
 
     @abstractmethod
     def save(self, key: str, data: bytes) -> None:
-        """
-        データを保存する
-
-        Args:
-            key: 保存先のキー（パス）
-            data: 保存するデータ
-        """
         pass
 
     @abstractmethod
     def get(self, key: str) -> bytes:
-        """
-        データを取得する
-
-        Args:
-            key: 取得するキー（パス）
-
-        Returns:
-            取得したデータ
-        """
         pass
