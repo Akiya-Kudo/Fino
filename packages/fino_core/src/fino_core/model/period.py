@@ -1,9 +1,10 @@
 from datetime import date, timedelta
 from enum import Enum, auto
-from typing import Iterator, Optional, Tuple
+from typing import Iterator, Tuple
 
 from dateutil.relativedelta import relativedelta
-from pydantic import BaseModel, Field, model_validator
+from fino_core.api.collector.inoput.collect_document import PeriodInput
+from pydantic import BaseModel
 
 
 class Granularity(Enum):
@@ -28,18 +29,9 @@ class Period(BaseModel):
     ロジック（期間の変換、イテレーション）を内包します。
     """
 
-    year: int = Field(ge=1900, le=3000, frozen=True)
-    month: Optional[int] = Field(ge=1, le=12, frozen=True)
-    day: Optional[int] = Field(ge=1, le=31, frozen=True)
-
-    @model_validator(mode="after")
-    def validate_period(cls, data: "Period") -> "Period":
-        """
-        期間指定の不整合をチェック
-        """
-        if data.day is not None and data.month is None:
-            raise ValueError("month must be specified when day is specified")
-        return data
+    year: int
+    month: int | None = None
+    day: int | None = None
 
     @property  # @see: https://zenn.dev/yuto_mo/articles/29682f6b0c402c
     def granularity(self) -> Granularity:
@@ -141,3 +133,11 @@ class Period(BaseModel):
         while current < end:
             yield current
             current += timedelta(days=1)
+
+    @classmethod
+    def from_input(cls, input: PeriodInput) -> "Period":
+        return cls(
+            year=input.year,
+            month=input.month,
+            day=input.day,
+        )
