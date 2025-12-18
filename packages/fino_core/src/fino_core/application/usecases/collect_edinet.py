@@ -57,7 +57,7 @@ def collect_edinet(input: CollectEdinetInput) -> CollectEdinetOutput:
 
             # 書類を取得
             doc_bytes = target.get_document(document["docID"], edinet_doc_type)
-            storage.save(doc_bytes, path=f"edinet/{document['docID']}")
+            storage.save(key=f"edinet/{document['docID']}", data=doc_bytes)
 
             # Domainエンティティを作成
             classification = DocumentClassification.from_edinet(edinet_doc_type)
