@@ -89,9 +89,13 @@ class Period(BaseModel):
         """
 
         if self.granularity == Granularity.DAY:
+            # granularityがDAYの場合、monthとdayはNoneではない
+            assert self.month is not None and self.day is not None  # noqa: S101
             start = date(self.year, self.month, self.day)
             end = start
         elif self.granularity == Granularity.MONTH:
+            # granularityがMONTHの場合、monthはNoneではない
+            assert self.month is not None  # noqa: S101
             start = date(self.year, self.month, 1)
             end = start + relativedelta(months=1) - timedelta(days=1)
         else:
