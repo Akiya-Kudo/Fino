@@ -1,7 +1,8 @@
-from typing import Optional
+from typing import Optional, Self, cast
 
+from fino_core.factory.data_source import create_edinet
 from fino_core.factory.storage import create_storage
-from fino_core.model.edinet import Edinet, EdinetDocument
+from fino_core.model.edinet import EdinetDocument, GetDocumentResponseWithDocs
 from fino_core.model.period import Period
 from fino_core.model.storage_type import StorageType
 from pydantic import BaseModel, Field, model_validator
@@ -13,10 +14,10 @@ class PeriodInput(BaseModel):
     day: Optional[int] = Field(ge=1, le=31, frozen=True)
 
     @model_validator(mode="after")
-    def validate_period(self, data: "PeriodInput") -> "PeriodInput":
-        if data.day is not None and data.month is None:
+    def validate_period(self) -> Self:
+        if self.day is not None and self.month is None:
             raise ValueError("month must be specified when day is specified")
-        return data.model_dump()
+        return self
 
 
 class StorageConfigInput(BaseModel):
@@ -25,6 +26,9 @@ class StorageConfigInput(BaseModel):
     storage_uri: Optional[str] = None
     password: Optional[str] = None
     username: Optional[str] = None
+    bucket: Optional[str] = None
+    api_key: Optional[str] = None
+    region: Optional[str] = None
 
 
 class CollectDocumentInput(BaseModel):
@@ -34,7 +38,22 @@ class CollectDocumentInput(BaseModel):
     api_key: str
 
 
-def collect_documents(input: CollectDocumentInput) -> None:
+def collect_edinet(input: CollectDocumentInput) -> None:
     period = Period.from_input(input.period)
-    storage = create_storage(input.storage_config)
-    edinet = Edinet(api_key=input.api_key)
+    storage = create_storage(input.storage)
+    edinet = create_edinet(api_key=input.api_key)
+
+    for date in period.iterate_by_day():
+        document_list_response = edinet.get_document_list(date, withdocs=True)
+        document_list = cast(GetDocumentResponseWithDocs, document_list_response)
+        for document in document_list["results"]:
+            doc_id = document["docID"]
+            doc_type_code = document.get("docTypeCode")
+            if doc_type_code is None:
+                continue
+            try:
+                doc_type = EdinetDocument(doc_type_code)
+            except ValueError:
+                continue
+            document_bytes = edinet.get_document(doc_id, doc_type)
+            storage.save(key=f"edinet/{doc_id}", data=document_bytes)

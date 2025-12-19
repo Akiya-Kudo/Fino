@@ -1,9 +1,8 @@
 from datetime import date, timedelta
 from enum import Enum, auto
-from typing import Iterator, Tuple
+from typing import Any, Iterator, Self, Tuple
 
 from dateutil.relativedelta import relativedelta
-from fino_core.api.collector.inoput.collect_document import PeriodInput
 from pydantic import BaseModel
 
 
@@ -49,14 +48,14 @@ class Period(BaseModel):
         >>> period.granularity
         <Granularity.DAY: 3>
         """
-        if self.year is not None and self.month is not None and self.day is not None:
+        # yearは必須（int型）なので、monthとdayのみをチェック
+        if self.month is not None and self.day is not None:
             return Granularity.DAY
-        elif self.year is not None and self.month is not None:
+        elif self.month is not None:
             return Granularity.MONTH
-        elif self.year is not None:
-            return Granularity.YEAR
         else:
-            raise ValueError("period must be collectedly specified")
+            # yearのみが指定されている場合
+            return Granularity.YEAR
 
     @property
     def closest_day(self) -> date:
@@ -64,9 +63,9 @@ class Period(BaseModel):
         Periodの最も近い日を取得する
         """
         if self.granularity == Granularity.DAY:
-            return date(self.year, self.month, self.day)
+            return date(self.year, self.month or 1, self.day or 1)
         elif self.granularity == Granularity.MONTH:
-            return date(self.year, self.month, 1) + relativedelta(months=1) - timedelta(days=1)
+            return date(self.year, self.month or 1, 1) + relativedelta(months=1) - timedelta(days=1)
         else:
             return date(self.year, 1, 1) + relativedelta(years=1) - timedelta(days=1)
 
@@ -135,7 +134,7 @@ class Period(BaseModel):
             current += timedelta(days=1)
 
     @classmethod
-    def from_input(cls, input: PeriodInput) -> "Period":
+    def from_input(cls, input: Any) -> Self:
         return cls(
             year=input.year,
             month=input.month,
