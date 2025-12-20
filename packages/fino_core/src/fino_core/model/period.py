@@ -133,7 +133,7 @@ class Period(BaseModel):
         start, end = self.to_range()
         current = start
 
-        while current < end:
+        while current <= end:
             yield current
             current += timedelta(days=1)
 

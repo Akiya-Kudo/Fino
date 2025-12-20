@@ -4,14 +4,12 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass
 
 
-class StorageConfig(ABC):
+class StorageConfig(ABC):  # noqa: B024
     """基底クラス: ストレージ設定の共通インターフェース"""
-
-    pass
 
 
 @dataclass
-class LocalStorageConfig(StorageConfig):
+class LocalStorageConfig(StorageConfig):  # noqa: B024
     """ローカルストレージの設定"""
 
     base_path: str
@@ -26,7 +24,7 @@ class S3StorageConfig(StorageConfig):
     region: str
 
 
-class Storage(ABC):
+class StoragePort(ABC):
     """ストレージ操作のポート（インターフェース）"""
 
     @abstractmethod

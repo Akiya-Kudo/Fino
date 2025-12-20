@@ -111,3 +111,4 @@ fino_core/src/fino_core/
 2. **拡張性**: 新しいストレージタイプ（GCS 等）を追加しても UseCase は無変更
 3. **テスト容易性**: 各 Config クラスが独立してテスト可能
 4. **保守性**: 差異が Config と Factory に閉じている
+

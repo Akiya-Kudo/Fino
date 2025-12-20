@@ -86,24 +86,28 @@ wheels = [
 name = "fino"
 version = "0.1.0"
 source = { virtual = "." }
-dependencies = [
-    { name = "pytest" },
-]
 
 [package.dev-dependencies]
 dev = [
+    { name = "pytest" },
     { name = "ruff" },
 ]
 lint = [
+    { name = "pytest" },
     { name = "ruff" },
 ]
 
 [package.metadata]
-requires-dist = [{ name = "pytest", specifier = ">=9.0.2" }]
 
 [package.metadata.requires-dev]
-dev = [{ name = "ruff", specifier = ">=0.14.8" }]
-lint = [{ name = "ruff", specifier = ">=0.14.8" }]
+dev = [
+    { name = "pytest", specifier = ">=9.0.2" },
+    { name = "ruff", specifier = ">=0.14.8" },
+]
+lint = [
+    { name = "pytest", specifier = ">=9.0.2" },
+    { name = "ruff", specifier = ">=0.14.8" },
+]
 
 [[package]]
 name = "fino-cli"

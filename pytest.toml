@@ -1,0 +1,26 @@
+[pytest]
+minversion = "9.0"
+addopts = ["-ra", "-q"]
+testpaths = ["packages/fino_core/tests"]
+
+markers = [
+    "core: Core tests",
+    "unit: Unit tests",
+    "integration: Integration tests",
+    "slow: Slow running tests",
+]
+
+[tool.coverage.run]
+source = ["packages/fino_core/src"]
+branch = true
+omit = ["packages/fino_core/tests/**", "*/__pycache__/*"]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+]

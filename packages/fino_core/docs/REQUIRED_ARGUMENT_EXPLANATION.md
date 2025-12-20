@@ -189,3 +189,4 @@ class EdinetAdapter(Edinet):
 3. **デフォルト引数があるため、技術的には呼び出し可能と判断される**
 
 しかし、これは**実行時エラーの原因**となり、**Liskov Substitution Principle に違反**しています。必ず修正する必要があります。
+
