@@ -15,29 +15,29 @@ class TestPeriod:
     DayArgs: TypeAlias = dict[Literal["year", "month", "day"], int]
 
     @pytest.fixture
-    def period_with_year(self) -> YearArgs:
+    def period_year_args(self) -> YearArgs:
         return {
             "year": 2024,
         }
 
     @pytest.fixture
-    def period_with_month(self) -> MonthArgs:
+    def period_month_args(self) -> MonthArgs:
         return {
             "year": 2024,
             "month": 6,
         }
 
     @pytest.fixture
-    def period_with_day(self) -> DayArgs:
+    def period_day_args(self) -> DayArgs:
         return {
             "year": 2024,
             "month": 3,
             "day": 15,
         }
 
-    def test_create_period_with_year_only(self, period_with_year: YearArgs) -> None:
+    def test_create_period_year(self, period_year_args: YearArgs) -> None:
         """PeriodをYearのみで生成"""
-        period = Period(**period_with_year)
+        period = Period(**period_year_args)
         assert period.year == 2024
         assert period.month is None
         assert period.day is None
@@ -50,9 +50,9 @@ class TestPeriod:
         assert start == date(2024, 1, 1)
         assert end == date(2024, 12, 31)
 
-    def test_create_period_with_year_and_month(self, period_with_month: MonthArgs) -> None:
+    def test_create_period_month(self, period_month_args: MonthArgs) -> None:
         """PeriodをYearとMonthで生成"""
-        period = Period(**period_with_month)
+        period = Period(**period_month_args)
         assert period.year == 2024
         assert period.month == 6
         assert period.day is None
@@ -65,9 +65,9 @@ class TestPeriod:
         assert start == date(2024, 6, 1)
         assert end == date(2024, 6, 30)
 
-    def test_create_period_with_full_date(self, period_with_day: DayArgs) -> None:
+    def test_create_period_date(self, period_day_args: DayArgs) -> None:
         """PeriodをYear、Month、Dayで生成"""
-        period = Period(**period_with_day)
+        period = Period(**period_day_args)
         assert period.year == 2024
         assert period.month == 3
         assert period.day == 15
@@ -80,25 +80,25 @@ class TestPeriod:
         assert start == date(2024, 3, 15)
         assert end == date(2024, 3, 15)
 
-    def test_iterate_by_day_for_year(self, period_with_year: YearArgs) -> None:
+    def test_iterate_by_day_for_year(self, period_year_args: YearArgs) -> None:
         """Year: iterate_by_dayテスト"""
-        period = Period(**period_with_year)
+        period = Period(**period_year_args)
         dates = list(period.iterate_by_day())
         assert len(dates) == 366
         assert dates[0] == date(2024, 1, 1)
         assert dates[-1] == date(2024, 12, 31)
 
-    def test_iterate_by_day_for_month(self, period_with_month: MonthArgs) -> None:
+    def test_iterate_by_day_for_month(self, period_month_args: MonthArgs) -> None:
         """Month: iterate_by_dayテスト"""
-        period = Period(**period_with_month)
+        period = Period(**period_month_args)
         dates = list(period.iterate_by_day())
         assert len(dates) == 30
         assert dates[0] == date(2024, 6, 1)
         assert dates[-1] == date(2024, 6, 30)
 
-    def test_iterate_by_day_for_day(self, period_with_day: DayArgs) -> None:
+    def test_iterate_by_day_for_day(self, period_day_args: DayArgs) -> None:
         """Day: iterate_by_dayテスト"""
-        period = Period(**period_with_day)
+        period = Period(**period_day_args)
         dates = list(period.iterate_by_day())
         assert len(dates) == 1
         assert dates[0] == date(2024, 3, 15)
@@ -109,3 +109,24 @@ class TestPeriod:
         closest = period.closest_day
         # 2024年は閏年で2月の最後の日は29日
         assert closest == date(2024, 2, 29)
+
+    def test_from_values_year_args(
+        self, period_year_args: YearArgs, period_month_args: MonthArgs, period_day_args: DayArgs
+    ) -> None:
+        period = Period.from_values(values=period_year_args)
+        """from_valuesテスト"""
+        assert period.year == 2024
+        assert period.month is None
+        assert period.day is None
+
+        period = Period.from_values(values=period_month_args)
+        """from_valuesテスト"""
+        assert period.year == 2024
+        assert period.month == 6
+        assert period.day is None
+
+        period = Period.from_values(values=period_day_args)
+        """from_valuesテスト"""
+        assert period.year == 2024
+        assert period.month == 3
+        assert period.day == 15
