@@ -2,3 +2,7 @@
 **/.python-version
 .env
 __pycache__
+.data
+
+# Ignore dynaconf secret files
+.secrets.*

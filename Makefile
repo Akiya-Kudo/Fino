@@ -87,3 +87,17 @@ fix:
 
 echo:
 	@echo "$(LOCALSTACK_VOLUME_DIR)"
+
+
+########################################################
+################                      ##################
+##############         FINO CLI         ################
+################                      ##################
+########################################################
+cli:
+	@if [ -z "$(word 1,$(ARGS))" ]; then \
+		echo "Error: CDK subcommand is required. Usage: make local <subcommand> [args...]"; \
+		echo "Available subcommands: deploy, synth, diff, destroy, bootstrap, ls, list, etc."; \
+		exit 1; \
+	fi
+	uv run typer src/fino/cli/main.py $(filter-out $(word 1,$(ARGS)),$(ARGS))
