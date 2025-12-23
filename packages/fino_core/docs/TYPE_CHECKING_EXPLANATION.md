@@ -126,3 +126,4 @@ class EdinetAdapter(Edinet):
         # date型を使用
         # ...
 ```
+

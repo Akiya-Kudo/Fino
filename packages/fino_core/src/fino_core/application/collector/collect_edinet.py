@@ -1,3 +1,4 @@
+from dataclasses import asdict
 from typing import Optional, Self, cast
 
 from fino_core.factory.data_source import create_edinet
@@ -39,7 +40,7 @@ class CollectDocumentInput(BaseModel):
 
 
 def collect_edinet(input: CollectDocumentInput) -> None:
-    period = Period.from_input(input.period)
+    period = Period.from_values(values=asdict(input.period))
     storage = create_storage(input.storage)
     edinet = create_edinet(api_key=input.api_key)
 

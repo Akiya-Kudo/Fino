@@ -1,6 +1,6 @@
 from datetime import date, timedelta
 from enum import Enum, auto
-from typing import Any, Iterator, Self, Tuple
+from typing import Iterator, Literal, Self, Tuple
 
 from dateutil.relativedelta import relativedelta
 from pydantic import BaseModel
@@ -133,14 +133,17 @@ class Period(BaseModel):
         start, end = self.to_range()
         current = start
 
-        while current < end:
+        while current <= end:
             yield current
             current += timedelta(days=1)
 
     @classmethod
-    def from_input(cls, input: Any) -> Self:
+    def from_values(cls, values: dict[Literal["year", "month", "day"] | str, int]) -> Self:
+        year = values.get("year")
+        if year is None:
+            raise ValueError("year is required")
         return cls(
-            year=input.year,
-            month=input.month,
-            day=input.day,
+            year=year,
+            month=values.get("month"),
+            day=values.get("day"),
         )
