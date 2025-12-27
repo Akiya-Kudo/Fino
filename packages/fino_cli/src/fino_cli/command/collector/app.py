@@ -5,7 +5,13 @@ import typer
 from click.core import ParameterSource
 from fino_cli.config import settings
 from fino_cli.util.theme import FinoColors
-from fino_core import collect_edinet
+from fino_core import (
+    CollectDocumentInput,
+    PeriodInput,
+    StorageConfigInput,
+    StorageType,
+    collect_edinet,
+)
 from typing_extensions import Annotated
 
 app = typer.Typer(no_args_is_help=True)
@@ -48,7 +54,17 @@ def collector(
         )
 
     # fino core collector
-    collect_edinet()
+    # TODO: Make these configurable via CLI options
+    input_data = CollectDocumentInput(
+        period=PeriodInput(year=2024, month=1, day=1),  # Default: today or make configurable
+        storage=StorageConfigInput(
+            type=StorageType.LOCAL,
+            path="./data",  # Default storage path
+        ),
+        doc_type=None,  # None means collect all document types
+        api_key=edinet_api_key,
+    )
+    collect_edinet(input_data)
 
 
 if __name__ == "__main__":

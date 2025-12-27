@@ -1,51 +1,42 @@
-from dataclasses import asdict
-from typing import Optional, Self, cast
+"""Application layer for collecting EDINET documents."""
 
-from fino_core.factory.data_source import create_edinet
-from fino_core.factory.storage import create_storage
-from fino_core.model.edinet import EdinetDocument, GetDocumentResponseWithDocs
-from fino_core.model.period import Period
-from fino_core.model.storage_type import StorageType
-from pydantic import BaseModel, Field, model_validator
+from datetime import date
+from typing import cast
 
-
-class PeriodInput(BaseModel):
-    year: int = Field(ge=1900, le=3000, frozen=True)
-    month: Optional[int] = Field(ge=1, le=12, frozen=True)
-    day: Optional[int] = Field(ge=1, le=31, frozen=True)
-
-    @model_validator(mode="after")
-    def validate_period(self) -> Self:
-        if self.day is not None and self.month is None:
-            raise ValueError("month must be specified when day is specified")
-        return self
+from fino_core.domain.edinet import Edinet, EdinetDocument, GetDocumentResponseWithDocs
+from fino_core.domain.period import Period
+from fino_core.domain.storage import StoragePort
 
 
-class StorageConfigInput(BaseModel):
-    type: StorageType
-    path: Optional[str] = Field(default="")
-    storage_uri: Optional[str] = None
-    password: Optional[str] = None
-    username: Optional[str] = None
-    bucket: Optional[str] = None
-    api_key: Optional[str] = None
-    region: Optional[str] = None
+def collect_edinet(
+    period: Period,
+    storage: StoragePort,
+    edinet: Edinet,
+    doc_types: list[EdinetDocument] | EdinetDocument | None = None,
+) -> None:
+    """
+    Collect EDINET documents for the specified period.
 
+    Args:
+        period: Period to collect documents for
+        storage: Storage port implementation to save documents
+        edinet: Edinet port implementation to fetch documents
+        doc_types: Optional filter for document types to collect.
+                   If None, collects all document types.
+    """
+    # Convert single doc_type to list for uniform processing
+    if doc_types is None:
+        doc_type_list: list[EdinetDocument] | None = None
+    elif isinstance(doc_types, EdinetDocument):
+        doc_type_list = [doc_types]
+    elif isinstance(doc_types, list) and len(doc_types) == 0:
+        # Empty list means collect all document types
+        doc_type_list = None
+    else:
+        doc_type_list = doc_types
 
-class CollectDocumentInput(BaseModel):
-    period: PeriodInput
-    storage: StorageConfigInput
-    doc_type: list[EdinetDocument] | EdinetDocument
-    api_key: str
-
-
-def collect_edinet(input: CollectDocumentInput) -> None:
-    period = Period.from_values(values=asdict(input.period))
-    storage = create_storage(input.storage)
-    edinet = create_edinet(api_key=input.api_key)
-
-    for date in period.iterate_by_day():
-        document_list_response = edinet.get_document_list(date, withdocs=True)
+    for date_obj in period.iterate_by_day():
+        document_list_response = edinet.get_document_list(date_obj, withdocs=True)
         document_list = cast(GetDocumentResponseWithDocs, document_list_response)
         for document in document_list["results"]:
             doc_id = document["docID"]
@@ -56,5 +47,10 @@ def collect_edinet(input: CollectDocumentInput) -> None:
                 doc_type = EdinetDocument(doc_type_code)
             except ValueError:
                 continue
+
+            # Filter by doc_types if specified
+            if doc_type_list is not None and doc_type not in doc_type_list:
+                continue
+
             document_bytes = edinet.get_document(doc_id, doc_type)
             storage.save(key=f"edinet/{doc_id}", data=document_bytes)

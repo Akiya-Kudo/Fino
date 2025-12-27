@@ -2,7 +2,7 @@ from datetime import date
 from typing import Any, override
 
 import requests
-from fino_core.model.edinet import (
+from fino_core.domain.edinet import (
     BadRequestError,
     Edinet,
     EdinetDocument,
@@ -13,6 +13,11 @@ from fino_core.model.edinet import (
     ResourceNotFoundError,
     ResponseNot200Error,
 )
+
+
+def create_edinet(api_key: str) -> Edinet:
+    """Create an Edinet adapter instance."""
+    return EdinetAdapter(api_key=api_key)
 
 
 class EdinetAdapter(Edinet):

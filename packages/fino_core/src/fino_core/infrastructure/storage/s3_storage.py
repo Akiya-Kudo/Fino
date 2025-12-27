@@ -1,6 +1,6 @@
 """AWS S3 storage implementation."""
 
-from fino_core.model.storage import StoragePort
+from fino_core.domain.storage import StoragePort
 
 
 class S3Storage(StoragePort):

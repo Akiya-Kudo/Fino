@@ -2,7 +2,7 @@
 
 from pathlib import Path
 
-from fino_core.model.storage import StoragePort
+from fino_core.domain.storage import StoragePort
 
 
 class LocalStorage(StoragePort):

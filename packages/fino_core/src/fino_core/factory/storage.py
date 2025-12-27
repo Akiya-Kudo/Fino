@@ -2,13 +2,13 @@ from typing import Union
 
 from fino_core.infrastructure.storage.local_storage import LocalStorage
 from fino_core.infrastructure.storage.s3_storage import S3Storage
-from fino_core.model.storage import (
+from fino_core.domain.storage import (
     LocalStorageConfig,
     S3StorageConfig,
     Storage,
     StorageConfig,
 )
-from fino_core.model.storage_type import StorageType
+from fino_core.domain.storage_type import StorageType
 
 
 def _convert_storage_config_input(input_config: object) -> StorageConfig:

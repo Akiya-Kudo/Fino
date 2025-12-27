@@ -34,3 +34,7 @@ class StoragePort(ABC):
     @abstractmethod
     def get(self, key: str) -> bytes:
         pass
+
+
+# 型エイリアス（後方互換性のため）
+Storage = StoragePort
