@@ -39,6 +39,8 @@ Public API → Application → Domain
 - Application orchestrates workflows
 - Domain contains pure business logic
 - Infrastructure handles side effects
+- Input models are part of the Interface Adapter role
+- They must not be exposed via the Public API if not neccesary
 
 Violations are considered design errors. so please suggeste solutions when you face those problems
 
@@ -87,6 +89,12 @@ Forbidden Dependencies
 - Must assemble dependencies explicitly
 - Must be stable and minimal
 - defined inside the src/fino_core/api but export as project root IF like under example
+
+  6.1 Public API and interface/adopter rules
+
+- Public API must accept only primitive types, enums, or standard collections
+- Public API must NOT require callers to instantiate internal models if those model is exist for internal logic
+- Input normalization models (e.g. Pydantic models) must be created internally
 
 Example:
 

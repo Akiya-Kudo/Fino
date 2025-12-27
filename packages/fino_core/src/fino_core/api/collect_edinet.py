@@ -3,13 +3,14 @@
 from dataclasses import asdict
 from typing import Optional, Self
 
+from pydantic import BaseModel, Field, model_validator
+
 from fino_core.application.collector.collect_edinet import collect_edinet as _collect_edinet
 from fino_core.domain.edinet import EdinetDocument
 from fino_core.domain.period import Period
 from fino_core.domain.storage_type import StorageType
 from fino_core.infrastructure.edinet import create_edinet
 from fino_core.infrastructure.storage import create_storage
-from pydantic import BaseModel, Field, model_validator
 
 
 class PeriodInput(BaseModel):

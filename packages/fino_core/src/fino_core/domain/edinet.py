@@ -12,7 +12,7 @@ class EdinetFormatType(Enum):
     CSV = 5
 
 
-class EdinetDocument(IntEnum):
+class EdinetDocType(IntEnum):
     """
     EDINET 書類種別コード（ファンダメンタルズ分析向け）
 

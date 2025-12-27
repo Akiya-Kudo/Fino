@@ -1,6 +1,5 @@
 """Application layer for collecting EDINET documents."""
 
-from datetime import date
 from typing import cast
 
 from fino_core.domain.edinet import Edinet, EdinetDocument, GetDocumentResponseWithDocs
@@ -24,12 +23,13 @@ def collect_edinet(
         doc_types: Optional filter for document types to collect.
                    If None, collects all document types.
     """
-    # Convert single doc_type to list for uniform processing
+    # Input
+    # doc_type Transformation
     if doc_types is None:
         doc_type_list: list[EdinetDocument] | None = None
     elif isinstance(doc_types, EdinetDocument):
         doc_type_list = [doc_types]
-    elif isinstance(doc_types, list) and len(doc_types) == 0:
+    elif len(doc_types) == 0:
         # Empty list means collect all document types
         doc_type_list = None
     else:
