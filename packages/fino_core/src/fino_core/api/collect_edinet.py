@@ -5,8 +5,8 @@ from typing import Optional, Self, cast
 
 from fino_core.application.collector.collect_edinet import collect_edinet as _collect_edinet
 from fino_core.application.dto.edinet_doc_type import EdinetDocTypeDto
+from fino_core.application.dto.query_period import QueryPeriod
 from fino_core.domain.edinet import EdinetDocType
-from fino_core.domain.period import Period
 from fino_core.domain.storage_type import StorageType
 from fino_core.infrastructure.edinet import create_edinet
 from fino_core.infrastructure.storage import create_storage
@@ -59,12 +59,8 @@ class CollectEdinetInput(BaseModel):
 
 
 def collect_edinet(input: CollectEdinetInput) -> None:
-    # Convert input models to domain models
-    period = Period.from_values(values=asdict(input.period))
-
-    # Create infrastructure implementations using factory functions
-    storage = create_storage(input.storage)
-    edinet = create_edinet(api_key=input.api_key)
+    # Convert input period to query period
+    period = QueryPeriod.from_values(values=asdict(input.period))
 
     # Convert doc_type to Dto
     doc_types_dto = EdinetDocTypeDto(
@@ -72,6 +68,10 @@ def collect_edinet(input: CollectEdinetInput) -> None:
             list[int], input.doc_types
         )  # validatorでnormalizeされ、list[int]になる想定のためcastで型を強制する
     )
+
+    # Create infrastructure implementations using factory functions
+    storage = create_storage(input.storage)
+    edinet = create_edinet(api_key=input.api_key)
 
     # Call application layer function with injected dependencies
     _collect_edinet(

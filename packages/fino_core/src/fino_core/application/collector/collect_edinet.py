@@ -2,13 +2,13 @@
 
 from typing import cast
 
+from fino_core.application.dto.query_period import QueryPeriod
 from fino_core.domain.edinet import Edinet, EdinetDocType, GetDocumentResponseWithDocs
-from fino_core.domain.period import Period
 from fino_core.domain.storage import StoragePort
 
 
 def collect_edinet(
-    period: Period,
+    period: QueryPeriod,
     storage: StoragePort,
     edinet: Edinet,
     doc_types: list[EdinetDocType] | EdinetDocType | None = None,
