@@ -1,0 +1,33 @@
+---
+alwaysApply: true
+---
+
+# Project System
+
+## System Component's Abstruction
+
+please read under description , and detect where to read more
+each component will have the cursor rules. so please read them too.
+
+- project root
+
+  - this project is constructec as monorepo project that contain full tools and programs which will help analyzing about investment
+  - provide comprehensive features og managing Personal-Stack-Holder's investment and analyze company and urge to thoughtful decision
+
+- packages/fino-core:
+
+  - This is the sharable library used by other program and this projects application layer(fino-cli etc)
+  - the implementation focusing on managing Financial data and datalakehouse which has program and workflow's which can be integrated in a lot of usecases
+
+- packages/fino-cli:
+
+  - this is the cli application that emit any command to manage datas and datalakehouse
+  - which is caller of fino-core import and use it
+
+- infra/cdk:
+
+  - this system is not limited by any usecases and environment (local device and aws), so for achiving cloud usecase, this project suggest the one system implementations effectively using aws S3 lambda etc.
+
+- infra/monitor:
+  - this is the monitor servie, which will show the analyzed data visionally and helpe investigeting
+  - provisioning setting of grafana dashboard
