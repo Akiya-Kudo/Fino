@@ -6,7 +6,7 @@ from typing import Optional, Self
 from pydantic import BaseModel, Field, model_validator
 
 from fino_core.application.collector.collect_edinet import collect_edinet as _collect_edinet
-from fino_core.domain.edinet import EdinetDocument
+from fino_core.domain.edinet import EdinetDocType
 from fino_core.domain.period import Period
 from fino_core.domain.storage_type import StorageType
 from fino_core.infrastructure.edinet import create_edinet
@@ -45,7 +45,7 @@ class CollectDocumentInput(BaseModel):
 
     period: PeriodInput
     storage: StorageConfigInput
-    doc_type: list[EdinetDocument] | EdinetDocument | None = None
+    doc_type: list[EdinetDocType] | EdinetDocType | None = None
     api_key: str
 
 
@@ -68,7 +68,7 @@ def collect_edinet(input: CollectDocumentInput) -> None:
     edinet = create_edinet(api_key=input.api_key)
 
     # Convert doc_type to list if needed
-    doc_types: list[EdinetDocument] | EdinetDocument | None = input.doc_type
+    doc_types: list[EdinetDocType] | EdinetDocType | None = input.doc_type
 
     # Call application layer function with injected dependencies
     _collect_edinet(

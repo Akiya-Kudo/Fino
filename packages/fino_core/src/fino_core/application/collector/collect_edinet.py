@@ -2,7 +2,7 @@
 
 from typing import cast
 
-from fino_core.domain.edinet import Edinet, EdinetDocument, GetDocumentResponseWithDocs
+from fino_core.domain.edinet import Edinet, EdinetDocType, GetDocumentResponseWithDocs
 from fino_core.domain.period import Period
 from fino_core.domain.storage import StoragePort
 
@@ -11,7 +11,7 @@ def collect_edinet(
     period: Period,
     storage: StoragePort,
     edinet: Edinet,
-    doc_types: list[EdinetDocument] | EdinetDocument | None = None,
+    doc_types: list[EdinetDocType] | EdinetDocType | None = None,
 ) -> None:
     """
     Collect EDINET documents for the specified period.
@@ -26,8 +26,8 @@ def collect_edinet(
     # Input
     # doc_type Transformation
     if doc_types is None:
-        doc_type_list: list[EdinetDocument] | None = None
-    elif isinstance(doc_types, EdinetDocument):
+        doc_type_list: list[EdinetDocType] | None = None
+    elif isinstance(doc_types, EdinetDocType):
         doc_type_list = [doc_types]
     elif len(doc_types) == 0:
         # Empty list means collect all document types
@@ -44,7 +44,7 @@ def collect_edinet(
             if doc_type_code is None:
                 continue
             try:
-                doc_type = EdinetDocument(doc_type_code)
+                doc_type = EdinetDocType(doc_type_code)
             except ValueError:
                 continue
 

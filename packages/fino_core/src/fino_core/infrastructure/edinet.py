@@ -5,7 +5,7 @@ import requests
 from fino_core.domain.edinet import (
     BadRequestError,
     Edinet,
-    EdinetDocument,
+    EdinetDocType,
     GetDocumentResponse,
     GetDocumentResponseWithDocs,
     InternalServerError,
@@ -69,7 +69,7 @@ class EdinetAdapter(Edinet):
         return response.json()
 
     @override
-    def get_document(self, doc_id: str, doc_type: EdinetDocument) -> bytes:
+    def get_document(self, doc_id: str, doc_type: EdinetDocType) -> bytes:
         response = self.__request(endpoint=f"documents/{doc_id}", params={"type": doc_type.value})
 
         return response.content
