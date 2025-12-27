@@ -1,31 +1,31 @@
-"""Tests for EdinetDocTypeInput model."""
+"""Tests for EdinetDocTypeDto model."""
 
 import pytest
-from fino_core.application.input.edinet_doc_type import EdinetDocTypeInput
+from fino_core.application.input.edinet_doc_type import EdinetDocTypeDto
 from fino_core.domain.edinet import EdinetDocType
 
 
-class TestEdinetDocTypeInput:
-    """EdinetDocTypeInputモデルのテスト"""
+class TestEdinetDocTypeDto:
+    """EdinetDocTypeDtoモデルのテスト"""
 
     def test_create_with_single_int(self) -> None:
-        """単一のintでEdinetDocTypeInputを生成"""
-        input_model = EdinetDocTypeInput(doc_types=120)
+        """単一のintでEdinetDocTypeDtoを生成"""
+        input_model = EdinetDocTypeDto(doc_types=120)
         assert input_model.doc_types == [120]
 
     def test_create_with_single_edinet_doc_type(self) -> None:
-        """単一のEdinetDocTypeでEdinetDocTypeInputを生成"""
-        input_model = EdinetDocTypeInput(doc_types=EdinetDocType.ANNUAL_REPORT)
+        """単一のEdinetDocTypeでEdinetDocTypeDtoを生成"""
+        input_model = EdinetDocTypeDto(doc_types=EdinetDocType.ANNUAL_REPORT)
         assert input_model.doc_types == [120]
 
     def test_create_with_list_of_int(self) -> None:
-        """intのリストでEdinetDocTypeInputを生成"""
-        input_model = EdinetDocTypeInput(doc_types=[120, 130, 140])
+        """intのリストでEdinetDocTypeDtoを生成"""
+        input_model = EdinetDocTypeDto(doc_types=[120, 130, 140])
         assert input_model.doc_types == [120, 130, 140]
 
     def test_create_with_list_of_edinet_doc_type(self) -> None:
-        """EdinetDocTypeのリストでEdinetDocTypeInputを生成"""
-        input_model = EdinetDocTypeInput(
+        """EdinetDocTypeのリストでEdinetDocTypeDtoを生成"""
+        input_model = EdinetDocTypeDto(
             doc_types=[
                 EdinetDocType.ANNUAL_REPORT,
                 EdinetDocType.AMENDED_ANNUAL_REPORT,
@@ -35,34 +35,34 @@ class TestEdinetDocTypeInput:
         assert input_model.doc_types == [120, 130, 140]
 
     def test_create_with_mixed_list(self) -> None:
-        """intとEdinetDocTypeの混合リストでEdinetDocTypeInputを生成"""
-        input_model = EdinetDocTypeInput(doc_types=[120, EdinetDocType.AMENDED_ANNUAL_REPORT, 140])
+        """intとEdinetDocTypeの混合リストでEdinetDocTypeDtoを生成"""
+        input_model = EdinetDocTypeDto(doc_types=[120, EdinetDocType.AMENDED_ANNUAL_REPORT, 140])
         assert input_model.doc_types == [120, 130, 140]
 
     def test_create_with_empty_list(self) -> None:
-        """空のリストでEdinetDocTypeInputを生成"""
-        input_model = EdinetDocTypeInput(doc_types=[])
+        """空のリストでEdinetDocTypeDtoを生成"""
+        input_model = EdinetDocTypeDto(doc_types=[])
         assert input_model.doc_types == []
 
     def test_create_with_invalid_type_raises_error(self) -> None:
-        """無効な型でEdinetDocTypeInputを生成しようとするとエラー"""
+        """無効な型でEdinetDocTypeDtoを生成しようとするとエラー"""
         with pytest.raises(ValueError, match="Invalid document type code"):
-            EdinetDocTypeInput(doc_types="invalid")
+            EdinetDocTypeDto(doc_types="invalid")
 
     def test_create_with_list_containing_invalid_type_raises_error(self) -> None:
-        """無効な型を含むリストでEdinetDocTypeInputを生成しようとするとエラー"""
+        """無効な型を含むリストでEdinetDocTypeDtoを生成しようとするとエラー"""
         with pytest.raises(ValueError, match="Invalid document type code"):
-            EdinetDocTypeInput(doc_types=[120, "invalid", 140])
+            EdinetDocTypeDto(doc_types=[120, "invalid", 140])
 
     def test_to_domain_with_single_doc_type(self) -> None:
         """to_domainメソッドで単一のドキュメントタイプを変換"""
-        input_model = EdinetDocTypeInput(doc_types=120)
+        input_model = EdinetDocTypeDto(doc_types=120)
         domain_types = input_model.to_domain()
         assert domain_types == [EdinetDocType.ANNUAL_REPORT]
 
     def test_to_domain_with_multiple_doc_types(self) -> None:
         """to_domainメソッドで複数のドキュメントタイプを変換"""
-        input_model = EdinetDocTypeInput(doc_types=[120, 130, 140])
+        input_model = EdinetDocTypeDto(doc_types=[120, 130, 140])
         domain_types = input_model.to_domain()
         assert domain_types == [
             EdinetDocType.ANNUAL_REPORT,
@@ -72,7 +72,7 @@ class TestEdinetDocTypeInput:
 
     def test_to_domain_with_empty_list(self) -> None:
         """to_domainメソッドで空のリストを変換"""
-        input_model = EdinetDocTypeInput(doc_types=[])
+        input_model = EdinetDocTypeDto(doc_types=[])
         domain_types = input_model.to_domain()
         assert domain_types == []
 
@@ -80,7 +80,7 @@ class TestEdinetDocTypeInput:
         """to_domainメソッドで無効なintを変換しようとするとエラー"""
         # Pydanticのバリデーションを通すために、まず有効な値で作成してから
         # 直接無効な値を設定する必要がある
-        input_model = EdinetDocTypeInput(doc_types=[120])
+        input_model = EdinetDocTypeDto(doc_types=[120])
         input_model.doc_types = [999]  # 無効な値
         with pytest.raises(ValueError):
             input_model.to_domain()

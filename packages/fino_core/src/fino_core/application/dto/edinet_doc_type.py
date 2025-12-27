@@ -4,7 +4,7 @@ from fino_core.domain.edinet import EdinetDocType
 from pydantic import BaseModel, field_validator
 
 
-class EdinetDocTypeInput(BaseModel):
+class EdinetDocTypeDto(BaseModel):
     """Input model for EDINET document type."""
 
     doc_types: list[int]

@@ -1,16 +1,16 @@
 """Public API for collecting EDINET documents."""
 
 from dataclasses import asdict
-from typing import Optional, Self
-
-from pydantic import BaseModel, Field, model_validator
+from typing import Optional, Self, cast
 
 from fino_core.application.collector.collect_edinet import collect_edinet as _collect_edinet
+from fino_core.application.dto.edinet_doc_type import EdinetDocTypeDto
 from fino_core.domain.edinet import EdinetDocType
 from fino_core.domain.period import Period
 from fino_core.domain.storage_type import StorageType
 from fino_core.infrastructure.edinet import create_edinet
 from fino_core.infrastructure.storage import create_storage
+from pydantic import BaseModel, Field, model_validator
 
 
 class PeriodInput(BaseModel):
@@ -49,7 +49,16 @@ class CollectDocumentInput(BaseModel):
     api_key: str
 
 
-def collect_edinet(input: CollectDocumentInput) -> None:
+class CollectEdinetInput(BaseModel):
+    """Input model for collecting EDINET documents."""
+
+    period: PeriodInput
+    storage: StorageConfigInput
+    doc_types: list[int] | int | list[EdinetDocType] | EdinetDocType = EdinetDocType.ANNUAL_REPORT
+    api_key: str
+
+
+def collect_edinet(input: CollectEdinetInput) -> None:
     """
     Collect EDINET documents for the specified period.
 
@@ -67,15 +76,19 @@ def collect_edinet(input: CollectDocumentInput) -> None:
     storage = create_storage(input.storage)
     edinet = create_edinet(api_key=input.api_key)
 
-    # Convert doc_type to list if needed
-    doc_types: list[EdinetDocType] | EdinetDocType | None = input.doc_type
+    # Convert doc_type to Dto
+    doc_types_dto = EdinetDocTypeDto(
+        doc_types=cast(
+            list[int], input.doc_types
+        )  # validatorでnormalizeされ、list[int]になる想定のためcastで型を強制する
+    )
 
     # Call application layer function with injected dependencies
     _collect_edinet(
         period=period,
         storage=storage,
         edinet=edinet,
-        doc_types=doc_types,
+        doc_types=doc_types_dto.to_domain(),
     )
 
 
