@@ -4,7 +4,7 @@ from datetime import date
 from typing import Literal, TypeAlias
 
 import pytest
-from fino_core.domain.period import Granularity, Period
+from fino_core.application.dto.query_period import Granularity, QueryPeriod
 
 
 class TestPeriod:
@@ -37,7 +37,7 @@ class TestPeriod:
 
     def test_create_period_year(self, period_year_args: YearArgs) -> None:
         """PeriodをYearのみで生成"""
-        period = Period(**period_year_args)
+        period = QueryPeriod(**period_year_args)
         assert period.year == 2024
         assert period.month is None
         assert period.day is None
@@ -52,7 +52,7 @@ class TestPeriod:
 
     def test_create_period_month(self, period_month_args: MonthArgs) -> None:
         """PeriodをYearとMonthで生成"""
-        period = Period(**period_month_args)
+        period = QueryPeriod(**period_month_args)
         assert period.year == 2024
         assert period.month == 6
         assert period.day is None
@@ -67,7 +67,7 @@ class TestPeriod:
 
     def test_create_period_date(self, period_day_args: DayArgs) -> None:
         """PeriodをYear、Month、Dayで生成"""
-        period = Period(**period_day_args)
+        period = QueryPeriod(**period_day_args)
         assert period.year == 2024
         assert period.month == 3
         assert period.day == 15
@@ -82,7 +82,7 @@ class TestPeriod:
 
     def test_iterate_by_day_for_year(self, period_year_args: YearArgs) -> None:
         """Year: iterate_by_dayテスト"""
-        period = Period(**period_year_args)
+        period = QueryPeriod(**period_year_args)
         dates = list(period.iterate_by_day())
         assert len(dates) == 366
         assert dates[0] == date(2024, 1, 1)
@@ -90,7 +90,7 @@ class TestPeriod:
 
     def test_iterate_by_day_for_month(self, period_month_args: MonthArgs) -> None:
         """Month: iterate_by_dayテスト"""
-        period = Period(**period_month_args)
+        period = QueryPeriod(**period_month_args)
         dates = list(period.iterate_by_day())
         assert len(dates) == 30
         assert dates[0] == date(2024, 6, 1)
@@ -98,14 +98,14 @@ class TestPeriod:
 
     def test_iterate_by_day_for_day(self, period_day_args: DayArgs) -> None:
         """Day: iterate_by_dayテスト"""
-        period = Period(**period_day_args)
+        period = QueryPeriod(**period_day_args)
         dates = list(period.iterate_by_day())
         assert len(dates) == 1
         assert dates[0] == date(2024, 3, 15)
 
     def test_closest_day_for_year(self) -> None:
         """Year: 閏年のテスト"""
-        period = Period(year=2024, month=2)
+        period = QueryPeriod(year=2024, month=2)
         closest = period.closest_day
         # 2024年は閏年で2月の最後の日は29日
         assert closest == date(2024, 2, 29)
@@ -113,19 +113,19 @@ class TestPeriod:
     def test_from_values_year_args(
         self, period_year_args: YearArgs, period_month_args: MonthArgs, period_day_args: DayArgs
     ) -> None:
-        period = Period.from_values(values=period_year_args)
+        period = QueryPeriod.from_values(values=period_year_args)
         """from_valuesテスト"""
         assert period.year == 2024
         assert period.month is None
         assert period.day is None
 
-        period = Period.from_values(values=period_month_args)
+        period = QueryPeriod.from_values(values=period_month_args)
         """from_valuesテスト"""
         assert period.year == 2024
         assert period.month == 6
         assert period.day is None
 
-        period = Period.from_values(values=period_day_args)
+        period = QueryPeriod.from_values(values=period_day_args)
         """from_valuesテスト"""
         assert period.year == 2024
         assert period.month == 3

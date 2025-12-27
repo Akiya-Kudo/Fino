@@ -59,16 +59,6 @@ class CollectEdinetInput(BaseModel):
 
 
 def collect_edinet(input: CollectEdinetInput) -> None:
-    """
-    Collect EDINET documents for the specified period.
-
-    This is the public API function that assembles dependencies and calls
-    the application layer function.
-
-    Args:
-        input: Configuration for document collection including period,
-               storage settings, document types, and API key.
-    """
     # Convert input models to domain models
     period = Period.from_values(values=asdict(input.period))
 
