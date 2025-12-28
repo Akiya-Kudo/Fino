@@ -5,8 +5,7 @@ from typing import Optional, cast
 from fino_core.application.collector.collect_edinet import collect_edinet as _collect_edinet
 from fino_core.application.model.edinet_doc_type_dto import EdinetDocTypeDto
 from fino_core.application.model.time_scope import TimeScope
-from fino_core.domain.edinet import EdinetDocType
-from fino_core.domain.storage_type import StorageType
+from fino_core.domain.model.edinet import EdinetDocType
 from fino_core.infrastructure.edinet import create_edinet
 from fino_core.infrastructure.storage import create_storage
 from pydantic import BaseModel, Field

@@ -3,8 +3,8 @@
 from typing import cast
 
 from fino_core.application.model.time_scope import TimeScope
-from fino_core.domain.edinet import Edinet, EdinetDocType, GetDocumentResponseWithDocs
-from fino_core.domain.storage import StoragePort
+from fino_core.domain.model.edinet import Edinet, EdinetDocType, GetDocumentResponseWithDocs
+from fino_core.domain.model.storage import StoragePort
 
 
 def collect_edinet(
