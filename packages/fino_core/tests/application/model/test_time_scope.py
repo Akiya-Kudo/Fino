@@ -116,19 +116,25 @@ class TestTimeScope:
         timescope_month_args: MonthArgs,
         timescope_day_args: DayArgs,
     ) -> None:
-        timescope = TimeScope.from_values(values=timescope_year_args)
+        timescope = TimeScope(year=timescope_year_args["year"])
         """from_valuesテスト"""
         assert timescope.year == 2024
         assert timescope.month is None
         assert timescope.day is None
 
-        timescope = TimeScope.from_values(values=timescope_month_args)
+        timescope = TimeScope(
+            year=timescope_month_args["year"], month=timescope_month_args["month"]
+        )
         """from_valuesテスト"""
         assert timescope.year == 2024
         assert timescope.month == 6
         assert timescope.day is None
 
-        timescope = TimeScope.from_values(values=timescope_day_args)
+        timescope = TimeScope(
+            year=timescope_day_args["year"],
+            month=timescope_day_args["month"],
+            day=timescope_day_args["day"],
+        )
         """from_valuesテスト"""
         assert timescope.year == 2024
         assert timescope.month == 3
