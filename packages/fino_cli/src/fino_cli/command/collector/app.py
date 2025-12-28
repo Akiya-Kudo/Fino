@@ -34,9 +34,7 @@ def collector(
             help="Target system name to collect data",
         ),
     ] = "edinet",
-    edinet_api_key: Annotated[str, typer.Option()] = settings.get(
-        "EDINET__API_KEY", default=""
-    ),
+    edinet_api_key: Annotated[str, typer.Option()] = settings.get("EDINET__API_KEY", default=""),
 ) -> None:
     """
     Collect data from the target system.

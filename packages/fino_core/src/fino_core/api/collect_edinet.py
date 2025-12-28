@@ -1,30 +1,15 @@
 """Public API for collecting EDINET documents."""
 
-from dataclasses import asdict
-from typing import Optional, Self, cast
+from typing import Optional, cast
 
 from fino_core.application.collector.collect_edinet import collect_edinet as _collect_edinet
-from fino_core.application.dto.edinet_doc_type import EdinetDocTypeDto
-from fino_core.application.dto.query_period import QueryPeriod
+from fino_core.application.model.edinet_doc_type_dto import EdinetDocTypeDto
+from fino_core.application.model.time_scope import TimeScope
 from fino_core.domain.edinet import EdinetDocType
 from fino_core.domain.storage_type import StorageType
 from fino_core.infrastructure.edinet import create_edinet
 from fino_core.infrastructure.storage import create_storage
-from pydantic import BaseModel, Field, model_validator
-
-
-class PeriodInput(BaseModel):
-    """Input model for period specification."""
-
-    year: int = Field(ge=1900, le=3000, frozen=True)
-    month: Optional[int] = Field(ge=1, le=12, frozen=True)
-    day: Optional[int] = Field(ge=1, le=31, frozen=True)
-
-    @model_validator(mode="after")
-    def validate_period(self) -> Self:
-        if self.day is not None and self.month is None:
-            raise ValueError("month must be specified when day is specified")
-        return self
+from pydantic import BaseModel, Field
 
 
 class StorageConfigInput(BaseModel):
@@ -40,29 +25,22 @@ class StorageConfigInput(BaseModel):
     region: Optional[str] = None
 
 
-class CollectDocumentInput(BaseModel):
-    """Input model for collecting EDINET documents."""
-
-    period: PeriodInput
-    storage: StorageConfigInput
-    doc_type: list[EdinetDocType] | EdinetDocType | None = None
-    api_key: str
-
-
 class CollectEdinetInput(BaseModel):
     """Input model for collecting EDINET documents."""
 
-    period: PeriodInput
+    year: int
+    month: int | None = None
+    day: int | None = None
     storage: StorageConfigInput
     doc_types: list[int] | int | list[EdinetDocType] | EdinetDocType = EdinetDocType.ANNUAL_REPORT
     api_key: str
 
 
 def collect_edinet(input: CollectEdinetInput) -> None:
-    # Convert input period to query period
-    period = QueryPeriod.from_values(values=asdict(input.period))
+    # Convert input time scope to time scope model
+    timescope = TimeScope(year=input.year, month=input.month, day=input.day)
 
-    # Convert doc_type to Dto
+    # Convert doc_types to domain model
     doc_types_dto = EdinetDocTypeDto(
         doc_types=cast(
             list[int], input.doc_types
@@ -75,11 +53,8 @@ def collect_edinet(input: CollectEdinetInput) -> None:
 
     # Call application layer function with injected dependencies
     _collect_edinet(
-        period=period,
+        timescope=timescope,
         storage=storage,
         edinet=edinet,
         doc_types=doc_types_dto.to_domain(),
     )
-
-
-__all__ = ["collect_edinet", "CollectDocumentInput", "PeriodInput", "StorageConfigInput"]

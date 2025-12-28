@@ -1,7 +1,7 @@
 """Tests for EdinetDocTypeDto model."""
 
 import pytest
-from fino_core.application.input.edinet_doc_type import EdinetDocTypeDto
+from fino_core.application.model.edinet_doc_type_dto import EdinetDocTypeDto
 from fino_core.domain.edinet import EdinetDocType
 
 

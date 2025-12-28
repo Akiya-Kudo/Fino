@@ -1,9 +1,9 @@
 from datetime import date, timedelta
 from enum import Enum, auto
-from typing import Iterator, Literal, Self, Tuple
+from typing import Iterator, Optional, Self, Tuple
 
 from dateutil.relativedelta import relativedelta
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, model_validator
 
 
 class Granularity(Enum):
@@ -14,28 +14,30 @@ class Granularity(Enum):
     DAY = auto()
 
 
-class QueryPeriod(BaseModel):
+class TimeScope(BaseModel):
     """
-    ### 期間を表すモデル
-
-    指定範囲を年、月、日のいずれかで指定します。
-
+    TimeScope model for collecting EDINET documents.
     - year: 年単位、月単位、日単位の指定する場合に指定する。
     - month: 月単位、日単位の指定する場合に指定する。（yearが必須）
     - day: 日単位の指定する場合に指定する。（year, monthが必須）
-
-    Pydanticによるバリデーションとシリアライゼーションを提供しつつ、
     ロジック（期間の変換、イテレーション）を内包します。
     """
 
-    year: int
-    month: int | None = None
-    day: int | None = None
+    year: int = Field(ge=1900, le=2100)
+    month: Optional[int] = Field(ge=1, le=12, default=None)
+    day: Optional[int] = Field(ge=1, le=31, default=None)
+
+    @model_validator(mode="after")
+    def validate_time_scope(self) -> Self:
+        if self.month is None and self.day is not None:
+            raise ValueError("month is required if day is specified")
+        else:
+            return self
 
     @property  # @see: https://zenn.dev/yuto_mo/articles/29682f6b0c402c
     def granularity(self) -> Granularity:
         """
-        Periodの粒度を取得する
+        TimeScopeの粒度を取得する
 
         Returns
         -------
@@ -44,8 +46,8 @@ class QueryPeriod(BaseModel):
 
         Examples
         --------
-        >>> period = Period(year=2024, month=3, day=1)
-        >>> period.granularity
+        >>> timescope = TimeScope(year=2024, month=3, day=1)
+        >>> timescope.granularity
         <Granularity.DAY: 3>
         """
         # yearは必須（int型）なので、monthとdayのみをチェック
@@ -60,7 +62,7 @@ class QueryPeriod(BaseModel):
     @property
     def closest_day(self) -> date:
         """
-        Periodの最も近い日を取得する
+        TimeScopeの最も近い日を取得する
         """
         if self.granularity == Granularity.DAY:
             return date(self.year, self.month or 1, self.day or 1)
@@ -71,7 +73,7 @@ class QueryPeriod(BaseModel):
 
     def to_range(self) -> Tuple[date, date]:
         """
-        Period を [start, end) の日付レンジに変換する
+        TimeScope を [start, end) の日付レンジに変換する
 
         Returns
         -------
@@ -80,8 +82,8 @@ class QueryPeriod(BaseModel):
 
         Examples
         --------
-        >>> period = Period(year=2024, month=3)
-        >>> start, end = period.to_range()
+        >>> timescope = TimeScope(year=2024, month=3)
+        >>> start, end = timescope.to_range()
         >>> start
         datetime.date(2024, 3, 1)
         >>> end
@@ -106,7 +108,7 @@ class QueryPeriod(BaseModel):
 
     def iterate_by_day(self) -> Iterator[date]:
         """
-        Periodを日単位でイテレートする
+        TimeScopeを日単位でイテレートする
 
         期間内のすべての日を日単位でイテレートします。
         粒度に関係なく、常に日単位で処理します。
@@ -118,15 +120,15 @@ class QueryPeriod(BaseModel):
 
         Examples
         --------
-        >>> period = Period(year=2024, month=3)
-        >>> dates = list(period.iterate_by_day())
+        >>> timescope = TimeScope(year=2024, month=3)
+        >>> dates = list(timescope.iterate_by_day())
         >>> dates[0]
         datetime.date(2024, 3, 1)
         >>> dates[-1]
         datetime.date(2024, 3, 31)
 
-        >>> period = Period(year=2024)
-        >>> dates = list(period.iterate_by_day())
+        >>> timescope = TimeScope(year=2024)
+        >>> dates = list(timescope.iterate_by_day())
         >>> len(dates)
         366  # 2024年はうるう年
         """
@@ -136,14 +138,3 @@ class QueryPeriod(BaseModel):
         while current <= end:
             yield current
             current += timedelta(days=1)
-
-    @classmethod
-    def from_values(cls, values: dict[Literal["year", "month", "day"] | str, int]) -> Self:
-        year = values.get("year")
-        if year is None:
-            raise ValueError("year is required")
-        return cls(
-            year=year,
-            month=values.get("month"),
-            day=values.get("day"),
-        )

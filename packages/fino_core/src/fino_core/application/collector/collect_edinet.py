@@ -2,22 +2,22 @@
 
 from typing import cast
 
-from fino_core.application.dto.query_period import QueryPeriod
+from fino_core.application.model.time_scope import TimeScope
 from fino_core.domain.edinet import Edinet, EdinetDocType, GetDocumentResponseWithDocs
 from fino_core.domain.storage import StoragePort
 
 
 def collect_edinet(
-    period: QueryPeriod,
+    timescope: TimeScope,
     storage: StoragePort,
     edinet: Edinet,
     doc_types: list[EdinetDocType] | EdinetDocType | None = None,
 ) -> None:
     """
-    Collect EDINET documents for the specified period.
+    Collect EDINET documents for the specified timescope.
 
     Args:
-        period: Period to collect documents for
+        timescope: TimeScope to collect documents for
         storage: Storage port implementation to save documents
         edinet: Edinet port implementation to fetch documents
         doc_types: Optional filter for document types to collect.
@@ -35,7 +35,7 @@ def collect_edinet(
     else:
         doc_type_list = doc_types
 
-    for date_obj in period.iterate_by_day():
+    for date_obj in timescope.iterate_by_day():
         document_list_response = edinet.get_document_list(date_obj, withdocs=True)
         document_list = cast(GetDocumentResponseWithDocs, document_list_response)
         for document in document_list["results"]:
