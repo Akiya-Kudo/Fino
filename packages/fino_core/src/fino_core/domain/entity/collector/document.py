@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 
-from ..value import DocumentId, FilingFormat
+from fino_core.domain.value.collector import DocumentId, FilingFormat
+
 from .document_metadata import DocumentMetadata
 
 
