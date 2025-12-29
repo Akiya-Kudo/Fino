@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from fino_core.domain.model.document import Document
+from ..entity.document import Document
 
 
 class DocumentRepository(ABC):

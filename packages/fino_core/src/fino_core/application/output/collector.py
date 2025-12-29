@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from fino_core.domain.model.document.document_metadata import DocumentMetadata
+from fino_core.domain.entity.document_metadata import DocumentMetadata
 
 
 @dataclass
