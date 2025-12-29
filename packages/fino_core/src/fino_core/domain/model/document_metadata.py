@@ -1,11 +1,8 @@
+from dataclasses import dataclass
 from datetime import date
 from enum import Enum
 
-
-class FilingFormat(Enum):
-    PDF = "pdf"
-    XBRL = "xbrl"
-    CSV = "csv"
+from fino_core.domain.model.document.document import FilingFormat
 
 
 class FilingLanguage(Enum):
@@ -36,7 +33,10 @@ class DisclosureType(Enum):
     """訂正自己株券買付状況報告書"""
 
 
-class DocumentMetaData:
+@dataclass
+class DocumentMetadata:
+    document_id: str
+    source: str
     title: str
     ticker: str
     filing_language: FilingLanguage

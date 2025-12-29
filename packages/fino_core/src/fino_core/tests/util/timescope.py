@@ -4,7 +4,7 @@ from datetime import date
 from typing import Literal, TypeAlias
 
 import pytest
-from fino_core.application.model.time_scope import Granularity, TimeScope
+from fino_core.util.timescope import Granularity, TimeScope
 
 
 class TestTimeScope:
