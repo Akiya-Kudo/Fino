@@ -1,12 +1,12 @@
 from dataclasses import dataclass
 
 from ..value import (
-    DisclosureType,
+    DisclosureSource,
     DocumentId,
+    DocumentType,
     FilingDate,
     FilingFormat,
     FilingLanguage,
-    Source,
     Ticker,
 )
 
@@ -16,13 +16,13 @@ class DocumentMetadata:
     """文書のメタデータを表現するドメインエンティティ"""
 
     document_id: DocumentId
-    source: Source
+    source: DisclosureSource
     title: str
     ticker: Ticker
     filing_language: FilingLanguage
     filing_format: FilingFormat
     filing_date: FilingDate
-    disclosure_type: DisclosureType
+    disclosure_type: DocumentType
 
     def __post_init__(self) -> None:
         """ドメイン不変条件の検証"""

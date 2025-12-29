@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 
-class DisclosureTypeEnum(Enum):
+class DocumentTypeEnum(Enum):
     """開示書類の種類"""
 
     ANNUAL_REPORT = "annual_report"
@@ -28,7 +28,7 @@ class DisclosureTypeEnum(Enum):
 
 
 @dataclass(frozen=True)
-class DisclosureType:
+class DocumentType:
     """開示書類の種類を表現するValue Object
 
     許可された開示書類の種類のみを受け付けます。
@@ -42,10 +42,10 @@ class DisclosureType:
             raise ValueError("DisclosureType must not be empty")
         disclosure_type = self.value.strip().lower()
         try:
-            _ = DisclosureTypeEnum(disclosure_type)
+            _ = DocumentTypeEnum(disclosure_type)
         except ValueError as err:
             raise ValueError(
-                f"DisclosureType must be one of {[dt.value for dt in DisclosureTypeEnum]}: {disclosure_type}"
+                f"DisclosureType must be one of {[dt.value for dt in DocumentTypeEnum]}: {disclosure_type}"
             ) from err
 
     def __str__(self) -> str:
@@ -57,7 +57,7 @@ class DisclosureType:
     @property
     def is_annual_report(self) -> bool:
         """有価証券報告書かどうかを判定"""
-        return self.value.strip().lower() == DisclosureTypeEnum.ANNUAL_REPORT.value
+        return self.value.strip().lower() == DocumentTypeEnum.ANNUAL_REPORT.value
 
     @property
     def is_amended(self) -> bool:

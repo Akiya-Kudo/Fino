@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from enum import Enum
 
 
-class DataSource(Enum):
+class DisclosureSourceEnum(Enum):
     """データソースの種類"""
 
     EDINET = "edinet"
@@ -10,7 +10,7 @@ class DataSource(Enum):
 
 
 @dataclass(frozen=True)
-class Source:
+class DisclosureSource:
     """データソースを表現するValue Object
 
     許可されたデータソースのみを受け付けます。
@@ -24,10 +24,10 @@ class Source:
             raise ValueError("Source must not be empty")
         source = self.value.strip().upper()
         try:
-            _ = DataSource(source)
+            _ = DisclosureSourceEnum(source)
         except ValueError as err:
             raise ValueError(
-                f"Source must be one of {[ds.value for ds in DataSource]}: {source}"
+                f"Source must be one of {[ds.value for ds in DisclosureSourceEnum]}: {source}"
             ) from err
 
     def __str__(self) -> str:
@@ -39,9 +39,9 @@ class Source:
     @property
     def is_edinet(self) -> bool:
         """EDINETソースかどうかを判定"""
-        return self.value.strip().lower() == DataSource.EDINET.value
+        return self.value.strip().lower() == DisclosureSourceEnum.EDINET.value
 
     @property
     def is_tdnet(self) -> bool:
         """TDNETソースかどうかを判定"""
-        return self.value.strip().lower() == DataSource.TDNET.value
+        return self.value.strip().lower() == DisclosureSourceEnum.TDNET.value
