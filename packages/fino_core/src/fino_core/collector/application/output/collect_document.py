@@ -1,8 +1,10 @@
 from dataclasses import dataclass
 
+from fino_core.collector.domain.entity.document import Document
+
 
 @dataclass
-class CollectEdinetDocumentOutput:
+class CollectDocumentsOutput:
     """文書収集の出力DTO
 
     メタデータのみの状態（resource=None）のDocumentのリストを含みます。

@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from fino_core.domain.value.collector import (
+from fino_core.collector.domain.value import (
     DisclosureSource,
     DocumentId,
     DocumentType,

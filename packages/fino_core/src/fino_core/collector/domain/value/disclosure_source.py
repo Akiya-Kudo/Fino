@@ -35,13 +35,3 @@ class DisclosureSource:
 
     def __repr__(self) -> str:
         return f"Source('{self.value}')"
-
-    @property
-    def is_edinet(self) -> bool:
-        """EDINETソースかどうかを判定"""
-        return self.value.strip().lower() == DisclosureSourceEnum.EDINET.value
-
-    @property
-    def is_tdnet(self) -> bool:
-        """TDNETソースかどうかを判定"""
-        return self.value.strip().lower() == DisclosureSourceEnum.TDNET.value

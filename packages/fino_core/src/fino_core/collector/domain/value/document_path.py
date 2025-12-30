@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from fino_core.domain.value import DisclosureSource, DocumentId, FilingDate
+from fino_core.collector.domain.value import DisclosureSource, DocumentId, FilingDate
 
 
 @dataclass(frozen=True)
