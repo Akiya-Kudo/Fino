@@ -6,6 +6,6 @@ class CollectDocumentUseCase:
     """文書収集・ビジネスロジック"""
 
     def execute(self, input: CollectorCollectDocumentInputDTO) -> CollectorCollectDocumentOutputDTO:
-        document_metadata_list = []
+        document_list = []
 
-        return CollectorCollectDocumentOutputDTO(document_metadata_list=[])
+        return CollectorCollectDocumentOutputDTO(document_list=[])

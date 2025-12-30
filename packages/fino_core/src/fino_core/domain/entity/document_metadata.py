@@ -11,9 +11,13 @@ from fino_core.domain.value.collector import (
 )
 
 
-@dataclass
+@dataclass(frozen=True)
 class DocumentMetadata:
-    """文書のメタデータを表現するドメインエンティティ"""
+    """文書のメタデータを表現するValue Object
+
+    DocumentMetadataはDocument Aggregateの一部としてのみ存在します。
+    独立したエンティティとして扱うべきではありません。
+    """
 
     document_id: DocumentId
     source: DisclosureSource
