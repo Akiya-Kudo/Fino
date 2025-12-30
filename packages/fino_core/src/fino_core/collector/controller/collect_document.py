@@ -1,1 +1,0 @@
-def collect_document

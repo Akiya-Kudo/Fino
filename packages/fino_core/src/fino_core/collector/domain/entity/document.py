@@ -1,9 +1,8 @@
 from dataclasses import dataclass
 
-from fino_core.domain.entity.entity import AggregateRoot
-from fino_core.domain.value import DocumentId, FilingFormat
-
+from ..value import DocumentId, FilingFormat
 from .document_metadata import DocumentMetadata
+from .entity import AggregateRoot
 
 
 # @see: about dataclass annotation:  https://qiita.com/fumiya0238/items/46115b399c4ea1322ee8
