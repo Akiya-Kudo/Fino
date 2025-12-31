@@ -10,95 +10,56 @@ alwaysApply: true
 
 fino_core is a **core financial data engine library**.
 
-It is NOT:
+target is **enginner and personal invester**
 
-- an application
-- a CLI tool
-- a Lambda handler
-- a workflow runner
+fino_core will engage t financial data management and make the workflow creation smooth
 
-fino_core exists only to:
+# User Story
 
-- fetch financial data
-- validate and structure it
-- persist it deterministically
-- be reused by external interfaces
+- 金融データを分析したい
+- そのためのフローを自動化して直感的に収集したい
 
----
+# Features ( Bounded Context)
 
-## 2. Architectural Layers (Mandatory)
+## Fino Core Collector
 
-The project is structured into four conceptual layers:
-
-Public API → Application → Domain
-↘ Infrastructure
-
-### Layer Constraints
-
-- Public API is the ONLY external entry point
-- Application orchestrates workflows
-- Domain contains pure business logic
-- Infrastructure handles side effects
-- Input models are part of the Interface Adapter role
-- They must not be exposed via the Public API if not neccesary
-
-Violations are considered design errors. so please suggeste solutions when you face those problems
-
----
-
-## 3. Directory Structure (Enforced)
-
-```text
-src/fino_core/
-    ├── api/
-    ├── domain/
-    ├── application/
-    ├── infrastructure/
-    ├── util/
-    └── config/
-
-```
-
-4. Dependency Rules
-
-Allowed Dependencies
-
-- Public API → Application
-- Application → Domain, Ports
-- Infrastructure → Domain
-- Domain → Python standard library only
-
-Forbidden Dependencies
-
-- Domain → Infrastructure
-- Application → Concrete Infrastructure
-- Infrastructure → Application logic
-- External users → Internal modules
-
-5. Error Handling Rules
-
-- Network errors must be retried
-- Provider rate limits must be respected
-- Fatal parsing errors must surface clearly
-- Silent failures are forbidden
-
-6. Public API Rules
-
-- Public API must be function-based
-- Must not expose internal classes
-- Must assemble dependencies explicitly
-- Must be stable and minimal
-- defined inside the src/fino_core/api but export as project root IF like under example
-
-  6.1 Public API and interface/adopter rules
-
-- Public API must accept only primitive types, enums, or standard collections
-- Public API must NOT require callers to instantiate internal models if those model is exist for internal logic
-- Input normalization models (e.g. Pydantic models) must be created internally
-
-Example:
-
-```
-from fino_core import collect_edinet
-
-```
+- データの収集・保管プロセスの自動化を行う。
+- ### Domain
+  - **Model**
+    - **Document** (Entity)
+      - ticker (VO)
+      - disclosure_source
+      - filing_name
+      - filing_format (VO)
+    - **Disclosure Source** (VO)
+    - **Document Search Criteria** (VO)
+      - document_source
+      - timescope
+      - ticker
+  - **Repository**
+    - **DocumentRepository**
+- ### Application
+  - **usecase**
+    - list_document
+    - collect_document
+  - **InputModel**
+    - port を使用
+  - **OutputModel**
+    - port を使用
+- ### Interface / Port
+  - **Controller**
+    - list_document
+    - collect_document
+  - **Port**
+    - UseCase が外部に「期待する能力」を定義
+    - **DocumentStorage**
+      - Infra の RepositoryImplee が実際の Storage の詳細を知らないための IF
+- ### Infrastructure
+  - **repository**
+    - **DocumentRepositoryImpl**
+  - **Adopter**
+    - **EdinetDisclosureSourceAdapter** (with criteria)
+    - **TDnetDisclosureSourceAdapter** (with criteria)
+    - **S3DocumentStorageAdapter**
+    - **LocalDocumentStorageAdaper**
+    -
