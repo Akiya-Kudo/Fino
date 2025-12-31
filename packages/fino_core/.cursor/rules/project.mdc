@@ -24,6 +24,7 @@ fino_core will engage t financial data management and make the workflow creation
 ## Fino Core Collector
 
 - データの収集・保管プロセスの自動化を行う。
+
 - ### Domain
   - **Model**
     - **Document** (Entity)
@@ -60,6 +61,22 @@ fino_core will engage t financial data management and make the workflow creation
   - **Adopter**
     - **EdinetDisclosureSourceAdapter** (with criteria)
     - **TDnetDisclosureSourceAdapter** (with criteria)
-    - **S3DocumentStorageAdapter**
-    - **LocalDocumentStorageAdaper**
-    -
+    - **S3StorageAdapter**
+    - **LocalStorageAdaper**
+
+### Storage Save Requirements
+
+- document will store into storage this process
+
+- ### Document
+  - パーティション：検索時や、アクセス時のクエリに応じたグルーピングを行う
+  - ファイル名：参照時の識別子・
+  - **Partition**: <market>/<ticker>/<document_type>/
+    - market (市場の国別)
+    - ticker (企業 ID)
+    - document_type (開示書類の種別)
+  - **File Name**: <disclosure_source>-<document_id>-<disclosure_date（開示日）>-<format_type>
+    - disclosure_source (開示ソース)
+    - document_id (書類 ID)
+    - disclosure_date（開示日）
+    - format_type (書類形式)
