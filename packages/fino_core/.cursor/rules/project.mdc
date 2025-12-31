@@ -35,17 +35,16 @@ fino_core will engage t financial data management and make the workflow creation
       - disclosure_source (VO)
       - disclosure_date (VO)
       - filing_format (VO)
-    - **Disclosure Source** (VO)
-    - **Document Search Criteria** (VO)
-      - document_source
-      - timescope
-      - ticker
+      - Disclosure Source (VO)
   - **Repository**
     - **DocumentRepository**
 - ### Application
   - **usecase**
     - list_document
+      - 開示ソースから取得可能で条件に一致するドキュメントを参照できるように確認する
     - collect_document
+      - ドキュメントをダウンロードして指定先のストレージに適切に保存する
+      - 重複保存から保護するためにストレージから存在チェックを行う
   - **InputModel**
     - port を使用
   - **OutputModel**
@@ -56,6 +55,11 @@ fino_core will engage t financial data management and make the workflow creation
     - collect_document
   - **Port**
     - UseCase が外部に「期待する能力」を定義
+    - **Document Search Criteria** (VO)
+      - Infra の Disclosure Source に対して条件を抽象的に定義する
+      - document_source
+      - timescope
+      - ticker
     - **DocumentStorage**
       - Infra の RepositoryImplee が実際の Storage の詳細を知らないための IF
 - ### Infrastructure
@@ -70,6 +74,8 @@ fino_core will engage t financial data management and make the workflow creation
 ### Storage Save Requirements
 
 - document will store into storage this process
+- user が分析以外にも確認できるようにする
+- 冪等性を維持し、重複保存から保護する
 
 - ### Document
   - パーティション：検索時や、アクセス時のクエリに応じたグルーピングを行う
