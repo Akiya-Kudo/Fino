@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Protocol
 
-from fino_core.collector.domain.entity.document import Document
-from fino_core.collector.domain.value import DocumentId, DocumentType
+from ..entity.document import Document
 
 
 class DocumentSourceCriteria(Protocol):
@@ -44,12 +43,11 @@ class DocumentSource(ABC):
         ...
 
     @abstractmethod
-    def get_document(self, document_id: DocumentId, document_type: DocumentType) -> Document:
+    def get_document(self, document: Document) -> Document:
         """指定された文書IDの完全なDocumentを取得する
 
         Args:
-            document_id: 文書ID
-            document_type: 開示種別
+            document: 文書
 
         Returns:
             完全な状態のDocument（resourceが設定されている）

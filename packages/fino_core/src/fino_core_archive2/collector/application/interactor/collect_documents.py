@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 
-from fino_core.collector.application.input.collect_document import CollectDocumentsInput
-from fino_core.collector.application.output.collect_document import CollectDocumentsOutput
+from ..input.collect_document import CollectDocumentsInput
+from ..output.collect_document import CollectDocumentsOutput
 
 
 @dataclass
