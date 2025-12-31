@@ -1,7 +1,6 @@
+from abc import ABC, abstractmethod
 from dataclasses import field
-from typing import Any, TypeVar
-
-EntityType = TypeVar("EntityType", bound="Entity")
+from typing import Any
 
 
 class Entity:
@@ -22,3 +21,16 @@ class AggregateRoot(Entity):
     """
 
     pass
+
+
+class ValueObject(ABC):
+    """
+    An VO Abstruct Object
+    Need to be extends with @dataclass annotation to correctory validate states
+    """
+
+    def __post_init__(self) -> None:
+        self._validate()
+
+    @abstractmethod
+    def _validate(self) -> None: ...

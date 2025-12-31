@@ -28,9 +28,12 @@ fino_core will engage t financial data management and make the workflow creation
 - ### Domain
   - **Model**
     - **Document** (Entity)
-      - ticker (VO)
-      - disclosure_source
+      - document_id (VO)
       - filing_name
+      - ticker (VO)
+      - dicsclosure_type (VO)
+      - disclosure_source (VO)
+      - disclosure_date (VO)
       - filing_format (VO)
     - **Disclosure Source** (VO)
     - **Document Search Criteria** (VO)
@@ -71,10 +74,10 @@ fino_core will engage t financial data management and make the workflow creation
 - ### Document
   - パーティション：検索時や、アクセス時のクエリに応じたグルーピングを行う
   - ファイル名：参照時の識別子・
-  - **Partition**: <market>/<ticker>/<document_type>/
+  - **Partition**: <market>/<ticker>/<disclosure_type>/
     - market (市場の国別)
     - ticker (企業 ID)
-    - document_type (開示書類の種別)
+    - disclosure_type (開示書類の種別)
   - **File Name**: <disclosure_source>-<document_id>-<disclosure_date（開示日）>-<format_type>
     - disclosure_source (開示ソース)
     - document_id (書類 ID)
