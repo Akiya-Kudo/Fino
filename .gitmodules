@@ -1,0 +1,3 @@
+[submodule "packages/fino_core"]
+	path = packages/fino_core
+	url = git@github.com:Akiya-Kudo/fino-core.git
