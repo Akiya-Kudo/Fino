@@ -8,7 +8,3 @@ dependencies = []
 
 [tool.uv.workspace]
 members = ["packages/*"]
-
-[dependency-groups]
-lint = ["ruff>=0.14.8", "pytest>=9.0.2"]
-dev = [{ include-group = "lint" }]
