@@ -5,4 +5,4 @@ __pycache__
 .data
 
 # Ignore dynaconf secret files
-.secrets.*
+.finosecrets.toml
