@@ -6,3 +6,6 @@ __pycache__
 
 # Ignore dynaconf secret files
 .finosecrets.toml
+
+# default local data store
+fino-data
