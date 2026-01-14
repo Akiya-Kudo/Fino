@@ -26,4 +26,4 @@ alias fino="make"
 
 # npm install
 echo "process: npm install cdk dependencies (infra)"
-cd infra && npm install && cd ..
+cd infra/cdk && npm install && cd ../..

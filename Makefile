@@ -7,20 +7,6 @@ ifneq (,$(wildcard ./.env))
     export
 endif
 
-# ===============================
-# CDK Makefile
-# ===============================
-
-DEFAULT_PROFILE ?= $(AWS_PROFILE)
-LOCAL_PROFILE   ?= $(LOCALSTACK_PROFILE)
-
-# AWS_ACCOUNT_ID ?= $(AWS_ACCOUNT_ID)
-# LOCALSTACK_ACCOUNT_ID ?= 000000000000
-
-CDK      = cdk
-CDKLOCAL = cdklocal
-
-RUN_CDK = cd infra &&
 
 # Extract extra args:
 # Remove the make target name from MAKECMDGOALS
@@ -29,6 +15,27 @@ ARGS = $(filter-out $@, $(MAKECMDGOALS))
 # Avoid "No rule to make target" errors for args
 %:
 	@:
+
+########################################################
+################                      ##################
+##############         FINO CLI         ################
+################                      ##################
+########################################################
+# make だけで起動、make subcommand でサブコマンド実行
+run:
+	uv run typer ./packages/fino_cli/src/fino_cli/app.py run $(ARGS)
+
+# ===============================
+# CDK Makefile
+# ===============================
+
+DEFAULT_PROFILE ?= $(AWS_PROFILE)
+LOCAL_PROFILE   ?= $(LOCALSTACK_PROFILE)
+
+CDK      = cdk
+CDKLOCAL = cdklocal
+
+RUN_CDK = cd infra/cdk &&
 
 # -------- Default AWS --------
 # 引数の1つ目をCDKサブコマンドとして使用
@@ -89,15 +96,3 @@ echo:
 	@echo "$(LOCALSTACK_VOLUME_DIR)"
 
 
-########################################################
-################                      ##################
-##############         FINO CLI         ################
-################                      ##################
-########################################################
-cli:
-	@if [ -z "$(word 1,$(ARGS))" ]; then \
-		echo "Error: CDK subcommand is required. Usage: make local <subcommand> [args...]"; \
-		echo "Available subcommands: deploy, synth, diff, destroy, bootstrap, ls, list, etc."; \
-		exit 1; \
-	fi
-	uv run typer src/fino/cli/main.py $(filter-out $(word 1,$(ARGS)),$(ARGS))
